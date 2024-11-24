@@ -3,7 +3,7 @@ import image from "../../assets/developer.png";
 function Hero() {
   return (
     <div className="flex flex-col-reverse md:flex-row gap-5 md:gap-10">
-      <div className="flex-[3]">
+      <div className="flex-[3] md:flex-1">
         <p className="text-lg md:text-xl md:my-5">Hello, Myself</p>
         <h1 className=" text-2xl md:text-4xl font-bold font-Montserrat text-[#e63946] my-3 md:my-5">
           Md. Samiul Karim Prodhan
@@ -20,7 +20,7 @@ function Hero() {
           Download Resume
         </button>
       </div>
-      <div className="flex-[2] flex justify-center">
+      <div className="flex-[2] md:flex-1 flex justify-center">
         <img
           src={image}
           alt="developer-image"

@@ -4,7 +4,9 @@ function Navbar() {
   return (
     <div>
       <div className="navbar bg-base-100">
-        <div className="navbar-start">
+        {/* Navbar Start */}
+        <div className="navbar-start w-full">
+          {/* Dropdown for Mobile View */}
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
               <svg
@@ -30,26 +32,28 @@ function Navbar() {
                 <Link to="/about">About</Link>
               </li>
               <li>
-                <Link to="/resume">About</Link>
+                <Link to="/resume">Resume</Link>
               </li>
               <li>
-                <a>Item 3</a>
+                <Link to="/projects">Projects</Link>
               </li>
             </ul>
           </div>
-          <Link to="/" className="btn btn-ghost md:text-xl">
+          {/* Brand Name */}
+          <Link to="/" className="md:text-xl font-medium md:px-5">
             Samiul Karim Prodhan
           </Link>
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
+
+        {/* Navbar End (Hidden in Mobile View, Visible in Large Screens) */}
+        <div className="navbar-end hidden lg:flex px-5">
+          <ul className="menu menu-horizontal px-1 gap-4">
             <li>
               <Link to="/about">About</Link>
             </li>
             <li>
               <Link to="/resume">Resume</Link>
             </li>
-
             <li>
               <Link to="/projects">Projects</Link>
             </li>
