@@ -1,6 +1,14 @@
 import image from "../../assets/developer.png";
 
+import { getResume } from "../../services/resumeApis";
+import download from "downloadjs";
+
 function Hero() {
+  async function handleDownloadResume() {
+    const resumeData = await getResume();
+    const blob = new Blob([resumeData], { type: "application/pdf" });
+    download(blob, "test.pdf");
+  }
   return (
     <div className="flex flex-col-reverse md:flex-row gap-5 md:gap-10">
       <div className="flex-[3] md:flex-1">
@@ -16,7 +24,10 @@ function Hero() {
           front-end, but I also use Node.Js to build a responsive full-stack
           website.
         </p>
-        <button className="btn sm:btn-sm md:btn-md lg:btn-lg btn-outline ">
+        <button
+          className="btn sm:btn-sm md:btn-md lg:btn-lg btn-outline "
+          onClick={handleDownloadResume}
+        >
           Download Resume
         </button>
       </div>
