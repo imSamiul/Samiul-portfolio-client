@@ -17,8 +17,13 @@ function Projects() {
             <h2 className="card-title">Keeper</h2>
             <p>It is a to-do list full stack website</p>
             <div className="card-actions justify-end mt-5">
-              <button className="btn btn-primary">Live Site</button>
-              <button className="btn btn-primary">Learn More</button>
+              <a
+                className="btn btn-primary"
+                href="https://keeper3041.netlify.app/"
+              >
+                Live Site
+              </a>
+              {/* <button className="btn btn-primary">Learn More</button> */}
             </div>
           </div>
         </div>
@@ -33,8 +38,13 @@ function Projects() {
               manager.
             </p>
             <div className="card-actions justify-end mt-5">
-              <button className="btn btn-primary">Live Site</button>
-              <button className="btn btn-primary">Learn More</button>
+              <a
+                className="btn btn-primary"
+                href="https://topu-pay-client.vercel.app/"
+              >
+                Live Site
+              </a>
+              {/* <button className="btn btn-primary">Learn More</button> */}
             </div>
           </div>
         </div>
@@ -46,8 +56,13 @@ function Projects() {
             <h2 className="card-title">Bari-Vara</h2>
             <p>A house rental management website</p>
             <div className="card-actions justify-end mt-5">
-              <button className="btn btn-primary">Live Site</button>
-              <button className="btn btn-primary">Learn More</button>
+              <a
+                className="btn btn-primary"
+                href="https://bari-vara.vercel.app/"
+              >
+                Live Site
+              </a>
+              {/* <button className="btn btn-primary">Learn More</button> */}
             </div>
           </div>
         </div>
