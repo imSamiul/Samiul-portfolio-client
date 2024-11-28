@@ -14,8 +14,10 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ResumeImport } from './routes/resume'
 import { Route as ProjectsImport } from './routes/projects'
 import { Route as LoginImport } from './routes/login'
+import { Route as DashboardImport } from './routes/dashboard'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardAddProjectImport } from './routes/dashboard/addProject'
 
 // Create/Update Routes
 
@@ -37,6 +39,12 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AboutRoute = AboutImport.update({
   id: '/about',
   path: '/about',
@@ -47,6 +55,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardAddProjectRoute = DashboardAddProjectImport.update({
+  id: '/addProject',
+  path: '/addProject',
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -65,6 +79,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -88,48 +109,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResumeImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/addProject': {
+      id: '/dashboard/addProject'
+      path: '/addProject'
+      fullPath: '/dashboard/addProject'
+      preLoaderRoute: typeof DashboardAddProjectImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface DashboardRouteChildren {
+  DashboardAddProjectRoute: typeof DashboardAddProjectRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAddProjectRoute: DashboardAddProjectRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
+  '/dashboard/addProject': typeof DashboardAddProjectRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
+  '/dashboard/addProject': typeof DashboardAddProjectRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
+  '/dashboard/addProject': typeof DashboardAddProjectRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/login' | '/projects' | '/resume'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/dashboard'
+    | '/login'
+    | '/projects'
+    | '/resume'
+    | '/dashboard/addProject'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/login' | '/projects' | '/resume'
-  id: '__root__' | '/' | '/about' | '/login' | '/projects' | '/resume'
+  to:
+    | '/'
+    | '/about'
+    | '/dashboard'
+    | '/login'
+    | '/projects'
+    | '/resume'
+    | '/dashboard/addProject'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/dashboard'
+    | '/login'
+    | '/projects'
+    | '/resume'
+    | '/dashboard/addProject'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProjectsRoute: typeof ProjectsRoute
   ResumeRoute: typeof ResumeRoute
@@ -138,6 +207,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
   ProjectsRoute: ProjectsRoute,
   ResumeRoute: ResumeRoute,
@@ -155,6 +225,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/dashboard",
         "/login",
         "/projects",
         "/resume"
@@ -166,6 +237,12 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.tsx"
     },
+    "/dashboard": {
+      "filePath": "dashboard.tsx",
+      "children": [
+        "/dashboard/addProject"
+      ]
+    },
     "/login": {
       "filePath": "login.tsx"
     },
@@ -174,6 +251,10 @@ export const routeTree = rootRoute
     },
     "/resume": {
       "filePath": "resume.tsx"
+    },
+    "/dashboard/addProject": {
+      "filePath": "dashboard/addProject.tsx",
+      "parent": "/dashboard"
     }
   }
 }

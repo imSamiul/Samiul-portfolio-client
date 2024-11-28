@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
+import { getAuthToken } from "../../utils/auth";
 
 function Navbar() {
   return (
     <div>
       <div className="navbar bg-base-100">
         {/* Navbar Start */}
-        <div className="navbar-start w-full">
+        <div className="navbar-start ">
           {/* Dropdown for Mobile View */}
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -37,6 +38,9 @@ function Navbar() {
               <li>
                 <Link to="/projects">Projects</Link>
               </li>
+              <li>
+                {getAuthToken() && <Link to="/dashboard">Dashboard</Link>}
+              </li>
             </ul>
           </div>
           {/* Brand Name */}
@@ -57,6 +61,7 @@ function Navbar() {
             <li>
               <Link to="/projects">Projects</Link>
             </li>
+            <li>{getAuthToken() && <Link to="/dashboard">Dashboard</Link>}</li>
           </ul>
         </div>
       </div>
