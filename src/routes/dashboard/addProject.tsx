@@ -1,86 +1,112 @@
 import { createFileRoute } from "@tanstack/react-router";
-import React, { useState } from "react";
+
+import { useCreateNewProject } from "../../services/mutation/projectMutation";
+import { useState } from "react";
+import { ProjectType } from "../../types/ProjectType";
 
 export const Route = createFileRoute("/dashboard/addProject")({
   component: AddProjectForm,
 });
 
+const initialValues = {
+  title: "",
+  summary: "",
+  frontEndTech: "",
+  backEndTech: "",
+  liveLink: "",
+  frontEndRepo: "",
+  backEndRepo: "",
+  projectDetails: "",
+  showOnHomepage: false,
+  image: null,
+};
+
 function AddProjectForm() {
-  const [formData, setFormData] = useState({
-    projectName: "",
-    oneLineDescription: "",
-    liveLink: "",
-    frontendTechnologies: "" as string, // String input to be split
-    backendTechnologies: "" as string, // String input to be split
-    frontendRepo: "",
-    backendRepo: "",
-    projectDetails: "",
-    showOnHomepage: false,
-  });
-  const [image, setImage] = useState("");
-  const [formErrors, setFormErrors] = useState<string | null>(null);
+  const [formValues, setFormValues] = useState<ProjectType>(initialValues);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const { mutate, isPending } = useCreateNewProject();
+
+  function onInputChange(
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log(e.target.files);
-    if (!e.target.files) return;
-    setImage(URL.createObjectURL(e.target.files[0]));
-  }
-  function onToggleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormData({ ...formData, showOnHomepage: e.target.checked });
+    setFormError(null);
+    setFormValues((prev) => ({ ...prev, [name]: value }));
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    setFormError(null);
+    if (file) {
+      setFormValues((prev) => ({ ...prev, image: file }));
+      setImagePreview(URL.createObjectURL(file));
+    }
+  }
+  function onCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, checked } = e.target;
+    setFormError(null);
+    setFormValues((prev) => ({ ...prev, [name]: checked }));
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    // Validation for empty fields
     if (
-      !formData.projectName ||
-      !formData.oneLineDescription ||
-      !formData.liveLink ||
-      !formData.frontendTechnologies ||
-      !formData.backendTechnologies ||
-      !formData.frontendRepo ||
-      !formData.backendRepo ||
-      !formData.projectDetails
+      !formValues.title ||
+      !formValues.summary ||
+      !formValues.projectDetails ||
+      !formValues.image ||
+      !formValues.frontEndTech ||
+      !formValues.backEndTech ||
+      !formValues.liveLink ||
+      !formValues.frontEndRepo ||
+      !formValues.backEndRepo
     ) {
-      setFormErrors("Please fill all the fields");
+      setFormError("Please fill all the fields");
       return;
     }
-
-    // Split technologies by commas and trim extra spaces
-    const frontendTechArray = formData.frontendTechnologies
-      .split(",")
-      .map((tech) => tech.trim());
-    const backendTechArray = formData.backendTechnologies
-      .split(",")
-      .map((tech) => tech.trim());
-
-    const projectData = {
-      ...formData,
-      frontendTechnologies: frontendTechArray,
-      backendTechnologies: backendTechArray,
-      image,
+    // Ensure both fields are arrays
+    const transformedFormValues = {
+      ...formValues,
+      frontEndTech: Array.isArray(formValues.frontEndTech)
+        ? formValues.frontEndTech
+        : formValues.frontEndTech.split(",").map((tech) => tech.trim()),
+      backEndTech: Array.isArray(formValues.backEndTech)
+        ? formValues.backEndTech
+        : formValues.backEndTech.split(",").map((tech) => tech.trim()),
     };
 
-    console.log("Form submitted:", projectData);
-    // Submit projectData to backend
-  };
+    const formData = new FormData();
+
+    Object.entries(transformedFormValues).forEach(([key, value]) => {
+      if (value !== null) {
+        // Convert arrays to JSON for FormData
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value as string | Blob);
+        }
+      }
+    });
+
+    // Debugging FormData (Optional)
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+    mutate(formData);
+    setFormValues(initialValues);
+  }
 
   return (
-    <div className="container mx-auto p-5 ">
+    <div className="container mx-auto p-5">
       <h2 className="text-2xl font-bold text-center mb-5">Add Project</h2>
       <form
-        onSubmit={handleSubmit}
         className="grid gap-1 md:gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+        onSubmit={handleSubmit}
       >
         {/* Project Name */}
         <div className="form-control">
@@ -89,11 +115,11 @@ function AddProjectForm() {
           </label>
           <input
             type="text"
-            name="projectName"
-            value={formData.projectName}
-            onChange={handleChange}
             className="input input-bordered"
             placeholder="Enter project name"
+            name="title"
+            value={formValues.title}
+            onChange={onInputChange}
           />
         </div>
 
@@ -104,11 +130,11 @@ function AddProjectForm() {
           </label>
           <input
             type="text"
-            name="oneLineDescription"
-            value={formData.oneLineDescription}
-            onChange={handleChange}
             className="input input-bordered"
             placeholder="Say one line about the project"
+            name="summary"
+            value={formValues.summary}
+            onChange={onInputChange}
           />
         </div>
 
@@ -119,26 +145,26 @@ function AddProjectForm() {
           </label>
           <input
             type="text"
-            name="frontendTechnologies"
-            value={formData.frontendTechnologies}
-            onChange={handleChange}
             className="input input-bordered"
             placeholder="Enter frontend technologies (comma-separated)"
+            name="frontEndTech"
+            value={formValues.frontEndTech}
+            onChange={onInputChange}
           />
         </div>
 
         {/* Backend Technologies */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Backend Technologies</span>
+            <span className="label-text">Backend Technologies:</span>
           </label>
           <input
             type="text"
-            name="backendTechnologies"
-            value={formData.backendTechnologies}
-            onChange={handleChange}
             className="input input-bordered"
             placeholder="Enter backend technologies (comma-separated)"
+            name="backEndTech"
+            value={formValues.backEndTech}
+            onChange={onInputChange}
           />
         </div>
 
@@ -149,11 +175,11 @@ function AddProjectForm() {
           </label>
           <input
             type="text"
-            name="liveLink"
-            value={formData.liveLink}
-            onChange={handleChange}
             className="input input-bordered"
             placeholder="Enter live link"
+            name="liveLink"
+            value={formValues.liveLink}
+            onChange={onInputChange}
           />
         </div>
 
@@ -164,11 +190,11 @@ function AddProjectForm() {
           </label>
           <input
             type="text"
-            name="frontendRepo"
-            value={formData.frontendRepo}
-            onChange={handleChange}
             className="input input-bordered"
             placeholder="Enter frontend repo link"
+            name="frontEndRepo"
+            value={formValues.frontEndRepo}
+            onChange={onInputChange}
           />
         </div>
 
@@ -179,11 +205,11 @@ function AddProjectForm() {
           </label>
           <input
             type="text"
-            name="backendRepo"
-            value={formData.backendRepo}
-            onChange={handleChange}
             className="input input-bordered"
             placeholder="Enter backend repo link"
+            name="backEndRepo"
+            value={formValues.backEndRepo}
+            onChange={onInputChange}
           />
         </div>
 
@@ -193,11 +219,11 @@ function AddProjectForm() {
             <span className="label-text">Project Details:</span>
           </label>
           <textarea
-            name="projectDetails"
-            value={formData.projectDetails}
-            onChange={handleChange}
             className="textarea textarea-bordered md:h-32"
             placeholder="Enter project details"
+            name="projectDetails"
+            value={formValues.projectDetails}
+            onChange={onInputChange}
           />
         </div>
 
@@ -207,10 +233,10 @@ function AddProjectForm() {
             <span className="label-text">Show on Homepage:</span>
             <input
               type="checkbox"
-              name="showOnHomepage"
-              checked={formData.showOnHomepage}
-              onChange={onToggleChange}
               className="toggle toggle-primary"
+              name="showOnHomepage"
+              checked={formValues.showOnHomepage}
+              onChange={onCheckboxChange}
             />
           </label>
         </div>
@@ -222,24 +248,25 @@ function AddProjectForm() {
           </label>
           <input
             type="file"
-            name="image"
-            onChange={handleFileChange}
             className="file-input file-input-bordered w-full max-w-xs"
+            name="image"
+            onChange={onFileChange}
           />
         </div>
-        {image && <img src={image} alt="Project" />}
+        {imagePreview && (
+          <img src={imagePreview} alt="Preview" className="mt-3" />
+        )}
 
         {/* Submit Button */}
         <button
           type="submit"
           className="btn btn-primary w-full mt-5 md:col-span-2 lg:col-span-3"
+          disabled={isPending}
         >
-          Add Project
+          {isPending ? "Adding Project..." : "Add Project"}
         </button>
-        {formErrors && (
-          <p className="text-red-500 text-sm mt-2">{formErrors}</p>
-        )}
       </form>
+      {formError && <div className="alert alert-error mt-5">{formError}</div>}
     </div>
   );
 }
