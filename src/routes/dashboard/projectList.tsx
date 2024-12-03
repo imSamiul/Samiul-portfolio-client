@@ -1,13 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useGetAllProjects } from "../../services/quries/projectQuries";
 import { ProjectType } from "../../types/ProjectType";
+import { useUpdateShowOnHomePage } from "../../services/mutations/projectMutation";
+import Loader from "../../components/UI/Loader";
 
 export const Route = createFileRoute("/dashboard/projectList")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data } = useGetAllProjects();
+  const { data, isLoading } = useGetAllProjects();
+  const { mutate, isPending } = useUpdateShowOnHomePage();
+
+  if (isPending) {
+    return <Loader className="h-screen" />;
+  }
+  if (isLoading) {
+    return <Loader className="h-screen" />;
+  }
 
   return (
     <div className="container mx-auto p-5">
@@ -28,7 +38,7 @@ function RouteComponent() {
           <tbody>
             {data?.map((project: ProjectType, index: number) => {
               return (
-                <tr key={project.id} className="hover">
+                <tr key={project._id} className="hover">
                   <th>{index + 1}</th>
                   <td>{project.title}</td>
                   <td>{project.liveLink}</td>
@@ -36,7 +46,10 @@ function RouteComponent() {
                     <input
                       type="checkbox"
                       className="toggle toggle-sm"
-                      checked={project.showOnHomepage}
+                      defaultChecked={project.showOnHomepage}
+                      onChange={() => {
+                        mutate(project._id!);
+                      }}
                     />
                   </td>
                   <td>

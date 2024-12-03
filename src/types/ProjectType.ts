@@ -1,5 +1,5 @@
 export type ProjectType = {
-  id?: string;
+  _id?: string;
   title: string;
   summary: string;
   frontEndTech: string[] | string;

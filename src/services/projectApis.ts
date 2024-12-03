@@ -42,3 +42,13 @@ export async function createNewProject(formData: FormData) {
     throw new Error(getErrorMessage(error));
   }
 }
+
+// PATCH: update showOnHomePage
+export async function updateShowOnHomePage(projectId: string) {
+  try {
+    const response = await instance.patch(`/updateShowOnHomePage/${projectId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
