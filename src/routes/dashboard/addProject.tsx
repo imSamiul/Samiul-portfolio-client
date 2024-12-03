@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { useCreateNewProject } from "../../services/mutation/projectMutation";
+import { useCreateNewProject } from "../../services/mutations/projectMutation";
 import { useState } from "react";
 import { ProjectType } from "../../types/ProjectType";
 

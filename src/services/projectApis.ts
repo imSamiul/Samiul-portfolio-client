@@ -19,6 +19,16 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
+// GET: get all projects
+export async function getAllProjects() {
+  try {
+    const response = await instance.get("/getAllProjects");
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
 // POST:create new project
 export async function createNewProject(formData: FormData) {
   try {

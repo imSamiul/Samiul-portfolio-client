@@ -31,7 +31,7 @@ function DashBoard() {
             <Link to="/dashboard/addProject">Add Project</Link>
           </li>
           <li>
-            <a>Sidebar Item 2</a>
+            <Link to="/dashboard/projectList">Project List</Link>
           </li>
         </ul>
       </div>

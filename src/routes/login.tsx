@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useLoginUser } from "../services/mutation/userMutation";
+import { useLoginUser } from "../services/mutations/userMutation";
 import { useState } from "react";
 import { LoginFormType } from "../types/userType";
 
