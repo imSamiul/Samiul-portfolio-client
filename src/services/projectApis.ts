@@ -2,6 +2,7 @@ import axios from "axios";
 import { getAuthToken } from "../utils/auth";
 
 import { getErrorMessage } from "../utils/errorHandler";
+import { ProjectType } from "../types/ProjectType";
 
 const apiUrl = `${import.meta.env.VITE_BASE_URL}/api/project`;
 
@@ -28,6 +29,15 @@ export async function getAllProjects() {
     throw new Error(getErrorMessage(error));
   }
 }
+// GET: get project by id
+export async function getProjectById(projectId: string) {
+  try {
+    const response = await instance.get(`/getProjectById/${projectId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
 
 // POST:create new project
 export async function createNewProject(formData: FormData) {
@@ -47,6 +57,24 @@ export async function createNewProject(formData: FormData) {
 export async function updateShowOnHomePage(projectId: string) {
   try {
     const response = await instance.patch(`/updateShowOnHomePage/${projectId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
+// PATCH: update project
+export async function updateProject(projectId: string, formData: ProjectType) {
+  try {
+    const response = await instance.patch(
+      `/updateProject/${projectId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw new Error(getErrorMessage(error));

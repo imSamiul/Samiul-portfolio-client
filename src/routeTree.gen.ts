@@ -19,6 +19,7 @@ import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardProjectListImport } from './routes/dashboard/projectList'
 import { Route as DashboardAddProjectImport } from './routes/dashboard/addProject'
+import { Route as DashboardEditProjectProjectIdImport } from './routes/dashboard/editProject/$projectId'
 
 // Create/Update Routes
 
@@ -69,6 +70,13 @@ const DashboardAddProjectRoute = DashboardAddProjectImport.update({
   path: '/addProject',
   getParentRoute: () => DashboardRoute,
 } as any)
+
+const DashboardEditProjectProjectIdRoute =
+  DashboardEditProjectProjectIdImport.update({
+    id: '/editProject/$projectId',
+    path: '/editProject/$projectId',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -130,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProjectListImport
       parentRoute: typeof DashboardImport
     }
+    '/dashboard/editProject/$projectId': {
+      id: '/dashboard/editProject/$projectId'
+      path: '/editProject/$projectId'
+      fullPath: '/dashboard/editProject/$projectId'
+      preLoaderRoute: typeof DashboardEditProjectProjectIdImport
+      parentRoute: typeof DashboardImport
+    }
   }
 }
 
@@ -138,11 +153,13 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteChildren {
   DashboardAddProjectRoute: typeof DashboardAddProjectRoute
   DashboardProjectListRoute: typeof DashboardProjectListRoute
+  DashboardEditProjectProjectIdRoute: typeof DashboardEditProjectProjectIdRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAddProjectRoute: DashboardAddProjectRoute,
   DashboardProjectListRoute: DashboardProjectListRoute,
+  DashboardEditProjectProjectIdRoute: DashboardEditProjectProjectIdRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
@@ -158,6 +175,7 @@ export interface FileRoutesByFullPath {
   '/resume': typeof ResumeRoute
   '/dashboard/addProject': typeof DashboardAddProjectRoute
   '/dashboard/projectList': typeof DashboardProjectListRoute
+  '/dashboard/editProject/$projectId': typeof DashboardEditProjectProjectIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -169,6 +187,7 @@ export interface FileRoutesByTo {
   '/resume': typeof ResumeRoute
   '/dashboard/addProject': typeof DashboardAddProjectRoute
   '/dashboard/projectList': typeof DashboardProjectListRoute
+  '/dashboard/editProject/$projectId': typeof DashboardEditProjectProjectIdRoute
 }
 
 export interface FileRoutesById {
@@ -181,6 +200,7 @@ export interface FileRoutesById {
   '/resume': typeof ResumeRoute
   '/dashboard/addProject': typeof DashboardAddProjectRoute
   '/dashboard/projectList': typeof DashboardProjectListRoute
+  '/dashboard/editProject/$projectId': typeof DashboardEditProjectProjectIdRoute
 }
 
 export interface FileRouteTypes {
@@ -194,6 +214,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/dashboard/addProject'
     | '/dashboard/projectList'
+    | '/dashboard/editProject/$projectId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -204,6 +225,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/dashboard/addProject'
     | '/dashboard/projectList'
+    | '/dashboard/editProject/$projectId'
   id:
     | '__root__'
     | '/'
@@ -214,6 +236,7 @@ export interface FileRouteTypes {
     | '/resume'
     | '/dashboard/addProject'
     | '/dashboard/projectList'
+    | '/dashboard/editProject/$projectId'
   fileRoutesById: FileRoutesById
 }
 
@@ -263,7 +286,8 @@ export const routeTree = rootRoute
       "filePath": "dashboard.tsx",
       "children": [
         "/dashboard/addProject",
-        "/dashboard/projectList"
+        "/dashboard/projectList",
+        "/dashboard/editProject/$projectId"
       ]
     },
     "/login": {
@@ -281,6 +305,10 @@ export const routeTree = rootRoute
     },
     "/dashboard/projectList": {
       "filePath": "dashboard/projectList.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/editProject/$projectId": {
+      "filePath": "dashboard/editProject/$projectId.tsx",
       "parent": "/dashboard"
     }
   }

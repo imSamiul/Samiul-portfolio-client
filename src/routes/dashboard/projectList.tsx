@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useGetAllProjects } from "../../services/quries/projectQuries";
 import { ProjectType } from "../../types/ProjectType";
 import { useUpdateShowOnHomePage } from "../../services/mutations/projectMutation";
@@ -53,7 +53,13 @@ function RouteComponent() {
                     />
                   </td>
                   <td>
-                    <button className="btn btn-sm btn-outline">Edit</button>
+                    <Link
+                      to="/dashboard/editProject/$projectId"
+                      params={{ projectId: project._id! }}
+                      className="btn btn-sm btn-outline"
+                    >
+                      Edit
+                    </Link>
                   </td>
                   <td>
                     <button className="btn btn-sm btn-outline btn-error">

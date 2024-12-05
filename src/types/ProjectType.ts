@@ -9,7 +9,7 @@ export type ProjectType = {
   backEndRepo: string;
   projectDetails: string;
   showOnHomepage?: boolean;
-  image: File | null;
+  image?: File | null;
   createdAt?: Date;
   updatedAt?: Date;
 };
