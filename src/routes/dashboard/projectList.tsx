@@ -38,8 +38,6 @@ function RouteComponent() {
           </thead>
           <tbody>
             {data?.map((project: ProjectType, index: number) => {
-              console.log(typeof project.image?.data);
-
               return (
                 <tr key={project._id} className="hover">
                   <th>{index + 1}</th>
@@ -71,7 +69,11 @@ function RouteComponent() {
                       modalId={project._id!}
                       title={project.title}
                       summary={project.summary}
-                      image={project.image ? project.image.data : null}
+                      image={
+                        project.image && "data" in project.image
+                          ? project.image.data
+                          : null
+                      }
                       liveLink={project.liveLink}
                     />
                   </td>

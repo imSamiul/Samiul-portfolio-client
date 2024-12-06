@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCreateNewProject } from "../../services/mutations/projectMutation";
 import { useState } from "react";
 import { ProjectType } from "../../types/ProjectType";
+import Toast from "../../components/UI/Toast";
 
 export const Route = createFileRoute("/dashboard/addProject")({
   component: AddProjectForm,
@@ -18,7 +19,7 @@ const initialValues = {
   backEndRepo: "",
   projectDetails: "",
   showOnHomepage: false,
-  image: null,
+  image: undefined,
 };
 
 function AddProjectForm() {
@@ -26,7 +27,7 @@ function AddProjectForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const { mutate, isPending } = useCreateNewProject();
+  const { mutate, isPending, isError, error } = useCreateNewProject();
 
   function onInputChange(
     e:
@@ -93,16 +94,17 @@ function AddProjectForm() {
       }
     });
 
-    // Debugging FormData (Optional)
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
-    mutate(formData);
-    setFormValues(initialValues);
+    mutate(formData, {
+      onSuccess: () => {
+        setFormValues(initialValues);
+        setImagePreview(null);
+      },
+    });
   }
 
   return (
     <div className="container mx-auto p-5">
+      {isError && <Toast message={error?.message} />}
       <h2 className="text-2xl font-bold text-center mb-5">Add Project</h2>
       <form
         className="grid gap-1 md:gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
