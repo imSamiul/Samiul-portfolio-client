@@ -9,7 +9,20 @@ export type ProjectType = {
   backEndRepo: string;
   projectDetails: string;
   showOnHomepage?: boolean;
-  image?: File | null;
+  image?: ImageType;
   createdAt?: Date;
   updatedAt?: Date;
+};
+
+export type DeleteProjectModalPropsType = {
+  modalId: string;
+  title: string;
+  summary: string;
+  image: string | null;
+  liveLink: string;
+};
+
+export type ImageType = {
+  data: string;
+  contentType: string;
 };

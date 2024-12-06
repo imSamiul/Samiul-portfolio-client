@@ -3,6 +3,7 @@ import { useGetAllProjects } from "../../services/quries/projectQuries";
 import { ProjectType } from "../../types/ProjectType";
 import { useUpdateShowOnHomePage } from "../../services/mutations/projectMutation";
 import Loader from "../../components/UI/Loader";
+import ProjectDeleteModal from "../../components/UI/ProjectDeleteModal";
 
 export const Route = createFileRoute("/dashboard/projectList")({
   component: RouteComponent,
@@ -37,6 +38,8 @@ function RouteComponent() {
           </thead>
           <tbody>
             {data?.map((project: ProjectType, index: number) => {
+              console.log(typeof project.image?.data);
+
               return (
                 <tr key={project._id} className="hover">
                   <th>{index + 1}</th>
@@ -53,18 +56,24 @@ function RouteComponent() {
                     />
                   </td>
                   <td>
-                    <Link
-                      to="/dashboard/editProject/$projectId"
-                      params={{ projectId: project._id! }}
-                      className="btn btn-sm btn-outline"
-                    >
-                      Edit
-                    </Link>
+                    <div>
+                      <Link
+                        to="/dashboard/editProject/$projectId"
+                        params={{ projectId: project._id! }}
+                        className="btn btn-md btn-outline"
+                      >
+                        Edit
+                      </Link>
+                    </div>
                   </td>
                   <td>
-                    <button className="btn btn-sm btn-outline btn-error">
-                      Delete
-                    </button>
+                    <ProjectDeleteModal
+                      modalId={project._id!}
+                      title={project.title}
+                      summary={project.summary}
+                      image={project.image ? project.image.data : null}
+                      liveLink={project.liveLink}
+                    />
                   </td>
                 </tr>
               );

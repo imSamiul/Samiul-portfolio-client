@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
   createNewProject,
+  deleteProject,
   updateProject,
   updateShowOnHomePage,
 } from "../projectApis";
@@ -33,6 +34,17 @@ export function useUpdateProject() {
       projectId: string;
       formData: ProjectType;
     }) => updateProject(projectId, formData),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["allProjects"] });
+    },
+  });
+}
+
+// Delete project
+export function useDeleteProject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (projectId: string) => deleteProject(projectId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["allProjects"] });
     },

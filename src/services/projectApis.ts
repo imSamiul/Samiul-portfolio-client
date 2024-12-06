@@ -80,3 +80,13 @@ export async function updateProject(projectId: string, formData: ProjectType) {
     throw new Error(getErrorMessage(error));
   }
 }
+
+// DELETE: delete project
+export async function deleteProject(projectId: string) {
+  try {
+    const response = await instance.delete(`/deleteProject/${projectId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
