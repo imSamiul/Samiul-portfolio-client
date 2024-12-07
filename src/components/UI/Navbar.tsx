@@ -36,7 +36,7 @@ function Navbar() {
                 <Link to="/resume">Resume</Link>
               </li>
               <li>
-                <Link to="/projects">Projects</Link>
+                <Link to="/projects/allProjects">Projects</Link>
               </li>
               <li>
                 {getAuthToken() && <Link to="/dashboard">Dashboard</Link>}
@@ -59,7 +59,7 @@ function Navbar() {
               <Link to="/resume">Resume</Link>
             </li>
             <li>
-              <Link to="/projects">Projects</Link>
+              <Link to="/projects/allProjects">Projects</Link>
             </li>
             <li>{getAuthToken() && <Link to="/dashboard">Dashboard</Link>}</li>
           </ul>

@@ -6,6 +6,7 @@ import FollowMe from "../components/homepage/FollowMe";
 import Hero from "../components/homepage/Hero";
 
 import { getProjectsForHomepage } from "../services/projectApis";
+import Loader from "../components/UI/Loader";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -23,7 +24,7 @@ function Home() {
     <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
       <Hero />
       <Skills />
-      <Await promise={homePageProject} fallback={<div>Loading....</div>}>
+      <Await promise={homePageProject} fallback={<Loader></Loader>}>
         {(data) => <Projects projects={data} />}
       </Await>
 

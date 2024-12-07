@@ -12,11 +12,12 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ResumeImport } from './routes/resume'
-import { Route as ProjectsImport } from './routes/projects'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProjectsAllProjectsImport } from './routes/projects/allProjects'
+import { Route as ProjectsProjectIdImport } from './routes/projects/$projectId'
 import { Route as DashboardProjectListImport } from './routes/dashboard/projectList'
 import { Route as DashboardAddProjectImport } from './routes/dashboard/addProject'
 import { Route as DashboardEditProjectProjectIdImport } from './routes/dashboard/editProject/$projectId'
@@ -26,12 +27,6 @@ import { Route as DashboardEditProjectProjectIdImport } from './routes/dashboard
 const ResumeRoute = ResumeImport.update({
   id: '/resume',
   path: '/resume',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ProjectsRoute = ProjectsImport.update({
-  id: '/projects',
-  path: '/projects',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -56,6 +51,18 @@ const AboutRoute = AboutImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProjectsAllProjectsRoute = ProjectsAllProjectsImport.update({
+  id: '/projects/allProjects',
+  path: '/projects/allProjects',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProjectsProjectIdRoute = ProjectsProjectIdImport.update({
+  id: '/projects/$projectId',
+  path: '/projects/$projectId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -110,13 +117,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/projects': {
-      id: '/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof ProjectsImport
-      parentRoute: typeof rootRoute
-    }
     '/resume': {
       id: '/resume'
       path: '/resume'
@@ -137,6 +137,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/projectList'
       preLoaderRoute: typeof DashboardProjectListImport
       parentRoute: typeof DashboardImport
+    }
+    '/projects/$projectId': {
+      id: '/projects/$projectId'
+      path: '/projects/$projectId'
+      fullPath: '/projects/$projectId'
+      preLoaderRoute: typeof ProjectsProjectIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/projects/allProjects': {
+      id: '/projects/allProjects'
+      path: '/projects/allProjects'
+      fullPath: '/projects/allProjects'
+      preLoaderRoute: typeof ProjectsAllProjectsImport
+      parentRoute: typeof rootRoute
     }
     '/dashboard/editProject/$projectId': {
       id: '/dashboard/editProject/$projectId'
@@ -171,10 +185,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
   '/dashboard/addProject': typeof DashboardAddProjectRoute
   '/dashboard/projectList': typeof DashboardProjectListRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/projects/allProjects': typeof ProjectsAllProjectsRoute
   '/dashboard/editProject/$projectId': typeof DashboardEditProjectProjectIdRoute
 }
 
@@ -183,10 +198,11 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
   '/dashboard/addProject': typeof DashboardAddProjectRoute
   '/dashboard/projectList': typeof DashboardProjectListRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/projects/allProjects': typeof ProjectsAllProjectsRoute
   '/dashboard/editProject/$projectId': typeof DashboardEditProjectProjectIdRoute
 }
 
@@ -196,10 +212,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
   '/dashboard/addProject': typeof DashboardAddProjectRoute
   '/dashboard/projectList': typeof DashboardProjectListRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/projects/allProjects': typeof ProjectsAllProjectsRoute
   '/dashboard/editProject/$projectId': typeof DashboardEditProjectProjectIdRoute
 }
 
@@ -210,10 +227,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/login'
-    | '/projects'
     | '/resume'
     | '/dashboard/addProject'
     | '/dashboard/projectList'
+    | '/projects/$projectId'
+    | '/projects/allProjects'
     | '/dashboard/editProject/$projectId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -221,10 +239,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/login'
-    | '/projects'
     | '/resume'
     | '/dashboard/addProject'
     | '/dashboard/projectList'
+    | '/projects/$projectId'
+    | '/projects/allProjects'
     | '/dashboard/editProject/$projectId'
   id:
     | '__root__'
@@ -232,10 +251,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/login'
-    | '/projects'
     | '/resume'
     | '/dashboard/addProject'
     | '/dashboard/projectList'
+    | '/projects/$projectId'
+    | '/projects/allProjects'
     | '/dashboard/editProject/$projectId'
   fileRoutesById: FileRoutesById
 }
@@ -245,8 +265,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
-  ProjectsRoute: typeof ProjectsRoute
   ResumeRoute: typeof ResumeRoute
+  ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
+  ProjectsAllProjectsRoute: typeof ProjectsAllProjectsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -254,8 +275,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
-  ProjectsRoute: ProjectsRoute,
   ResumeRoute: ResumeRoute,
+  ProjectsProjectIdRoute: ProjectsProjectIdRoute,
+  ProjectsAllProjectsRoute: ProjectsAllProjectsRoute,
 }
 
 export const routeTree = rootRoute
@@ -272,8 +294,9 @@ export const routeTree = rootRoute
         "/about",
         "/dashboard",
         "/login",
-        "/projects",
-        "/resume"
+        "/resume",
+        "/projects/$projectId",
+        "/projects/allProjects"
       ]
     },
     "/": {
@@ -293,9 +316,6 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.tsx"
     },
-    "/projects": {
-      "filePath": "projects.tsx"
-    },
     "/resume": {
       "filePath": "resume.tsx"
     },
@@ -306,6 +326,12 @@ export const routeTree = rootRoute
     "/dashboard/projectList": {
       "filePath": "dashboard/projectList.tsx",
       "parent": "/dashboard"
+    },
+    "/projects/$projectId": {
+      "filePath": "projects/$projectId.tsx"
+    },
+    "/projects/allProjects": {
+      "filePath": "projects/allProjects.tsx"
     },
     "/dashboard/editProject/$projectId": {
       "filePath": "dashboard/editProject/$projectId.tsx",
