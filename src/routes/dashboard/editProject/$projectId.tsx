@@ -1,17 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ProjectType } from "../../../types/ProjectType";
-import { useGetProjectById } from "../../../services/quries/projectQuries";
-import { useSuspenseQuery } from "@tanstack/react-query";
+
 import { useUpdateProject } from "../../../services/mutations/projectMutation";
+import { getProjectById } from "../../../services/projectApis";
 
 export const Route = createFileRoute("/dashboard/editProject/$projectId")({
+  loader: async ({ params: { projectId } }) => getProjectById(projectId),
+  errorComponent: () => <div>Error</div>,
+  notFoundComponent: () => <div>Not Found</div>,
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const projectId = Route.useParams().projectId;
-  const { data: project } = useSuspenseQuery(useGetProjectById(projectId));
+  const project = Route.useLoaderData();
 
   const [formValues, setFormValues] = useState<ProjectType>({
     title: project.title,

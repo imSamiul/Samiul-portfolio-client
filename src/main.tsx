@@ -8,10 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 const router = createRouter({
   routeTree,
-  context: {
-    queryClient,
-  },
   defaultPreload: "intent",
+  defaultStaleTime: 5000,
 });
 
 // Register things for typeSafety
