@@ -38,6 +38,15 @@ export async function getProjectById(projectId: string) {
     throw new Error(getErrorMessage(error));
   }
 }
+// GET: get projects for homepage
+export async function getProjectsForHomepage() {
+  try {
+    const response = await instance.get("/getProjectsForHomepage");
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
 
 // POST:create new project
 export async function createNewProject(formData: FormData) {

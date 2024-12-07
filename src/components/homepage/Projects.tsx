@@ -2,7 +2,9 @@ import keeper from "../../assets/keeper.png";
 import ProjectPay from "../../assets/project-pay.png";
 import BariVara from "../../assets/bari-vara.png";
 
-function Projects() {
+function Projects({ projects }: any) {
+  console.log(projects);
+
   return (
     <div className="my-5 md:my-10">
       <h1 className="text-xl md:text-3xl font-bold font-Montserrat mb-5">
