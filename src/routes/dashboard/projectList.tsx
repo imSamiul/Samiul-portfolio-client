@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useGetAllProjects } from "../../services/quries/projectQuries";
+import { useGetAllProjects } from "../../services/queries/projectQueries";
 import { ProjectType } from "../../types/ProjectType";
 import { useUpdateShowOnHomePage } from "../../services/mutations/projectMutation";
 import Loader from "../../components/UI/Loader";
@@ -70,8 +70,8 @@ function RouteComponent() {
                       title={project.title}
                       summary={project.summary}
                       image={
-                        project.image && "data" in project.image
-                          ? project.image.data
+                        project.image && typeof project.image === "string"
+                          ? project.image
                           : null
                       }
                       liveLink={project.liveLink}

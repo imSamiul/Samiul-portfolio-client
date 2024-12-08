@@ -35,7 +35,7 @@ function ProjectDeleteModal({
           <div className="flex flex-col gap-3 py-3">
             <div className="my-2">
               <img
-                src={image ? `data:image/jpeg;base64,${image}` : ""}
+                src={image ? image : ""}
                 alt={title}
                 className="w-full h-full object-cover"
               />

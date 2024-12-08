@@ -1,5 +1,6 @@
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getAllProjects, getProjectById } from "../projectApis";
+import { ProjectType } from "../../types/ProjectType";
 
 export function useGetAllProjects() {
   return useQuery({
@@ -9,7 +10,7 @@ export function useGetAllProjects() {
 }
 
 export function useGetProjectById(projectId: string) {
-  return queryOptions({
+  return useQuery<ProjectType>({
     queryKey: ["projectById", projectId],
     queryFn: () => getProjectById(projectId),
   });
