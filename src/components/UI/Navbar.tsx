@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { getAuthToken } from "../../utils/auth";
+
+import { useAuth } from "../../hooks/useAuth";
 
 function Navbar() {
+  const { isAuthenticated } = useAuth();
   return (
     <div>
       <div className="navbar bg-base-100">
@@ -39,7 +41,7 @@ function Navbar() {
                 <Link to="/projects/allProjects">Projects</Link>
               </li>
               <li>
-                {getAuthToken() && <Link to="/dashboard">Dashboard</Link>}
+                {isAuthenticated && <Link to="/dashboard">Dashboard</Link>}
               </li>
             </ul>
           </div>
@@ -61,7 +63,7 @@ function Navbar() {
             <li>
               <Link to="/projects/allProjects">Projects</Link>
             </li>
-            <li>{getAuthToken() && <Link to="/dashboard">Dashboard</Link>}</li>
+            <li>{isAuthenticated && <Link to="/dashboard">Dashboard</Link>}</li>
           </ul>
         </div>
       </div>

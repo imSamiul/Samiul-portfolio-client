@@ -1,7 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { useRouter } from "@tanstack/react-router";
 
-type AuthContextType = {
+export type AuthContextType = {
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
@@ -17,15 +18,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!Cookies.get("token")
   );
+  const router = useRouter();
 
   const login = (token: string) => {
     Cookies.set("token", token, { expires: 7 });
+
     setIsAuthenticated(true);
+    router.invalidate();
   };
 
   const logout = () => {
     Cookies.remove("token");
     setIsAuthenticated(false);
+    router.invalidate();
   };
 
   useEffect(() => {

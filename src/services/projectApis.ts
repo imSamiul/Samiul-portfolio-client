@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAuthToken } from "../utils/auth";
+import Cookies from "js-cookie";
 
 import { getErrorMessage } from "../utils/errorHandler";
 import { ProjectType } from "../types/ProjectType";
@@ -13,7 +13,7 @@ const defaultOptions = {
 const instance = axios.create(defaultOptions);
 
 instance.interceptors.request.use((config) => {
-  const TOKEN = getAuthToken();
+  const TOKEN = Cookies.get("token");
   if (TOKEN) {
     config.headers.Authorization = `Bearer ${TOKEN}`;
   }

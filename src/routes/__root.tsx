@@ -1,9 +1,14 @@
 import * as React from "react";
-import { Outlet, createRootRoute } from "@tanstack/react-router";
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import Navbar from "../components/UI/Navbar";
 import Footer from "../components/Footer";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AuthContextType } from "../contexts/AuthContext";
+
+interface MyRouterContextType {
+  auth: AuthContextType;
+}
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -17,7 +22,7 @@ const TanStackRouterDevtools =
         }))
       );
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<MyRouterContextType>()({
   component: RootComponent,
 });
 
