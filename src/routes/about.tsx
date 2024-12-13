@@ -11,7 +11,9 @@ export const Route = createFileRoute("/about")({
 function AboutComponent() {
   return (
     <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
-      <h1 className="text-center text-3xl font-bold mb-5">About me</h1>
+      <div className="sticky top-0 bg-white py-2 md:py-5">
+        <h1 className="text-center text-3xl font-bold mb-5">About me</h1>
+      </div>
       <div className=" flex flex-col-reverse  items-center gap-5 px-4 py-8 lg:flex-row lg:gap-10 lg:px-16">
         <div className="text-center lg:text-left">
           <h2 className="text-xl md:text-2xl  font-semibold lg:text-3xl font-Montserrat">
