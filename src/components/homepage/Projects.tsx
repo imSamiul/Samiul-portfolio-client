@@ -7,7 +7,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {projects.map((project) => (
           <div
-            className="card card-compact bg-base-100  shadow-xl rounded-lg"
+            className="card card-compact bg-base-100  shadow-xl rounded-lg z-0"
             key={project._id}
           >
             <figure>
