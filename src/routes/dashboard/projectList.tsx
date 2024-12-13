@@ -70,9 +70,9 @@ function RouteComponent() {
                       title={project.title}
                       summary={project.summary}
                       image={
-                        project.image && typeof project.image === "string"
-                          ? project.image
-                          : null
+                        project.image && "data" in project.image
+                          ? `data:image/jpeg;base64,${project.image?.data}`
+                          : ""
                       }
                       liveLink={project.liveLink}
                     />

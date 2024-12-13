@@ -8,7 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 
 // Set up a Router instance
 const queryClient = new QueryClient();
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultStaleTime: 5000,

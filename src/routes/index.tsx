@@ -20,12 +20,22 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { homePageProject } = Route.useLoaderData();
+
   return (
     <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
       <Hero />
       <Skills />
       <Await promise={homePageProject} fallback={<Loader></Loader>}>
-        {(data) => <Projects projects={data} />}
+        {(data) => {
+          return (
+            <div>
+              <h1 className="text-xl md:text-3xl font-bold font-Montserrat mb-5">
+                Projects
+              </h1>
+              <Projects projects={data} />
+            </div>
+          );
+        }}
       </Await>
 
       <div className="divider md:my-20"></div>
