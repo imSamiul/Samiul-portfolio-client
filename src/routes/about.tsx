@@ -49,17 +49,15 @@ function AboutComponent() {
           passion. By 2023, during my final semester, I was actively building
           full-stack projects, exploring new tools, and honing my skills. I
           watch tutorials videos, read blogs, and work on side projects to keep
-          my skills sharp. I also have experience working with clients and
-          collaborating with other developers to deliver high-quality products.
-          I work on different tools of web development. First I started with
-          HTML then CSS. After that I learn css framework Tailwind, Bootstrap.
-          Then I learn JavaScript then React.JS. I also learn Node.JS to build
-          full-stack website. I also learn Express.JS, MongoDB, Mongoose to
-          build full-stack website. I also learn Redux toolkit, React Context
-          API to manage state effectively. I also learn how to integrate
-          authentication systems with JWT, Passport.js, and OAuth. I also learn
-          how to build RESTful APIs. I also learn how to build secure and
-          scalable back-end systems with Node.js, Express.js, MongoDB, and
+          my skills sharp. I work on different tools of web development. First I
+          started with HTML then CSS. After that I learn css framework Tailwind,
+          Bootstrap. Then I learn JavaScript then React.JS. I also learn Node.JS
+          to build full-stack website. I also learn Express.JS, MongoDB,
+          Mongoose to build full-stack website. I also learn Redux toolkit,
+          React Context API to manage state effectively. I also learn how to
+          integrate authentication systems with JWT, Passport.js, and OAuth. I
+          also learn how to build RESTful APIs. I also learn how to build secure
+          and scalable back-end systems with Node.js, Express.js, MongoDB, and
           Mongoose. I also learn how to build dynamic, responsive front-end
           interfaces using React, TypeScript, Tailwind, and Bootstrap. Recently
           I learn about TypeScript. I am a big fan of TypeScript. I also a big
