@@ -10,6 +10,7 @@ export const buttonTools = [
   "tools",
   "python",
   "javascript",
+  "authentication",
 ];
 export const colors = [
   "#03071eff",
@@ -110,6 +111,12 @@ export const skillsData = [
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
+    tools: "TanStack Table",
+    value: 65,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
+  },
+  {
     tools: "RESTful APIs",
     value: 90,
     color: colors[Math.floor(Math.random() * 9)],
@@ -187,6 +194,36 @@ export const skillsData = [
     value: 65,
     color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
+  },
+  {
+    tools: "Figma",
+    value: 70,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: ["allSkills", "tools"],
+  },
+  {
+    tools: "Postman",
+    value: 75,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: ["allSkills", "tools"],
+  },
+  {
+    tools: "JWT",
+    value: 80,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: ["allSkills", "authentication"],
+  },
+  {
+    tools: "OAuth",
+    value: 70,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: ["allSkills", "authentication"],
+  },
+  {
+    tools: "Passport.JS",
+    value: 80,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: ["allSkills", "authentication"],
   },
 ];
 
