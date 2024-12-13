@@ -407,11 +407,17 @@ function ResumeComponent() {
   }
   function onPress(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     e.preventDefault();
-    const target = window.document.getElementById(
-      e.currentTarget.href.split("#")[1]
-    );
+    const targetId = e.currentTarget.href.split("#")[1];
+    const target = window.document.getElementById(targetId);
+    const navbarHeight = document.querySelector(".sticky")?.clientHeight || 0; // Get the height of the sticky navbar
+
     if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+      const targetPosition =
+        target.getBoundingClientRect().top + window.scrollY - navbarHeight;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: "smooth",
+      });
     }
   }
 
