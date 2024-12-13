@@ -40,7 +40,7 @@ function AboutComponent() {
       </div>
 
       <div className="py-4 md:py-8">
-        <h2 className="text-base md:text-lg  font-semibold lg:text-xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
           My Journey
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -75,7 +75,7 @@ function AboutComponent() {
         </p>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-base md:text-lg  font-semibold lg:text-xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
           What I Offer
         </h2>
         <div className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -228,7 +228,7 @@ function AboutComponent() {
         </div>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-base md:text-lg  font-semibold lg:text-xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
           Why Me?
         </h2>
         <div className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -262,7 +262,7 @@ function AboutComponent() {
         </div>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-base md:text-lg  font-semibold lg:text-xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
           Beyond Code
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -297,7 +297,7 @@ function AboutComponent() {
         </p>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-base md:text-lg  font-semibold lg:text-xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
           Currently
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -305,7 +305,7 @@ function AboutComponent() {
         </p>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-base md:text-lg  font-semibold lg:text-xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
           Contact Me
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">

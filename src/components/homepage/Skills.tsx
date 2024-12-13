@@ -13,14 +13,20 @@ import TanstackIcon from "../../assets/logo-color-600w-Bx4vtR8J.png";
 import FigmaIcon from "../../assets/figma.svg";
 import JWTIcon from "../../assets/icons8-jwt.svg";
 import PassportJSIcon from "../../assets/passport-seeklogo.svg";
+import BootstrapIcon from "../../assets/bootstrap.png";
+import ReactRouterIcon from "../../assets/react-router.svg";
+import FirebaseIcon from "../../assets/firebase.png";
+import GitIcon from "../../assets/git.svg";
+import GithubIcon from "../../assets/github.svg";
+import ReduxToolkitIcon from "../../assets/redux.svg";
 
 function Skills() {
   return (
-    <div className="my-5">
-      <h1 className="text-xl md:text-3xl font-bold font-Montserrat mb-5">
+    <div className="py-4 md:py-8">
+      <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat">
         Skills
       </h1>
-      <div className="grid  grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="mt-3 py-2 lg:mt-5 grid  grid-cols-2 md:grid-cols-5 gap-3">
         <div className=" border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
           <img
             src={HTMLIcon}
@@ -44,6 +50,14 @@ function Skills() {
             className="h-5 w-5 md:h-7 md:w-7"
           />
           <p>Tailwind CSS</p>
+        </div>
+        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+          <img
+            src={BootstrapIcon}
+            alt="react-icon"
+            className="h-5 w-5 md:h-7 md:w-7"
+          />
+          <p>Bootstrap</p>
         </div>
 
         <div className=" border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium ">
@@ -69,6 +83,14 @@ function Skills() {
             className="h-5 w-5 md:h-7 md:w-7"
           />
           <p>React.JS</p>
+        </div>
+        <div className="border border-[#a8dadc] p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+          <img
+            src={ReduxToolkitIcon}
+            alt="react-icon"
+            className="h-5 w-5 md:h-7 md:w-7"
+          />
+          <p>Redux Toolkit</p>
         </div>
 
         <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium  ">
@@ -105,11 +127,19 @@ function Skills() {
         </div>
         <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
           <img
-            src={TanstackIcon}
+            src={FirebaseIcon}
             alt="react-icon"
             className="h-5 w-5 md:h-7 md:w-7"
           />
-          <p>Tanstack Query</p>
+          <p>Firebase</p>
+        </div>
+        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+          <img
+            src={ReactRouterIcon}
+            alt="react-icon"
+            className="h-5 w-5 md:h-7 md:w-7"
+          />
+          <p>React Router</p>
         </div>
         <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
           <img
@@ -117,7 +147,40 @@ function Skills() {
             alt="react-icon"
             className="h-5 w-5 md:h-7 md:w-7"
           />
+          <p>Tanstack Query</p>
+        </div>
+
+        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+          <img
+            src={TanstackIcon}
+            alt="react-icon"
+            className="h-5 w-5 md:h-7 md:w-7"
+          />
           <p>Tanstack Router</p>
+        </div>
+        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+          <img
+            src={TanstackIcon}
+            alt="react-icon"
+            className="h-5 w-5 md:h-7 md:w-7"
+          />
+          <p>Tanstack Table</p>
+        </div>
+        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+          <img
+            src={GitIcon}
+            alt="react-icon"
+            className="h-5 w-5 md:h-7 md:w-7"
+          />
+          <p>Git</p>
+        </div>
+        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+          <img
+            src={GithubIcon}
+            alt="react-icon"
+            className="h-5 w-5 md:h-7 md:w-7"
+          />
+          <p>Github</p>
         </div>
 
         <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
