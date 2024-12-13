@@ -55,15 +55,55 @@ function Navbar() {
         <div className="navbar-end hidden lg:flex px-5">
           <ul className="menu menu-horizontal px-1 gap-4">
             <li>
-              <Link to="/about">About</Link>
+              <Link
+                to="/about"
+                activeProps={{
+                  className:
+                    "rounded-none border-b-2  border-red-300 font-semibold ",
+                }}
+                className=" hover:rounded-md active:bg-transparent"
+              >
+                About
+              </Link>
             </li>
             <li>
-              <Link to="/resume">Resume</Link>
+              <Link
+                to="/resume"
+                activeProps={{
+                  className:
+                    "rounded-none border-b-2  border-red-300 font-semibold ",
+                }}
+                className=" hover:rounded-md active:bg-transparent"
+              >
+                Resume
+              </Link>
             </li>
             <li>
-              <Link to="/projects/allProjects">Projects</Link>
+              <Link
+                to="/projects/allProjects"
+                activeProps={{
+                  className:
+                    "rounded-none border-b-2  border-red-300 font-semibold ",
+                }}
+                className=" hover:rounded-md active:bg-transparent"
+              >
+                Projects
+              </Link>
             </li>
-            <li>{isAuthenticated && <Link to="/dashboard">Dashboard</Link>}</li>
+            <li>
+              {isAuthenticated && (
+                <Link
+                  to="/dashboard"
+                  activeProps={{
+                    className:
+                      "rounded-none border-b-2  border-red-300 font-semibold ",
+                  }}
+                  className=" hover:rounded-md active:bg-transparent"
+                >
+                  Dashboard
+                </Link>
+              )}
+            </li>
           </ul>
         </div>
       </div>
