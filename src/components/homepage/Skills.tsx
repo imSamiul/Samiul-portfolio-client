@@ -23,7 +23,7 @@ import ReduxToolkitIcon from "../../assets/redux.svg";
 function Skills() {
   return (
     <div className="py-4 md:py-8">
-      <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat">
+      <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat ">
         Skills
       </h1>
       <div className="mt-3 py-2 lg:mt-5 grid  grid-cols-2 md:grid-cols-5 gap-3">

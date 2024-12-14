@@ -1,7 +1,19 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  redirect,
+} from "@tanstack/react-router";
 import barIcon from "../assets/bars-solid.svg";
 
 export const Route = createFileRoute("/dashboard")({
+  beforeLoad: ({ context }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/",
+      });
+    }
+  },
   component: DashBoard,
 });
 
@@ -28,10 +40,20 @@ function DashBoard() {
         <ul className="menu bg-base-200 text-base-content min-h-full w-auto lg:w-full p-4">
           {/* Sidebar content here */}
           <li>
-            <Link to="/dashboard/addProject">Add Project</Link>
+            <Link
+              to="/dashboard/addProject"
+              activeProps={{ className: "bg-primary text-white" }}
+            >
+              Add Project
+            </Link>
           </li>
           <li>
-            <Link to="/dashboard/projectList">Project List</Link>
+            <Link
+              to="/dashboard/projectList"
+              activeProps={{ className: "bg-primary text-white" }}
+            >
+              Project List
+            </Link>
           </li>
         </ul>
       </div>

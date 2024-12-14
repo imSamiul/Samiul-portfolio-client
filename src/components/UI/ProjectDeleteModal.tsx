@@ -24,7 +24,7 @@ function ProjectDeleteModal({
   return (
     <div>
       <button
-        className="btn btn-md btn-outline btn-error "
+        className="btn btn-md btn-error text-white "
         onClick={() => toggleModal(modalId, "open")}
       >
         Delete Project
@@ -60,14 +60,14 @@ function ProjectDeleteModal({
           <div className="modal-action">
             <button
               type="button"
-              className="btn btn-error"
+              className="btn btn-secondary text-black"
               onClick={() => toggleModal(modalId, "close")}
             >
               Close
             </button>
             <button
               type="button"
-              className="btn btn-warning"
+              className="btn btn-error"
               onClick={deleteProjectHandler}
               disabled={isPending}
             >

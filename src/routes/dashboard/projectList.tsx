@@ -46,7 +46,7 @@ function RouteComponent() {
                   <td className="text-center">
                     <input
                       type="checkbox"
-                      className="toggle toggle-sm"
+                      className="toggle toggle-sm toggle-primary"
                       defaultChecked={project.showOnHomepage}
                       onChange={() => {
                         mutate(project._id!);
@@ -58,7 +58,7 @@ function RouteComponent() {
                       <Link
                         to="/dashboard/editProject/$projectId"
                         params={{ projectId: project._id! }}
-                        className="btn btn-md btn-outline"
+                        className="btn btn-md btn-secondary text-black"
                       >
                         Edit
                       </Link>

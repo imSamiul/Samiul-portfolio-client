@@ -59,9 +59,9 @@ function Navbar() {
                 to="/about"
                 activeProps={{
                   className:
-                    "rounded-none border-b-2  border-red-300 font-semibold ",
+                    "rounded-none border-b-2  border-secondary font-semibold ",
                 }}
-                className=" hover:rounded-md active:bg-transparent"
+                className=" hover:rounded-md focus:bg-transparent "
               >
                 About
               </Link>
@@ -71,9 +71,9 @@ function Navbar() {
                 to="/resume"
                 activeProps={{
                   className:
-                    "rounded-none border-b-2  border-red-300 font-semibold ",
+                    "rounded-none border-b-2  border-secondary font-semibold ",
                 }}
-                className=" hover:rounded-md active:bg-transparent"
+                className=" hover:rounded-md  focus:bg-transparent"
               >
                 Resume
               </Link>
@@ -83,9 +83,9 @@ function Navbar() {
                 to="/projects/allProjects"
                 activeProps={{
                   className:
-                    "rounded-none border-b-2  border-red-300 font-semibold ",
+                    "rounded-none border-b-2  border-secondary font-semibold ",
                 }}
-                className=" hover:rounded-md active:bg-transparent"
+                className=" hover:rounded-md  focus:bg-transparent"
               >
                 Projects
               </Link>
@@ -96,9 +96,9 @@ function Navbar() {
                   to="/dashboard"
                   activeProps={{
                     className:
-                      "rounded-none border-b-2  border-red-300 font-semibold ",
+                      "rounded-none border-b-2  border-secondary font-semibold ",
                   }}
-                  className=" hover:rounded-md active:bg-transparent"
+                  className=" hover:rounded-md focus:bg-transparent"
                 >
                   Dashboard
                 </Link>

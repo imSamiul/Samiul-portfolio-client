@@ -12,7 +12,9 @@ function AboutComponent() {
   return (
     <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
       <div className="sticky top-0 bg-white py-2 md:py-5">
-        <h1 className="text-center text-3xl font-bold mb-5">About me</h1>
+        <h1 className="text-center text-3xl font-bold mb-5 text-primary">
+          About me
+        </h1>
       </div>
       <div className=" flex flex-col-reverse  items-center gap-5 px-4 py-8 lg:flex-row lg:gap-10 lg:px-16">
         <div className="text-center lg:text-left">
@@ -40,7 +42,7 @@ function AboutComponent() {
       </div>
 
       <div className="py-4 md:py-8">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           My Journey
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -73,7 +75,7 @@ function AboutComponent() {
         </p>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           What I Offer
         </h2>
         <div className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -226,7 +228,7 @@ function AboutComponent() {
         </div>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Why Me?
         </h2>
         <div className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -260,7 +262,7 @@ function AboutComponent() {
         </div>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Beyond Code
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -295,7 +297,7 @@ function AboutComponent() {
         </p>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Currently
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
@@ -303,7 +305,7 @@ function AboutComponent() {
         </p>
       </div>
       <div className="py-4 md:py-8">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Contact Me
         </h2>
         <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">

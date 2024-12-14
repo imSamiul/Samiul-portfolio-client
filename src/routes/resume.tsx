@@ -42,7 +42,9 @@ function ResumeComponent() {
   return (
     <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
       <div className="sticky top-0 bg-white  py-2">
-        <h1 className="text-center text-3xl font-bold mb-5">Resume</h1>
+        <h1 className="text-center text-3xl font-bold mb-5 text-primary">
+          Resume
+        </h1>
         <div className="flex gap-2 md:gap-4 justify-center items-center flex-wrap ">
           <a href="#profileSummary" onClick={(e) => onPress(e)}>
             Profile Summary
@@ -67,7 +69,7 @@ function ResumeComponent() {
       </div>
 
       <div className="py-4 md:py-8" id="profileSummary">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Profile Summary
         </h2>
         <div className="my-2 md:my-4 ">
@@ -90,7 +92,7 @@ function ResumeComponent() {
         </p>
       </div>
       <div className="py-4 md:py-8" id="education">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Education
         </h2>
         <div className="mt-2 md:mt-4 px-2 md:px-4">
@@ -131,14 +133,14 @@ function ResumeComponent() {
         </div>
       </div>
       <div className="py-4 md:py-8" id="skills">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Skills
         </h2>
         <div className="my-2 md:my-4 flex gap-2 flex-wrap">
           {buttonTools.map((tool, index) => (
             <button
               key={index}
-              className={`btn btn-sm md:btn-am lg:btn-md ${tool === skills.name ? "btn-primary" : ""}`}
+              className={`btn btn-sm md:btn-am lg:btn-md  ${tool === skills.name ? "btn-primary text-white" : ""}`}
               onClick={() => handleChangeSkills(tool)}
             >
               {tool}
@@ -147,13 +149,12 @@ function ResumeComponent() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {skills.value.map((skill, index) => (
-            <div className="space-y-2">
+            <div className="space-y-2" key={index}>
               <div className="flex justify-between">
                 <h3>{skill.tools}</h3>
                 <h4>{skill.value}%</h4>
               </div>
               <Line
-                key={index}
                 percent={skill.value}
                 strokeWidth={2}
                 strokeColor={skill.color}
@@ -163,7 +164,7 @@ function ResumeComponent() {
         </div>
       </div>
       <div className="py-4 md:py-8" id="courses">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Course
         </h2>
         <div className="mt-2 md:mt-4">
@@ -179,7 +180,7 @@ function ResumeComponent() {
         </div>
       </div>
       <div className="py-4 md:py-8" id="reference">
-        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat">
+        <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
           Reference
         </h2>
         <div className="mt-2 md:mt-4">

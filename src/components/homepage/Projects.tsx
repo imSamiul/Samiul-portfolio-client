@@ -28,7 +28,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-sm md:btn-am lg:btn-md btn-outline"
+                  className="btn btn-primary btn-sm md:btn-am lg:btn-md  text-white"
                   href={project.liveLink}
                 >
                   Live Site
@@ -36,7 +36,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
                 <Link
                   to="/projects/$projectId"
                   params={{ projectId: project._id! }}
-                  className="btn btn-sm md:btn-am lg:btn-md btn-primary btn-outline"
+                  className="btn btn-secondary btn-sm md:btn-am lg:btn-md text-black "
                 >
                   Learn More
                 </Link>

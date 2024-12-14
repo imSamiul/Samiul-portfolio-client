@@ -6,7 +6,7 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 export async function getResume() {
   try {
     const response = await axios({
-      url: `${baseURL}/resume/download`,
+      url: `${baseURL}/api/resume/download`,
       responseType: "blob",
       method: "GET",
     });

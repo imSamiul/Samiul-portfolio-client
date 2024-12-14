@@ -13,10 +13,10 @@ function Hero() {
     <div className="py-4 md:py-8 flex flex-col-reverse md:flex-row gap-5 md:gap-10">
       <div className="flex-[3] md:flex-1">
         <p className="text-lg md:text-xl md:my-5">Hello, Myself</p>
-        <h1 className=" text-2xl md:text-4xl font-bold font-Montserrat text-[#e63946] my-3 md:my-5">
+        <h1 className=" text-2xl md:text-4xl font-bold font-Montserrat text-primary my-3 md:my-5">
           Md. Samiul Karim Prodhan
         </h1>
-        <h1 className="text-2xl md:text-4xl font-bold font-Montserrat text-[#1d3557] my-3 md:my-5">
+        <h1 className="text-2xl md:text-4xl font-bold font-Montserrat text-accent my-3 md:my-5">
           I build responsive & eye catching website.
         </h1>
         <p className="text-lg md:text-xl mb-5">
@@ -25,7 +25,7 @@ function Hero() {
           website.
         </p>
         <button
-          className="btn sm:btn-sm md:btn-md lg:btn-lg btn-outline "
+          className="btn btn-primary sm:btn-sm md:btn-md lg:btn-lg text-white "
           onClick={handleDownloadResume}
         >
           Download Resume
