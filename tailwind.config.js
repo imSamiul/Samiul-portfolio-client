@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import daisyui from "daisyui";
+import themes from "daisyui/src/theming/themes.js";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -13,7 +14,7 @@ export default {
     themes: [
       {
         light: {
-          ...require("daisyui/src/theming/themes")["light"],
+          ...themes["light"],
           primary: "#4670B7", // True Blue
           secondary: "#E2C849", // Arylide Yellow
           accent: "#F08EA0", // Salmon Pink
