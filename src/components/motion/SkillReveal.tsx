@@ -26,7 +26,7 @@ function SkillReveal({ children, className, index }: SkillRevealProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once: false,
-    margin: "-10% 0px -20% 0px",
+    margin: "-5% 0px -5% 0px",
   }); // Trigger animations repeatedly on scroll
   const controls = useAnimation();
 
