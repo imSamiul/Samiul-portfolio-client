@@ -1,13 +1,16 @@
 import { Await, createFileRoute, defer } from "@tanstack/react-router";
 
 import Skills from "../components/homepage/Skills";
-import Projects from "../components/homepage/Projects";
+
 import FollowMe from "../components/homepage/FollowMe";
 import Hero from "../components/homepage/Hero";
 
 import { getProjectsForHomepage } from "../services/projectApis";
 
 import CardLoader from "../components/UI/CardLoader";
+import Reveal from "../components/motion/Reveal";
+import { headingVariants } from "../components/motion/Variants";
+import Projects from "../components/homepage/Projects";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -28,9 +31,11 @@ function Home() {
 
       <Skills />
       <div className="py-4 md:py-8">
-        <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat mb-8">
-          Projects
-        </h1>
+        <Reveal variants={headingVariants}>
+          <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat mb-8">
+            Projects
+          </h1>
+        </Reveal>
         <Await promise={homePageProject} fallback={<CardLoader />}>
           {(data) => <Projects projects={data} />}
         </Await>

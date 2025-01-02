@@ -21,18 +21,9 @@ import GithubIcon from "../../assets/github.svg";
 import ReduxToolkitIcon from "../../assets/redux.svg";
 
 import Reveal from "../motion/Reveal";
-import SkillReveal from "../motion/SkillReveal";
+import SkillReveal from "../motion/OneByOneReveal";
+import { headingVariants } from "../motion/Variants";
 
-const headingVariants = {
-  hidden: {
-    opacity: 0,
-    x: -100, // Move left or right based on the prop
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-  },
-};
 const skills = [
   { imageSrc: HTMLIcon, skillName: "HTML5" },
   { imageSrc: CSSIcon, skillName: "CSS" },
@@ -57,6 +48,21 @@ const skills = [
   { imageSrc: JWTIcon, skillName: "JWT" },
   { imageSrc: PassportJSIcon, skillName: "PassportJS" },
 ];
+const skillVariants = {
+  hidden: {
+    opacity: 0,
+    x: -100, // Start from the right
+  },
+  visible: (index: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      type: "spring",
+      stiffness: 120,
+      delay: index * 0.2, // Stagger effect based on index
+    },
+  }),
+};
 function Skills() {
   return (
     <div className="py-4 md:py-8">
@@ -67,7 +73,7 @@ function Skills() {
       </Reveal>
       <div className="mt-3 py-2 lg:mt-5 grid grid-cols-2 md:grid-cols-5 gap-3">
         {skills.map((skill, index) => (
-          <SkillReveal key={index} index={index}>
+          <SkillReveal key={index} index={index} variants={skillVariants}>
             <div className="h-full border-2 border-[#a8dadc] p-2 md:p-4 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
               <img
                 src={skill.imageSrc}

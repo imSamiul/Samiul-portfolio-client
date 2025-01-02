@@ -1,28 +1,33 @@
 import { motion, useAnimation, useInView } from "motion/react";
 import React, { useEffect, useRef } from "react";
 
-type SkillRevealProps = {
+type OneByOneRevealProps = {
   children: React.ReactNode;
   className?: React.HTMLProps<HTMLElement>["className"];
   index?: number;
-};
-const skillVariants = {
-  hidden: {
-    opacity: 0,
-    x: -100, // Start from the right
-  },
-  visible: (index: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: {
-      type: "spring",
-      stiffness: 120,
-      delay: index * 0.2, // Stagger effect based on index
-    },
-  }),
+  variants: {
+    hidden: {
+      opacity: number;
+      x: number;
+    };
+    visible: (index: number) => {
+      opacity: number;
+      x: number;
+      transition: {
+        type: string;
+        stiffness: number;
+        delay: number;
+      };
+    };
+  };
 };
 
-function SkillReveal({ children, className, index }: SkillRevealProps) {
+function OneByOneReveal({
+  children,
+  className,
+  index,
+  variants,
+}: OneByOneRevealProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once: false,
@@ -41,7 +46,7 @@ function SkillReveal({ children, className, index }: SkillRevealProps) {
   return (
     <motion.div
       ref={ref}
-      variants={skillVariants}
+      variants={variants}
       initial="hidden"
       animate={controls}
       custom={index} // Pass index to variants
@@ -52,4 +57,4 @@ function SkillReveal({ children, className, index }: SkillRevealProps) {
   );
 }
 
-export default SkillReveal;
+export default OneByOneReveal;
