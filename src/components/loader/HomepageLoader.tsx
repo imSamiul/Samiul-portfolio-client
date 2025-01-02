@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 function HomepageLoader() {
   return (
     <motion.div
-      className="flex justify-center items-center h-screen w-full bg-gray-200"
+      className="flex justify-center items-center min-h-screen bg-gray-200"
       exit={{
         opacity: 0,
         transition: { duration: 1 }, // Fade out over 5 seconds
@@ -23,7 +23,7 @@ function HomepageLoader() {
         <motion.span
           className="absolute top-0 left-0 w-0 overflow-hidden text-[#1d3557]"
           initial={{ width: "0%" }}
-          animate={{ width: ["0%", "100%", "100%", "0%"] }}
+          animate={{ width: ["0%", "100%"] }}
           transition={{
             duration: 5, // Total animation duration
             ease: "linear",

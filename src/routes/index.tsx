@@ -8,10 +8,6 @@ import Hero from "../components/homepage/Hero";
 import { getProjectsForHomepage } from "../services/projectApis";
 
 import CardLoader from "../components/UI/CardLoader";
-import Reveal from "../components/motion/Reveal";
-import HomepageLoader from "../components/loader/HomepageLoader";
-import { useEffect, useState } from "react";
-import { use } from "motion/react-client";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -27,24 +23,21 @@ function Home() {
   const { homePageProject } = Route.useLoaderData();
 
   return (
-    <div>
-      <Reveal>
-        <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
-          <Hero />
-          <Skills />
-          <div className="py-4 md:py-8">
-            <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat mb-8">
-              Projects
-            </h1>
-            <Await promise={homePageProject} fallback={<CardLoader />}>
-              {(data) => <Projects projects={data} />}
-            </Await>
-          </div>
+    <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
+      <Hero />
 
-          <div className="divider md:my-20"></div>
-          <FollowMe />
-        </div>
-      </Reveal>
+      <Skills />
+      <div className="py-4 md:py-8">
+        <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat mb-8">
+          Projects
+        </h1>
+        <Await promise={homePageProject} fallback={<CardLoader />}>
+          {(data) => <Projects projects={data} />}
+        </Await>
+      </div>
+
+      <div className="divider md:my-20"></div>
+      <FollowMe />
     </div>
   );
 }

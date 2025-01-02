@@ -1,36 +1,49 @@
 import { useInView, motion, useAnimation } from "motion/react";
+import { useEffect, useRef, ReactNode, HTMLProps } from "react";
 
-import { useEffect, useRef } from "react";
-
-interface Props {
-  children: JSX.Element;
+interface RevealProps {
+  children: ReactNode;
+  direction?: "left" | "right"; // Add direction for animation
+  className?: HTMLProps<HTMLElement>["className"];
 }
-function Reveal({ children }: Props) {
+
+const Reveal = ({ children, direction = "left", className }: RevealProps) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const mainControls = useAnimation();
+  const isInView = useInView(ref, { once: false, margin: "-20% 0px -20% 0px" }); // Trigger animations repeatedly on scroll
+  const controls = useAnimation();
+
+  const variants = {
+    hidden: {
+      opacity: 0,
+      x: direction === "left" ? -100 : 100, // Move left or right based on the prop
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+    },
+  };
 
   useEffect(() => {
+    console.log("Is in view:", isInView);
     if (isInView) {
-      mainControls.start("visible");
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
     }
-  }, [isInView, mainControls]);
+  }, [isInView, controls]);
 
   return (
-    <div ref={ref}>
-      <motion.div
-        variants={{
-          hidden: { opacity: 0, y: 75 },
-          visible: { opacity: 1, y: 0 },
-        }}
-        initial="hidden"
-        animate={mainControls}
-        transition={{ duration: 0.5, delay: 0.25 }}
-      >
-        {children}
-      </motion.div>
-    </div>
+    <motion.div
+      ref={ref}
+      variants={variants}
+      initial="hidden"
+      animate={controls}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   );
-}
+};
 
 export default Reveal;

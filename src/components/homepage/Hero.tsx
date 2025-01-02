@@ -2,6 +2,8 @@ import image from "../../assets/developer.png";
 
 import { getResume } from "../../services/resumeApis";
 import download from "downloadjs";
+import Reveal from "../motion/Reveal";
+import { motion } from "motion/react";
 
 function Hero() {
   async function handleDownloadResume() {
@@ -11,7 +13,7 @@ function Hero() {
   }
   return (
     <div className="py-4 md:py-8 flex flex-col-reverse md:flex-row gap-5 md:gap-10">
-      <div className="flex-[3] md:flex-1">
+      <Reveal direction="left" className=" md:flex-1">
         <p className="text-lg md:text-xl md:my-5">Hello, Myself</p>
         <h1 className=" text-2xl md:text-4xl font-bold font-Montserrat text-primary my-3 md:my-5">
           Md. Samiul Karim Prodhan
@@ -24,20 +26,25 @@ function Hero() {
           front-end, but I also use Node.Js to build a responsive full-stack
           website.
         </p>
-        <button
+        <motion.button
           className="btn btn-primary sm:btn-sm md:btn-md lg:btn-lg text-white "
           onClick={handleDownloadResume}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
         >
           Download Resume
-        </button>
-      </div>
-      <div className="flex-[2] md:flex-1 flex justify-center">
-        <img
-          src={image}
-          alt="developer-image"
-          className="w-1/3 h-1/3 md:h-3/4 md:w-3/4 lg:h-auto lg:w-auto"
-        />
-      </div>
+        </motion.button>
+      </Reveal>
+
+      <Reveal
+        direction="right"
+        className=" md:flex-1 flex justify-center items-center"
+      >
+        <div className=" h-2/4 w-2/4 md:h-3/4 md:w-3/4 lg:h-auto lg:w-auto">
+          <img src={image} alt="developer-image" />
+        </div>
+      </Reveal>
     </div>
   );
 }
