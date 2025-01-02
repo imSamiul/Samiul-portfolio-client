@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthContextType } from "../contexts/AuthContext";
+import HomepageLoader from "../components/loader/HomepageLoader";
+import { AnimatePresence } from "motion/react";
 
 interface MyRouterContextType {
   auth: AuthContextType;
@@ -27,15 +29,32 @@ export const Route = createRootRouteWithContext<MyRouterContextType>()({
 });
 
 function RootComponent() {
+  const [showLoader, setShowLoader] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoader(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div>
-      <div className="min-h-screen">
-        <Navbar />
-        <Outlet />
-      </div>
-      <Footer />
-      <TanStackRouterDevtools position="bottom-left" />
-      <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+      <AnimatePresence mode="wait">
+        {showLoader ? (
+          <HomepageLoader key="loader" />
+        ) : (
+          <div>
+            <div className="min-h-screen">
+              <Navbar />
+              <Outlet />
+            </div>
+            <Footer />
+            <TanStackRouterDevtools position="bottom-left" />
+            <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

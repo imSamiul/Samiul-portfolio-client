@@ -25,19 +25,9 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { homePageProject } = Route.useLoaderData();
-  const [showLoader, setShowLoader] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowLoader(false);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div>
-      <HomepageLoader />
       <Reveal>
         <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
           <Hero />
