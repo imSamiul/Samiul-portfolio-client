@@ -20,190 +20,64 @@ import GitIcon from "../../assets/git.svg";
 import GithubIcon from "../../assets/github.svg";
 import ReduxToolkitIcon from "../../assets/redux.svg";
 
+import Reveal from "../motion/Reveal";
+import SkillReveal from "../motion/SkillReveal";
+
+const headingVariants = {
+  hidden: {
+    opacity: 0,
+    x: -100, // Move left or right based on the prop
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+  },
+};
+const skills = [
+  { imageSrc: HTMLIcon, skillName: "HTML5" },
+  { imageSrc: CSSIcon, skillName: "CSS" },
+  { imageSrc: TailwindCSSIcon, skillName: "Tailwind CSS" },
+  { imageSrc: BootstrapIcon, skillName: "Bootstrap" },
+  { imageSrc: JSIcon, skillName: "JavaScript" },
+  { imageSrc: TypeScriptIcon, skillName: "TypeScript" },
+  { imageSrc: ReactIcon, skillName: "React.JS" },
+  { imageSrc: ReduxToolkitIcon, skillName: "Redux Toolkit" },
+  { imageSrc: NodeJSICon, skillName: "Node.js" },
+  { imageSrc: ExpressJSIcon, skillName: "Express.JS" },
+  { imageSrc: MongoDBIcon, skillName: "MongoDB" },
+  { imageSrc: MongooseIcon, skillName: "Mongoose" },
+  { imageSrc: FirebaseIcon, skillName: "Firebase" },
+  { imageSrc: ReactRouterIcon, skillName: "React Router" },
+  { imageSrc: TanstackIcon, skillName: "Tanstack Query" },
+  { imageSrc: TanstackIcon, skillName: "Tanstack Router" },
+  { imageSrc: TanstackIcon, skillName: "Tanstack Table" },
+  { imageSrc: GitIcon, skillName: "Git" },
+  { imageSrc: GithubIcon, skillName: "Github" },
+  { imageSrc: FigmaIcon, skillName: "Figma" },
+  { imageSrc: JWTIcon, skillName: "JWT" },
+  { imageSrc: PassportJSIcon, skillName: "PassportJS" },
+];
 function Skills() {
   return (
     <div className="py-4 md:py-8">
-      <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat ">
-        Skills
-      </h1>
-      <div className="mt-3 py-2 lg:mt-5 grid  grid-cols-2 md:grid-cols-5 gap-3">
-        <div className=" border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={HTMLIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>HTML5</p>
-        </div>
-        <div className=" border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={CSSIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>CSS</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={TailwindCSSIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Tailwind CSS</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={BootstrapIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Bootstrap</p>
-        </div>
-
-        <div className=" border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium ">
-          <img
-            src={JSIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>JavaScript</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={TypeScriptIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>TypeScript</p>
-        </div>
-        <div className="border border-[#a8dadc] p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={ReactIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>React.JS</p>
-        </div>
-        <div className="border border-[#a8dadc] p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={ReduxToolkitIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Redux Toolkit</p>
-        </div>
-
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium  ">
-          <img
-            src={NodeJSICon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Node.js</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={ExpressJSIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Express.JS</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={MongoDBIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>MongoDB</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={MongooseIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Mongoose</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={FirebaseIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Firebase</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={ReactRouterIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>React Router</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={TanstackIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Tanstack Query</p>
-        </div>
-
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={TanstackIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Tanstack Router</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={TanstackIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Tanstack Table</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={GitIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Git</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={GithubIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Github</p>
-        </div>
-
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={FigmaIcon}
-            alt="react-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>Figma</p>
-        </div>
-
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img src={JWTIcon} alt="jwt-icon" className="h-5 w-5 md:h-7 md:w-7" />
-          <p>JWT</p>
-        </div>
-        <div className="border-2 border-[#a8dadc] p-2  md:p-3 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
-          <img
-            src={PassportJSIcon}
-            alt="jwt-icon"
-            className="h-5 w-5 md:h-7 md:w-7"
-          />
-          <p>PassportJS</p>
-        </div>
+      <Reveal variants={headingVariants}>
+        <h1 className="text-2xl md:text-3xl  font-semibold  font-Montserrat ">
+          Skills
+        </h1>
+      </Reveal>
+      <div className="mt-3 py-2 lg:mt-5 grid grid-cols-2 md:grid-cols-5 gap-3">
+        {skills.map((skill, index) => (
+          <SkillReveal key={index} index={index}>
+            <div className="h-full border-2 border-[#a8dadc] p-2 md:p-4 rounded-md flex items-center justify-center gap-2 text-lg font-medium">
+              <img
+                src={skill.imageSrc}
+                alt={`${skill.skillName}-icon`}
+                className="h-5 w-5 md:h-7 md:w-7"
+              />
+              <p>{skill.skillName}</p>
+            </div>
+          </SkillReveal>
+        ))}
       </div>
     </div>
   );

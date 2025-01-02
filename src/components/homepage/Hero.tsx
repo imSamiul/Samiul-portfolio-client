@@ -11,9 +11,31 @@ function Hero() {
     const blob = new Blob([resumeData], { type: "application/pdf" });
     download(blob, "test.pdf");
   }
+
+  const leftVariants = {
+    hidden: {
+      opacity: 0,
+      x: -100, // Move left or right based on the prop
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+    },
+  };
+  const rightVariants = {
+    hidden: {
+      opacity: 0,
+      x: 100, // Move left or right based on the prop
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+    },
+  };
+
   return (
     <div className="py-4 md:py-8 flex flex-col-reverse md:flex-row gap-5 md:gap-10">
-      <Reveal direction="left" className=" md:flex-1">
+      <Reveal className=" md:flex-1" variants={leftVariants}>
         <p className="text-lg md:text-xl md:my-5">Hello, Myself</p>
         <h1 className=" text-2xl md:text-4xl font-bold font-Montserrat text-primary my-3 md:my-5">
           Md. Samiul Karim Prodhan
@@ -38,7 +60,7 @@ function Hero() {
       </Reveal>
 
       <Reveal
-        direction="right"
+        variants={rightVariants}
         className=" md:flex-1 flex justify-center items-center"
       >
         <div className=" h-2/4 w-2/4 md:h-3/4 md:w-3/4 lg:h-auto lg:w-auto">

@@ -3,28 +3,27 @@ import { useEffect, useRef, ReactNode, HTMLProps } from "react";
 
 interface RevealProps {
   children: ReactNode;
-  direction?: "left" | "right"; // Add direction for animation
+
   className?: HTMLProps<HTMLElement>["className"];
+
+  variants: {
+    hidden: {
+      opacity: number;
+      x: number;
+    };
+    visible: {
+      opacity: number;
+      x: number;
+    };
+  };
 }
 
-const Reveal = ({ children, direction = "left", className }: RevealProps) => {
+const Reveal = ({ children, className, variants }: RevealProps) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, margin: "-20% 0px -20% 0px" }); // Trigger animations repeatedly on scroll
+  const isInView = useInView(ref, { once: false, margin: "-10% 0px -20% 0px" }); // Trigger animations repeatedly on scroll
   const controls = useAnimation();
 
-  const variants = {
-    hidden: {
-      opacity: 0,
-      x: direction === "left" ? -100 : 100, // Move left or right based on the prop
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-    },
-  };
-
   useEffect(() => {
-    console.log("Is in view:", isInView);
     if (isInView) {
       controls.start("visible");
     } else {
