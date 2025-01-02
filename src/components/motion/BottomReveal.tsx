@@ -1,33 +1,22 @@
 import { motion, useAnimation, useInView } from "motion/react";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-type OneByOneRevealProps = {
+type BottomRevealProps = {
   children: React.ReactNode;
   className?: React.HTMLProps<HTMLElement>["className"];
-  index?: number;
   variants: {
     hidden: {
       opacity: number;
-      x: number;
+      y: number;
     };
-    visible: (index: number) => {
+    visible: {
       opacity: number;
-      x: number;
-      transition: {
-        type: string;
-        stiffness: number;
-        delay: number;
-      };
+      y: number;
     };
   };
 };
 
-function OneByOneReveal({
-  children,
-  className,
-  index,
-  variants,
-}: OneByOneRevealProps) {
+function BottomReveal({ children, variants, className }: BottomRevealProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once: false,
@@ -48,7 +37,6 @@ function OneByOneReveal({
       variants={variants}
       initial="hidden"
       animate={controls}
-      custom={index} // Pass index to variants
       className={className}
     >
       {children}
@@ -56,4 +44,4 @@ function OneByOneReveal({
   );
 }
 
-export default OneByOneReveal;
+export default BottomReveal;
