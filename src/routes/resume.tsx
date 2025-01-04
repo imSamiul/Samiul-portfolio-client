@@ -188,7 +188,7 @@ function ResumeComponent() {
               >
                 <button
                   key={index}
-                  className={`btn btn-sm md:btn-am lg:btn-md  ${tool === skills.name ? "btn-primary text-white" : ""}`}
+                  className={`btn btn-sm md:btn-am lg:btn-md  ${tool === skills.name ? "btn-primary " : ""}`}
                   onClick={() => handleChangeSkills(tool)}
                 >
                   {tool}
