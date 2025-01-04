@@ -81,7 +81,7 @@ function ResumeComponent() {
   return (
     <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
       <BottomReveal variants={bottomRevealVariants}>
-        <div className="sticky top-0 bg-white  py-2">
+        <div className="sticky top-0   py-2">
           <h1 className="text-center text-3xl font-bold mb-5 text-primary">
             Resume
           </h1>

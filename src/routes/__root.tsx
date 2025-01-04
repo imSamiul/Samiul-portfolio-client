@@ -41,19 +41,19 @@ function RootComponent() {
   return (
     <div>
       <AnimatePresence mode="wait">
-        {showLoader ? (
+        {/* {showLoader ? (
           <HomepageLoader key="loader" />
-        ) : (
-          <div>
-            <div className="min-h-screen">
-              <Navbar />
-              <Outlet />
-            </div>
-            <Footer />
-            <TanStackRouterDevtools position="bottom-left" />
-            <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+        ) : ( */}
+        <div>
+          <div className="min-h-screen">
+            <Navbar />
+            <Outlet />
           </div>
-        )}
+          <Footer />
+          <TanStackRouterDevtools position="bottom-left" />
+          <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+        </div>
+        {/* )} */}
       </AnimatePresence>
     </div>
   );

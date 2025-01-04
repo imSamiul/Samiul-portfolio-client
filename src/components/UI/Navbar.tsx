@@ -2,18 +2,19 @@ import { Link } from "@tanstack/react-router";
 
 import { useAuth } from "../../hooks/useAuth";
 import { motion } from "motion/react";
+import ThemeController from "./ThemeController";
 
 function Navbar() {
   const { isAuthenticated } = useAuth();
   return (
     <motion.div
-      className="navbar bg-base-100"
+      className="navbar"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
       {/* Navbar Start */}
-      <div className="navbar-start ">
+      <div className="navbar-start flex-1">
         {/* Dropdown for Mobile View */}
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -34,7 +35,7 @@ function Navbar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
               <Link to="/about">About</Link>
@@ -49,22 +50,25 @@ function Navbar() {
           </ul>
         </div>
         {/* Brand Name */}
-        <Link to="/" className="md:text-xl font-medium md:px-5">
+        <Link
+          to="/"
+          className="md:text-xl font-medium whitespace-nowrap md:px-5"
+        >
           Samiul Karim Prodhan
         </Link>
       </div>
 
-      {/* Navbar End (Hidden in Mobile View, Visible in Large Screens) */}
-      <div className="navbar-end hidden lg:flex px-5">
+      {/* Navbar Center (Hidden in Mobile View, Visible in Large Screens) */}
+      <div className="navbar-center flex-[2] justify-center hidden lg:flex px-5">
         <ul className="menu menu-horizontal px-1 gap-4">
           <li>
             <Link
               to="/about"
               activeProps={{
                 className:
-                  "rounded-none border-b-2  border-secondary font-semibold ",
+                  "rounded-none border-b-2 border-secondary font-semibold",
               }}
-              className=" hover:rounded-md focus:bg-transparent "
+              className="hover:rounded-md focus:bg-transparent"
             >
               About
             </Link>
@@ -74,9 +78,9 @@ function Navbar() {
               to="/resume"
               activeProps={{
                 className:
-                  "rounded-none border-b-2  border-secondary font-semibold ",
+                  "rounded-none border-b-2 border-secondary font-semibold",
               }}
-              className=" hover:rounded-md  focus:bg-transparent"
+              className="hover:rounded-md focus:bg-transparent"
             >
               Resume
             </Link>
@@ -86,28 +90,35 @@ function Navbar() {
               to="/projects/allProjects"
               activeProps={{
                 className:
-                  "rounded-none border-b-2  border-secondary font-semibold ",
+                  "rounded-none border-b-2 border-secondary font-semibold",
               }}
-              className=" hover:rounded-md  focus:bg-transparent"
+              className="hover:rounded-md focus:bg-transparent"
             >
               Projects
             </Link>
           </li>
-          <li>
-            {isAuthenticated && (
+          {isAuthenticated && (
+            <li>
               <Link
                 to="/dashboard"
                 activeProps={{
                   className:
-                    "rounded-none border-b-2  border-secondary font-semibold ",
+                    "rounded-none border-b-2 border-secondary font-semibold",
                 }}
-                className=" hover:rounded-md focus:bg-transparent"
+                className="hover:rounded-md focus:bg-transparent"
               >
                 Dashboard
               </Link>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
+      </div>
+
+      {/* Navbar End */}
+      <div className="navbar-end flex-1 ">
+        <div className="flex items-center mx-1 md:px-5 ">
+          <ThemeController />
+        </div>
       </div>
     </motion.div>
   );

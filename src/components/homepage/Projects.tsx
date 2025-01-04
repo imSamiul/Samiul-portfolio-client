@@ -24,7 +24,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
       {projects.length === 0 ? (
         <p className="text-center">No projects found</p>
       ) : (
-        <div className=" grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className=" grid bg-base-100 grid-cols-1 md:grid-cols-3 gap-5 ">
           {projects.map((project, index) => (
             <OneByOneReveal
               key={project._id}
@@ -32,7 +32,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
               variants={projectVariants}
             >
               <div
-                className="card card-compact bg-base-100  shadow-xl rounded-lg z-0"
+                className="card card-compact bg-primary  dark:bg-inherit shadow-xl rounded-lg z-0"
                 key={project._id}
               >
                 <figure>
@@ -53,7 +53,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
                     <a
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-primary btn-sm md:btn-am lg:btn-md  text-white"
+                      className="btn btn-primary btn-sm md:btn-am lg:btn-md  "
                       href={project.liveLink}
                     >
                       Live Site
@@ -61,7 +61,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
                     <Link
                       to="/projects/$projectId"
                       params={{ projectId: project._id! }}
-                      className="btn btn-secondary btn-sm md:btn-am lg:btn-md text-black "
+                      className="btn btn-secondary btn-sm md:btn-am lg:btn-md text-accent-content "
                     >
                       Learn More
                     </Link>

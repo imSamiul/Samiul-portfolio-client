@@ -49,11 +49,11 @@ function Hero() {
           website.
         </p>
         <motion.button
-          className="btn btn-primary sm:btn-sm md:btn-md lg:btn-lg text-white "
+          className="btn btn-primary sm:btn-sm md:btn-md lg:btn-lg "
           onClick={handleDownloadResume}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.1, x: 10, transition: { duration: 0.5 } }}
         >
           Download Resume
         </motion.button>
