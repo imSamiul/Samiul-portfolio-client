@@ -3,24 +3,34 @@ import firstProfileImage from "../assets/first-profile-image.jpg";
 import { LuBadgeCheck } from "react-icons/lu";
 import { FaFeatherPointed } from "react-icons/fa6";
 import { TbTransformPointTopLeft } from "react-icons/tb";
-import Reveal from "../components/motion/Reveal";
+import BottomReveal from "../components/motion/BottomReveal";
 
 export const Route = createFileRoute("/about")({
   component: AboutComponent,
 });
 
+const bottomRevealVariants = {
+  hidden: {
+    opacity: 0,
+    y: 100,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
+
 function AboutComponent() {
   return (
     <>
-      <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
-        <Reveal>
+      <BottomReveal variants={bottomRevealVariants}>
+        <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
           <div className="sticky top-0 bg-white py-2 md:py-5">
             <h1 className="text-center text-3xl font-bold mb-5 text-primary">
               About me
             </h1>
           </div>
-        </Reveal>
-        <Reveal>
+
           <div className=" flex flex-col-reverse  items-center gap-5 px-4 py-8 lg:flex-row lg:gap-10 lg:px-16">
             <div className="text-center lg:text-left">
               <h2 className="text-xl md:text-2xl  font-semibold lg:text-3xl font-Montserrat">
@@ -45,8 +55,7 @@ function AboutComponent() {
               className="w-full max-w-xs rounded-lg shadow-md lg:max-w-md"
             />
           </div>
-        </Reveal>
-        <Reveal>
+
           <div className="py-4 md:py-8">
             <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
               My Journey
@@ -81,8 +90,7 @@ function AboutComponent() {
               technologies daily.
             </p>
           </div>
-        </Reveal>
-        <Reveal>
+
           <div className="py-4 md:py-8">
             <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
               What I Offer
@@ -246,8 +254,7 @@ function AboutComponent() {
               </div>
             </div>
           </div>
-        </Reveal>
-        <Reveal>
+
           <div className="py-4 md:py-8">
             <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
               Why Me?
@@ -282,82 +289,85 @@ function AboutComponent() {
               </div>
             </div>
           </div>
-        </Reveal>
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Beyond Code
-          </h2>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            I am based in Bangladesh, where I've spent years honing my skills
-            and exploring the ever-evolving world of technology. Beyond coding,
-            I enjoy a range of activities that fuel my creativity and passion.
-            <br></br> When I'm not writing code, you'll often find me solving
-            Rubik's Cubes, diving into tech blogs and videos, or reading about
-            the latest advancements in web development. I consider myself an
-            extrovert and enjoy engaging in conversations. Interestingly, I
-            always manage to find a common topic with anyone I talk to—be it
-            about technology, movies, series, sports, or anime.<br></br> I am a
-            PC enthusiast who enjoys staying up-to-date on the latest computer
-            components through YouTube and Facebook groups. I'm also a gamer,
-            primarily playing story-driven PC games that allow me to immerse
-            myself in the role of a character. One of my favorite games is
-            Uncharted 4.<br></br> In my leisure time, I enjoy watching anime,
-            series, or movies. Additionally, I have a passion for working with
-            electrical tools. I own a soldering iron and often try fixing broken
-            items or building DIY projects. While my experiments don't always
-            succeed, I thoroughly enjoy the process of tinkering and creating.
-            <br></br> I also enjoy reading books and spending time with friends.
-            My evenings are usually spent hanging out with friends, taking short
-            tours around our local area, and sharing lively conversations over
-            tea at a nearby stall. I find joy in connecting with people and
-            discussing various topics.<br></br> In terms of education, I have
-            had the privilege of experiencing different schools throughout my
-            academic journey. I completed my SSC in 2016 from Collectorate
-            Adarsha Shikkha Niketan in Panchagarh and my HSC in 2018 from
-            Cantonment Public School and College. In 2020, I enrolled at
-            Daffodil International University to study Computer Science and
-            Engineering and graduated in March 2024.
-          </p>
+
+          <div className="py-4 md:py-8">
+            <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
+              Beyond Code
+            </h2>
+            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
+              I am based in Bangladesh, where I've spent years honing my skills
+              and exploring the ever-evolving world of technology. Beyond
+              coding, I enjoy a range of activities that fuel my creativity and
+              passion.
+              <br></br> When I'm not writing code, you'll often find me solving
+              Rubik's Cubes, diving into tech blogs and videos, or reading about
+              the latest advancements in web development. I consider myself an
+              extrovert and enjoy engaging in conversations. Interestingly, I
+              always manage to find a common topic with anyone I talk to—be it
+              about technology, movies, series, sports, or anime.<br></br> I am
+              a PC enthusiast who enjoys staying up-to-date on the latest
+              computer components through YouTube and Facebook groups. I'm also
+              a gamer, primarily playing story-driven PC games that allow me to
+              immerse myself in the role of a character. One of my favorite
+              games is Uncharted 4.<br></br> In my leisure time, I enjoy
+              watching anime, series, or movies. Additionally, I have a passion
+              for working with electrical tools. I own a soldering iron and
+              often try fixing broken items or building DIY projects. While my
+              experiments don't always succeed, I thoroughly enjoy the process
+              of tinkering and creating.
+              <br></br> I also enjoy reading books and spending time with
+              friends. My evenings are usually spent hanging out with friends,
+              taking short tours around our local area, and sharing lively
+              conversations over tea at a nearby stall. I find joy in connecting
+              with people and discussing various topics.<br></br> In terms of
+              education, I have had the privilege of experiencing different
+              schools throughout my academic journey. I completed my SSC in 2016
+              from Collectorate Adarsha Shikkha Niketan in Panchagarh and my HSC
+              in 2018 from Cantonment Public School and College. In 2020, I
+              enrolled at Daffodil International University to study Computer
+              Science and Engineering and graduated in March 2024.
+            </p>
+          </div>
+          <div className="py-4 md:py-8">
+            <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
+              Currently
+            </h2>
+            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
+              Currently I am learning about Next.JS which is a React framework.
+            </p>
+          </div>
+          <div className="py-4 md:py-8">
+            <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
+              Contact Me
+            </h2>
+            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
+              <a href="mailto:samiulkarimprodhan@gmail.com">
+                Email: samiulkarimprodhan@gmail.com
+              </a>
+            </p>
+            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
+              Linkedin:{" "}
+              <a href="https://www.linkedin.com/in/imsamiul3041/">
+                Samiul Karim Prodhan
+              </a>
+            </p>
+            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
+              Whatsapp:{" "}
+              <a href="https://wa.me/+8801517868247">Samiul Karim Prodhan</a>
+            </p>
+            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
+              Telegram:{" "}
+              <a href="https://t.me/samiul_karim_shrabon">Samiul Karim</a>
+            </p>
+            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
+              Facebook:{" "}
+              <a href="https://www.facebook.com/samiul.karim.shrabon/">
+                Samiul Karim Shrabon
+              </a>
+            </p>
+          </div>
         </div>
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Currently
-          </h2>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            Currently I am learning about Next.JS which is a React framework.
-          </p>
-        </div>
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Contact Me
-          </h2>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            <a href="mailto:samiulkarimprodhan@gmail.com">
-              Email: samiulkarimprodhan@gmail.com
-            </a>
-          </p>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            Linkedin:{" "}
-            <a href="https://www.linkedin.com/in/imsamiul3041/">
-              Samiul Karim Prodhan
-            </a>
-          </p>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            Whatsapp:{" "}
-            <a href="https://wa.me/+8801517868247">Samiul Karim Prodhan</a>
-          </p>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            Telegram:{" "}
-            <a href="https://t.me/samiul_karim_shrabon">Samiul Karim</a>
-          </p>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            Facebook:{" "}
-            <a href="https://www.facebook.com/samiul.karim.shrabon/">
-              Samiul Karim Shrabon
-            </a>
-          </p>
-        </div>
-      </div>
+      </BottomReveal>
     </>
   );
 }
