@@ -25,7 +25,7 @@ function HomepageLoader() {
           initial={{ width: "0%" }}
           animate={{ width: ["0%", "100%"] }}
           transition={{
-            duration: 5, // Total animation duration
+            duration: 3, // Total animation duration
             ease: "linear",
             times: [0, 0.7, 0.9, 1], // Matches keyframe percentages
           }}

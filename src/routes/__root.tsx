@@ -34,26 +34,26 @@ function RootComponent() {
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setShowLoader(false);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
   return (
     <div>
       <AnimatePresence mode="wait">
-        {/* {showLoader ? (
+        {showLoader ? (
           <HomepageLoader key="loader" />
-        ) : ( */}
-        <div>
-          <div className="min-h-screen">
-            <Navbar />
-            <Outlet />
+        ) : (
+          <div>
+            <div className="min-h-screen">
+              <Navbar />
+              <Outlet />
+            </div>
+            <Footer />
+            <TanStackRouterDevtools position="bottom-left" />
+            <ReactQueryDevtools initialIsOpen={false} position="bottom" />
           </div>
-          <Footer />
-          <TanStackRouterDevtools position="bottom-left" />
-          <ReactQueryDevtools initialIsOpen={false} position="bottom" />
-        </div>
-        {/* )} */}
+        )}
       </AnimatePresence>
     </div>
   );
