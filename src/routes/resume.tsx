@@ -5,7 +5,7 @@ import { FaUniversity } from "react-icons/fa";
 import { RxDividerVertical } from "react-icons/rx";
 import { buttonTools, courses, skillsData } from "../db/resumeData";
 import BottomReveal from "../components/motion/BottomReveal";
-import OneByOneReveal from "../components/motion/OneByOneReveal";
+
 import UpReveal from "../components/motion/UpReveal";
 
 export const Route = createFileRoute("/resume")({
@@ -52,21 +52,7 @@ function ResumeComponent() {
       y: 0,
     },
   };
-  const skillVariants = {
-    hidden: {
-      opacity: 0,
-      x: -100, // Start from the right
-    },
-    visible: (index: number) => ({
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 120,
-        delay: index * 0.2, // Stagger effect based on index
-      },
-    }),
-  };
+
   const upRevealVariants = {
     hidden: {
       opacity: 0,
@@ -181,19 +167,13 @@ function ResumeComponent() {
 
           <div className="my-2 md:my-4 flex gap-2 flex-wrap">
             {buttonTools.map((tool, index) => (
-              <OneByOneReveal
+              <button
                 key={index}
-                index={index}
-                variants={skillVariants}
+                className={`btn btn-sm md:btn-am lg:btn-md  ${tool === skills.name ? "btn-primary " : ""}`}
+                onClick={() => handleChangeSkills(tool)}
               >
-                <button
-                  key={index}
-                  className={`btn btn-sm md:btn-am lg:btn-md  ${tool === skills.name ? "btn-primary " : ""}`}
-                  onClick={() => handleChangeSkills(tool)}
-                >
-                  {tool}
-                </button>
-              </OneByOneReveal>
+                {tool}
+              </button>
             ))}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
