@@ -19,6 +19,8 @@ import FirebaseIcon from "../../assets/firebase.png";
 import GitIcon from "../../assets/git.svg";
 import GithubIcon from "../../assets/github.svg";
 import ReduxToolkitIcon from "../../assets/redux.svg";
+import MotionIcon from "../../assets/motion.png";
+import NextJSIcon from "../../assets/next-js.svg";
 
 import Reveal from "../motion/Reveal";
 import SkillReveal from "../motion/OneByOneReveal";
@@ -47,6 +49,8 @@ const skills = [
   { imageSrc: FigmaIcon, skillName: "Figma" },
   { imageSrc: JWTIcon, skillName: "JWT" },
   { imageSrc: PassportJSIcon, skillName: "PassportJS" },
+  { imageSrc: MotionIcon, skillName: "Motion" },
+  { imageSrc: NextJSIcon, skillName: "Next.JS" },
 ];
 const skillVariants = {
   hidden: {

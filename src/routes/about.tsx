@@ -161,6 +161,18 @@ function AboutComponent() {
                       Tanstack Table (React Table)
                     </span>
                   </div>
+                  <div className="flex items-center gap-2 px-2">
+                    <LuBadgeCheck className="w-4 h-4  flex-shrink-0" />
+                    <span className="text-sm md:text-base lg:text-lg">
+                      Motion
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 px-2">
+                    <LuBadgeCheck className="w-4 h-4  flex-shrink-0" />
+                    <span className="text-sm md:text-base lg:text-lg">
+                      Next.JS
+                    </span>
+                  </div>
                 </div>
               </div>
               <div>

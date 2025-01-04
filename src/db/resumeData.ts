@@ -117,6 +117,25 @@ export const skillsData = [
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
+    tools: "Motion",
+    value: 70,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
+  },
+  {
+    tools: "Next.JS",
+    value: 50,
+    color: colors[Math.floor(Math.random() * 9)],
+    category: [
+      "allSkills",
+      "frontEnd",
+      "webDevelopment",
+      "framework",
+      "javascript",
+      "backEnd",
+    ],
+  },
+  {
     tools: "RESTful APIs",
     value: 90,
     color: colors[Math.floor(Math.random() * 9)],
