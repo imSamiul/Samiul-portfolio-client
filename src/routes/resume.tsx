@@ -22,7 +22,6 @@ function ResumeComponent() {
     const newSkills = skillsData.filter((skill) =>
       skill.category.includes(category)
     );
-    console.log(newSkills);
 
     setSkills({ name: category, value: newSkills });
   }

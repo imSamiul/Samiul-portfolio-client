@@ -49,6 +49,20 @@ function Projects({ projects }: { projects: ProjectType[] }) {
                 <div className="card-body">
                   <h2 className="card-title">{project.title}</h2>
                   <p>{project.summary}</p>
+                  <div className="space-x-2 mt-2 md:mt-5">
+                    {project.frontEndTech.includes("ReactJS") && (
+                      <div className="badge badge-outline">React</div>
+                    )}
+                    {project.frontEndTech.includes("NextJS") && (
+                      <div className="badge badge-outline">NextJS</div>
+                    )}
+                    {project.backEndTech.includes("NodeJS") && (
+                      <div className="badge badge-outline">Node</div>
+                    )}
+                    {project.backEndTech.includes("MongoDB") && (
+                      <div className="badge badge-outline">MongoDB</div>
+                    )}
+                  </div>
                   <div className="card-actions justify-end mt-5">
                     <a
                       target="_blank"
