@@ -24,7 +24,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
       {projects.length === 0 ? (
         <p className="text-center">No projects found</p>
       ) : (
-        <div className=" grid bg-base-100 grid-cols-1 md:grid-cols-3 gap-5 ">
+        <div className=" grid  grid-cols-1 md:grid-cols-3 gap-5 ">
           {projects.map((project, index) => (
             <OneByOneReveal
               key={project._id}
@@ -32,7 +32,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
               variants={projectVariants}
             >
               <div
-                className="card card-compact bg-primary h-full  dark:bg-inherit shadow-xl rounded-lg z-0"
+                className="card card-compact bg-base-100 h-full shadow-xl rounded-lg "
                 key={project._id}
               >
                 <figure>
