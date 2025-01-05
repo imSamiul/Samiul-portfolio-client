@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import { useCreateNewProject } from "../../services/mutations/projectMutation";
 import { useState } from "react";
@@ -26,6 +26,7 @@ function AddProjectForm() {
   const [formValues, setFormValues] = useState<ProjectType>(initialValues);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const { mutate, isPending, isError, error } = useCreateNewProject();
 
@@ -98,6 +99,7 @@ function AddProjectForm() {
       onSuccess: () => {
         setFormValues(initialValues);
         setImagePreview(null);
+        navigate({ to: "/projects/allProjects" });
       },
     });
   }

@@ -57,44 +57,7 @@ function RouteComponent() {
             Details
           </h3>
           <p className="text-sm md:text-base lg:text-lg   leading-6">
-            {/* {project.projectDetails} */}
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
-            debitis quaerat fugit ipsum amet illo. Quisquam praesentium illum
-            reprehenderit necessitatibus sed aliquam distinctio saepe corporis
-            eveniet. Consectetur eum autem omnis. Quos totam magni numquam sequi
-            libero illum voluptatum atque, deleniti maxime suscipit quia
-            repellendus, labore sit pariatur quidem sed, doloremque quasi
-            officiis! Porro perspiciatis fuga, necessitatibus ea illum
-            laboriosam et corporis officiis earum dolorum repellat architecto
-            veritatis magnam? Officia nesciunt animi laborum corporis maiores
-            tenetur ullam reprehenderit ex ea quidem, modi aliquid quo pariatur
-            ratione? Ab quo consequatur dolorum ipsa, nulla assumenda harum
-            veniam nisi suscipit iste dolorem, itaque consectetur, unde impedit
-            et excepturi ipsum distinctio. Ipsam ab consequuntur, nobis eos
-            tempora architecto possimus earum quis, laudantium asperiores
-            nesciunt consequatur, officia perspiciatis nulla officiis
-            voluptatibus dolore cupiditate ut iure! Consectetur ut eaque
-            aperiam, blanditiis ipsam praesentium totam modi accusamus saepe
-            excepturi nostrum animi ipsum nisi quo quisquam iste? Aliquid
-            exercitationem impedit ut excepturi quisquam explicabo illo itaque
-            voluptates iusto velit enim eaque minima sed odio, necessitatibus
-            accusantium nobis quo quaerat praesentium similique? Odio adipisci
-            provident ullam corrupti impedit ratione pariatur hic commodi modi
-            eius corporis unde velit aspernatur nesciunt cupiditate, vero cum
-            neque harum? Rem, totam? Veniam doloremque molestias quia quasi
-            aperiam illum omnis, id dicta nemo recusandae voluptate saepe
-            obcaecati nulla quas dolores beatae similique aliquid explicabo
-            corrupti labore. Impedit quo quibusdam voluptate laboriosam
-            excepturi obcaecati voluptatibus, maxime ratione id? Et placeat eos
-            dolores! Suscipit molestiae minus nobis assumenda pariatur omnis
-            consectetur? Facilis, voluptatibus saepe! Dignissimos neque ducimus
-            mollitia eligendi delectus tempora, voluptas sed earum odio iure
-            soluta, temporibus ratione aliquam consequatur sapiente laborum
-            iusto repudiandae labore enim aut voluptatem. Dolor provident
-            similique perferendis doloremque odio explicabo laboriosam animi
-            blanditiis aliquam quos, reiciendis delectus nostrum at mollitia
-            neque id. Impedit amet non deleniti cumque assumenda reprehenderit
-            iste, molestiae dolore.
+            {project.projectDetails}
           </p>
           <h3 className="text-base md:text-xl lg:text-2xl font-bold  my-2">
             Front-End Technologies
