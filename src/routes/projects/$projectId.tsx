@@ -12,7 +12,6 @@ export const Route = createFileRoute("/projects/$projectId")({
 function RouteComponent() {
   const projectId = Route.useParams().projectId;
   const { data: project, isLoading, isError } = useGetProjectById(projectId);
-  console.log(project);
 
   if (isLoading) {
     return <Loader className="h-screen" />;

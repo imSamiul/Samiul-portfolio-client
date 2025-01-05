@@ -71,7 +71,6 @@ function RouteComponent() {
         : formValues.backEndTech.split(",").map((tech) => tech.trim()),
     };
 
-    console.log(transformedFormValues);
     mutate({ projectId, formData: transformedFormValues });
   }
 

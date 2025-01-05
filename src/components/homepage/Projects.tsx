@@ -32,7 +32,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
               variants={projectVariants}
             >
               <div
-                className="card card-compact bg-primary  dark:bg-inherit shadow-xl rounded-lg z-0"
+                className="card card-compact bg-primary h-full  dark:bg-inherit shadow-xl rounded-lg z-0"
                 key={project._id}
               >
                 <figure>
