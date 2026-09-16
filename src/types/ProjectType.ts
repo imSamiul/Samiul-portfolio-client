@@ -1,5 +1,5 @@
 export type ProjectType = {
-  _id?: string;
+  id?: string;
   title: string;
   summary: string;
   frontEndTech: string[] | string;
@@ -9,7 +9,7 @@ export type ProjectType = {
   backEndRepo: string;
   projectDetails: string;
   showOnHomepage?: boolean;
-  image?: ImageType | File | string;
+  image?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -25,9 +25,4 @@ export type ProjectFormValues = {
   projectDetails: string;
   showOnHomepage: boolean;
   image?: FileList;
-};
-
-export type ImageType = {
-  data: string;
-  contentType: string;
 };

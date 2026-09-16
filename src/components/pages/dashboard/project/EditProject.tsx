@@ -27,7 +27,7 @@ function EditProject({ project }: { project: ProjectType }) {
   function handleUpdate(values: ProjectFormValues) {
     mutate(
       {
-        projectId: project._id!,
+        projectId: project.id!,
         formData: {
           title: values.title,
           summary: values.summary,

@@ -7,7 +7,6 @@ import { ProjectType } from "../../../types/ProjectType";
 import {
   PROJECT_IMAGE_HEIGHT,
   PROJECT_IMAGE_WIDTH,
-  projectImageUrl,
 } from "../../../utils/projectImage";
 import Reveal from "../../shared/motion/Reveal";
 import { projectCardVariants } from "../../shared/motion/variants";
@@ -32,15 +31,11 @@ function ProjectGrid({ projects }: { projects: ProjectType[] }) {
     <div className="mt-3 py-2 lg:mt-5">
       <div className=" grid  grid-cols-1 md:grid-cols-3 gap-5 ">
         {projects.map((project, index) => (
-          <Reveal
-            key={project._id}
-            index={index}
-            variants={projectCardVariants}
-          >
+          <Reveal key={project.id} index={index} variants={projectCardVariants}>
             <div className="card card-compact bg-base-100 h-full shadow-xl rounded-lg ">
               <figure>
                 <Image
-                  src={projectImageUrl(project._id!)}
+                  src={project.image!}
                   alt={project.title}
                   width={PROJECT_IMAGE_WIDTH}
                   height={PROJECT_IMAGE_HEIGHT}
@@ -70,7 +65,7 @@ function ProjectGrid({ projects }: { projects: ProjectType[] }) {
                     Live Site
                   </a>
                   <Link
-                    href={`/projects/${project._id}`}
+                    href={`/projects/${project.id}`}
                     className="btn btn-secondary btn-sm md:btn-am lg:btn-md text-accent-content "
                   >
                     Learn More

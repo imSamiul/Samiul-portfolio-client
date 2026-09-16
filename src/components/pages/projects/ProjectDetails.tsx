@@ -7,7 +7,6 @@ import { ProjectType } from "../../../types/ProjectType";
 import {
   PROJECT_IMAGE_HEIGHT,
   PROJECT_IMAGE_WIDTH,
-  projectImageUrl,
 } from "../../../utils/projectImage";
 import Reveal from "../../shared/motion/Reveal";
 import { bottomRevealVariants } from "../../shared/motion/variants";
@@ -29,7 +28,7 @@ function ProjectDetails({ project }: { project: ProjectType }) {
       <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
         <div>
           <Image
-            src={projectImageUrl(project._id!)}
+            src={project.image!}
             alt={project.title}
             width={PROJECT_IMAGE_WIDTH}
             height={PROJECT_IMAGE_HEIGHT}

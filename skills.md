@@ -86,8 +86,9 @@ This repo just moved from Vite + TanStack Router to Next.js App Router (commit `
 
 **Known gaps:**
 
-- Dashboard routes are incomplete. `components/pages/dashboard/project/AddProject.tsx` and `ProjectForm.tsx` exist but no route mounts them; `app/dashboard/page.tsx`, the project list and the edit route are missing.
-- `src/app/api/project-image/[projectId]/route.ts` and `src/utils/projectImage.ts` only exist to serve base64 images out of MongoDB. **Delete both** once the API serves Cloudinary URLs.
+- `src/components/UI/` is the tracked folder name but several files import `../ui/Loader` and `../ui/Toast`. Windows resolves that; **Linux does not, so the Vercel build breaks.** Fix the casing as part of moving those files to `components/shared/`.
+- `pnpm build` currently fails while prerendering `/_global-error` with `Cannot read properties of null (reading 'useContext')`. It predates the API contract change and is unrelated to it — a Next 16 / React 19 problem in this repo's setup.
+- `src/utils/projectImage.ts` now holds only the two image dimensions that `next/image` needs. The base64 workarounds it used to carry, along with `src/app/api/project-image/`, have been deleted.
 - DaisyUI classes are spread across 14 component files (heaviest: `Navbar`, `DashboardShell`, `ProjectGrid`, `LoginForm`, `ProjectForm`, `ThemeController`). Restyle domain by domain, not in one sweep.
 
 ---
@@ -131,28 +132,30 @@ See `.env.example`:
 - `API_BASE_URL` — server-to-server calls from Server Components and the sitemap
 - `NEXT_PUBLIC_BASE_URL` — browser calls (dashboard mutations, resume download)
 
-Both currently point at the Vercel-hosted API. **The API is moving to Koyeb**, so these values change together with that deploy.
+Both currently point at the Vercel-hosted API. **The API is moving to Koyeb**, so these values change together with that deploy. Neither includes the `/api/v1` prefix — the service files add it.
 
 ---
 
 ## API contract
 
-Base: `<API_BASE_URL>`. The API still serves everything under `/api/...`; a move to `/api/v1` is planned and must land in both repos at once.
+Base: `<API_BASE_URL>/api/v1`.
 
-| Method | Path | Auth | Notes |
+**Every response is enveloped.** Success is `{ success: true, message, data }` and errors are `{ success: false, message, code, details? }`. `src/types/apiType.ts` holds `ApiResponse<T>`; each service function types the call with it and returns `response.data.data`, so components and hooks never see the envelope. `src/utils/errorHandler.ts` reads `error.response.data.message`.
+
+Projects carry **`id`**, not `_id`, and `image` is a plain Cloudinary URL string.
+
+| Method | Path | Auth | `data` |
 | --- | --- | --- | --- |
-| GET | `/api/project/getAllProjects` | – | image returned as base64 data URL |
-| GET | `/api/project/getProjectById/:id` | – | 404 when missing |
-| GET | `/api/project/getProjectsForHomepage` | – | `showOnHomepage: true` only |
-| POST | `/api/project/create` | Bearer | multipart, file field `image`, `frontEndTech`/`backEndTech` as JSON strings, max 2MB |
-| PATCH | `/api/project/updateShowOnHomePage/:id` | Bearer | toggles the flag |
-| PATCH | `/api/project/updateProject/:id` | Bearer | partial; only whitelisted fields |
-| DELETE | `/api/project/deleteProject/:id` | Bearer | |
-| POST | `/api/auth/login` | – | 200 + `{ token }`; 401 on bad credentials |
-| POST | `/api/auth/signup` | – | 409 duplicate email, 400 validation |
-| GET | `/api/resume/download` | – | PDF download |
-
-Errors arrive as `{ message: string }` — `src/utils/errorHandler.ts` reads `error.response.data.message`.
+| GET | `/api/v1/project/getAllProjects` | – | project array, newest first |
+| GET | `/api/v1/project/getProjectById/:id` | – | one project; 404 when missing |
+| GET | `/api/v1/project/getProjectsForHomepage` | – | `showOnHomepage: true` only |
+| POST | `/api/v1/project/create` | Bearer | the created project. Multipart, file field `image`, `frontEndTech`/`backEndTech` as JSON strings, max 2 MB |
+| PATCH | `/api/v1/project/updateShowOnHomePage/:id` | Bearer | the project with the flag flipped |
+| PATCH | `/api/v1/project/updateProject/:id` | Bearer | the updated project; partial, only whitelisted fields |
+| DELETE | `/api/v1/project/deleteProject/:id` | Bearer | `null` |
+| POST | `/api/v1/auth/login` | – | `{ user: { id, email }, token }`; 401 on bad credentials |
+| POST | `/api/v1/auth/signUp` | – | same, 201; 409 duplicate email, 422 validation |
+| GET | `/api/v1/resume/download` | – | not an envelope: a 302 to the Cloudinary PDF, which axios follows into a blob |
 
 ---
 

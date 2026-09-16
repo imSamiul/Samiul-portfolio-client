@@ -1,3 +1,4 @@
+import { ApiResponse } from "../types/apiType";
 import { ProjectType } from "../types/ProjectType";
 
 const REVALIDATE_SECONDS = 300;
@@ -7,14 +8,7 @@ function projectApiUrl(path: string): string {
   if (!baseUrl) {
     throw new Error("API_BASE_URL is not set");
   }
-  return `${baseUrl}/api/project/${path}`;
-}
-
-// Every project carries its image as ~750KB of base64. Anything handed to a
-// client component ends up in the RSC payload inside the HTML, so the image is
-// stripped here and served separately by /api/project-image.
-function withoutImage(project: ProjectType): ProjectType {
-  return { ...project, image: undefined };
+  return `${baseUrl}/api/v1/project/${path}`;
 }
 
 // Public pages must still render (with their headings, name and structured
@@ -27,15 +21,23 @@ async function fetchProjectList(path: string): Promise<ProjectType[]> {
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}`);
     }
-    const projects: ProjectType[] = await response.json();
-    return projects.map(withoutImage);
+    const body: ApiResponse<ProjectType[]> = await response.json();
+    return body.data;
   } catch (error) {
     console.error(`Failed to load projects from ${path}`, error);
     return [];
   }
 }
 
-async function fetchProject(
+export function getAllProjectsOnServer(): Promise<ProjectType[]> {
+  return fetchProjectList("getAllProjects");
+}
+
+export function getHomepageProjectsOnServer(): Promise<ProjectType[]> {
+  return fetchProjectList("getProjectsForHomepage");
+}
+
+export async function getProjectByIdOnServer(
   projectId: string,
   options?: { fresh?: boolean },
 ): Promise<ProjectType | null> {
@@ -54,28 +56,7 @@ async function fetchProject(
       `Failed to load project ${projectId}: ${response.status} ${response.statusText}`,
     );
   }
-  return response.json();
-}
 
-export function getAllProjectsOnServer(): Promise<ProjectType[]> {
-  return fetchProjectList("getAllProjects");
-}
-
-export function getHomepageProjectsOnServer(): Promise<ProjectType[]> {
-  return fetchProjectList("getProjectsForHomepage");
-}
-
-export async function getProjectByIdOnServer(
-  projectId: string,
-  options?: { fresh?: boolean },
-): Promise<ProjectType | null> {
-  const project = await fetchProject(projectId, options);
-  return project ? withoutImage(project) : null;
-}
-
-export async function getProjectImageOnServer(
-  projectId: string,
-): Promise<ProjectType["image"]> {
-  const project = await fetchProject(projectId);
-  return project?.image;
+  const body: ApiResponse<ProjectType> = await response.json();
+  return body.data;
 }

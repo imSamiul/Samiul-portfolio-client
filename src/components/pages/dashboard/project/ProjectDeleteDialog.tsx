@@ -8,7 +8,6 @@ import { ProjectType } from "../../../../types/ProjectType";
 import {
   PROJECT_IMAGE_HEIGHT,
   PROJECT_IMAGE_WIDTH,
-  projectImageUrl,
 } from "../../../../utils/projectImage";
 
 function ProjectDeleteDialog({ project }: { project: ProjectType }) {
@@ -16,7 +15,7 @@ function ProjectDeleteDialog({ project }: { project: ProjectType }) {
   const { mutate, isPending, isError, error } = useDeleteProject();
 
   function handleDelete() {
-    mutate(project._id!, {
+    mutate(project.id!, {
       onSuccess: () => dialogRef.current?.close(),
     });
   }
@@ -35,7 +34,7 @@ function ProjectDeleteDialog({ project }: { project: ProjectType }) {
           <div className="flex flex-col gap-3 py-3">
             <div className="my-2">
               <Image
-                src={projectImageUrl(project._id!)}
+                src={project.image!}
                 alt={project.title}
                 width={PROJECT_IMAGE_WIDTH}
                 height={PROJECT_IMAGE_HEIGHT}

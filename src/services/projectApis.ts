@@ -2,9 +2,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 import { getErrorMessage } from "../utils/errorHandler";
+import { ApiResponse } from "../types/apiType";
 import { ProjectType } from "../types/ProjectType";
 
-const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/project`;
+const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/project`;
 
 const defaultOptions = {
   baseURL: apiUrl,
@@ -23,8 +24,9 @@ instance.interceptors.request.use((config) => {
 // GET: get all projects
 export async function getAllProjects() {
   try {
-    const response = await instance.get("/getAllProjects");
-    return response.data;
+    const response =
+      await instance.get<ApiResponse<ProjectType[]>>("/getAllProjects");
+    return response.data.data;
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -32,12 +34,16 @@ export async function getAllProjects() {
 // POST:create new project
 export async function createNewProject(formData: FormData) {
   try {
-    const response = await instance.post("/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const response = await instance.post<ApiResponse<ProjectType>>(
+      "/create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       },
-    });
-    return response.data;
+    );
+    return response.data.data;
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -46,8 +52,10 @@ export async function createNewProject(formData: FormData) {
 // PATCH: update showOnHomePage
 export async function updateShowOnHomePage(projectId: string) {
   try {
-    const response = await instance.patch(`/updateShowOnHomePage/${projectId}`);
-    return response.data;
+    const response = await instance.patch<ApiResponse<ProjectType>>(
+      `/updateShowOnHomePage/${projectId}`,
+    );
+    return response.data.data;
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -56,7 +64,7 @@ export async function updateShowOnHomePage(projectId: string) {
 // PATCH: update project
 export async function updateProject(projectId: string, formData: ProjectType) {
   try {
-    const response = await instance.patch(
+    const response = await instance.patch<ApiResponse<ProjectType>>(
       `/updateProject/${projectId}`,
       formData,
       {
@@ -65,7 +73,7 @@ export async function updateProject(projectId: string, formData: ProjectType) {
         },
       },
     );
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
@@ -74,8 +82,10 @@ export async function updateProject(projectId: string, formData: ProjectType) {
 // DELETE: delete project
 export async function deleteProject(projectId: string) {
   try {
-    const response = await instance.delete(`/deleteProject/${projectId}`);
-    return response.data;
+    const response = await instance.delete<ApiResponse<null>>(
+      `/deleteProject/${projectId}`,
+    );
+    return response.data.data;
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }

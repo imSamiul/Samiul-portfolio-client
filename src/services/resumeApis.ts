@@ -6,7 +6,7 @@ const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 export async function getResume() {
   try {
     const response = await axios({
-      url: `${baseURL}/api/resume/download`,
+      url: `${baseURL}/api/v1/resume/download`,
       responseType: "blob",
       method: "GET",
     });

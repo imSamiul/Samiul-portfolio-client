@@ -46,7 +46,7 @@ function DashboardProjectList() {
             </thead>
             <tbody>
               {projects.map((project, index) => (
-                <tr key={project._id} className="hover">
+                <tr key={project.id} className="hover">
                   <th>{index + 1}</th>
                   <td>{project.title}</td>
                   <td>{project.liveLink}</td>
@@ -56,12 +56,12 @@ function DashboardProjectList() {
                       className="toggle toggle-sm toggle-primary"
                       checked={project.showOnHomepage ?? false}
                       disabled={isTogglePending}
-                      onChange={() => toggleShowOnHomepage(project._id!)}
+                      onChange={() => toggleShowOnHomepage(project.id!)}
                     />
                   </td>
                   <td>
                     <Link
-                      href={`/dashboard/edit-project/${project._id}`}
+                      href={`/dashboard/edit-project/${project.id}`}
                       className="btn btn-md btn-secondary text-black"
                     >
                       Edit
