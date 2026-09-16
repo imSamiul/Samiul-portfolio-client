@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import {
+  useForm,
+  type RegisterOptions,
+  type SubmitHandler,
+} from "react-hook-form";
 
 import { ProjectFormValues } from "../../../../types/ProjectType";
 
@@ -15,6 +19,11 @@ type ProjectFormProps = {
 const TEXT_FIELDS = [
   { name: "title", label: "Project Name:", placeholder: "Enter project name" },
   {
+    name: "slug",
+    label: "URL Slug:",
+    placeholder: "Leave blank to build it from the title",
+  },
+  {
     name: "summary",
     label: "Summary:",
     placeholder: "Say one line about the project",
@@ -26,21 +35,48 @@ const TEXT_FIELDS = [
   },
   {
     name: "backEndTech",
-    label: "Backend Technologies:",
+    label: "Backend Technologies (optional):",
     placeholder: "Enter backend technologies (comma-separated)",
   },
-  { name: "liveLink", label: "Live Link:", placeholder: "Enter live link" },
+  {
+    name: "liveLink",
+    label: "Live Link (optional):",
+    placeholder: "Enter live link",
+  },
   {
     name: "frontEndRepo",
-    label: "Frontend Repo:",
+    label: "Frontend Repo (optional):",
     placeholder: "Enter frontend repo link",
   },
   {
     name: "backEndRepo",
-    label: "Backend Repo:",
+    label: "Backend Repo (optional):",
     placeholder: "Enter backend repo link",
   },
 ] as const;
+
+type TextFieldName = (typeof TEXT_FIELDS)[number]["name"];
+
+/**
+ * Anything absent from here is simply required. The listed fields are optional
+ * because a project can be frontend-only, undeployed, or have no public repo —
+ * and the slug is derived from the title when left blank.
+ */
+const FIELD_RULES: Partial<
+  Record<TextFieldName, RegisterOptions<ProjectFormValues, TextFieldName>>
+> = {
+  slug: {
+    // The empty branch matters: blank is how you ask for the derived slug.
+    pattern: {
+      value: /^$|^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      message: "Use lowercase letters, numbers and single dashes",
+    },
+  },
+  backEndTech: {},
+  liveLink: {},
+  frontEndRepo: {},
+  backEndRepo: {},
+};
 
 function ProjectForm({
   mode,
@@ -88,7 +124,12 @@ function ProjectForm({
             type="text"
             className="input input-bordered"
             placeholder={field.placeholder}
-            {...register(field.name, { required: `${field.label} is required` })}
+            {...register(
+              field.name,
+              FIELD_RULES[field.name] ?? {
+                required: `${field.label} is required`,
+              },
+            )}
           />
           {errors[field.name] && (
             <p className="text-error mt-1">{errors[field.name]?.message}</p>
@@ -111,6 +152,32 @@ function ProjectForm({
         {errors.projectDetails && (
           <p className="text-error mt-1">{errors.projectDetails.message}</p>
         )}
+      </div>
+
+      <div className="form-control">
+        <label className="label" htmlFor="status">
+          <span className="label-text">Status:</span>
+        </label>
+        <select
+          id="status"
+          className="select select-bordered"
+          {...register("status")}
+        >
+          <option value="draft">Draft (not on the site)</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+
+      <div className="form-control">
+        <label className="label" htmlFor="order">
+          <span className="label-text">Order (lower shows first):</span>
+        </label>
+        <input
+          id="order"
+          type="number"
+          className="input input-bordered"
+          {...register("order", { valueAsNumber: true })}
+        />
       </div>
 
       <div className="form-control justify-center">

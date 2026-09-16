@@ -10,6 +10,9 @@ import ProjectForm from "./ProjectForm";
 
 const EMPTY_PROJECT: ProjectFormValues = {
   title: "",
+  slug: "",
+  status: "draft",
+  order: 0,
   summary: "",
   frontEndTech: "",
   backEndTech: "",
@@ -27,6 +30,9 @@ function AddProject() {
   function handleCreate(values: ProjectFormValues) {
     const formData = new FormData();
     formData.append("title", values.title);
+    formData.append("slug", values.slug);
+    formData.append("status", values.status);
+    formData.append("order", String(values.order));
     formData.append("summary", values.summary);
     formData.append("liveLink", values.liveLink);
     formData.append("frontEndRepo", values.frontEndRepo);

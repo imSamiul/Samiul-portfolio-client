@@ -7,6 +7,7 @@ import firstProfileImage from "../../../assets/first-profile-image.jpg";
 import { siteConfig } from "../../../config/site";
 import Reveal from "../../shared/motion/Reveal";
 import { bottomRevealVariants } from "../../shared/motion/variants";
+import ContactForm from "./ContactForm";
 
 const SERVICES = [
   {
@@ -245,6 +246,7 @@ function AboutPage() {
               </a>
             </p>
           ))}
+          <ContactForm />
         </div>
       </div>
     </Reveal>

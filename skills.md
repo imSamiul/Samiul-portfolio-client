@@ -69,7 +69,8 @@ This repo just moved from Vite + TanStack Router to Next.js App Router (commit `
 - `src/app/**` (routes, layouts, metadata)
 - `src/components/layout/`, `src/components/pages/`, `src/components/shared/`
 - `src/middleware.ts`
-- `src/services/projectServerApis.ts` (RSC fetching with `revalidate`)
+- `src/services/projectServerApis.ts` (RSC fetching, tagged and cached indefinitely)
+- `src/app/api/revalidate/route.ts` (the API's cache-invalidation webhook)
 
 **Pre-migration — do NOT copy these shapes:**
 
@@ -116,6 +117,19 @@ services/projectServerApis.ts   # RSC-only fetch helpers
 - Browser mutations go through `services/apis` with the axios instance that attaches auth
 - A failed public list request degrades to an empty list so the page still renders (SEO)
 
+### Caching
+
+Project fetches are **cached indefinitely** (`next: { revalidate: false, tags: [...] }`), not on an interval. Invalidation is on demand: the API POSTs to `src/app/api/revalidate/route.ts` after every write, and that route calls `revalidateTag`. Do not reintroduce a `revalidate: <seconds>` — it only adds a window where the dashboard looks broken.
+
+Tags: every project fetch carries `projects`; the by-slug fetch also carries `project:<slug>`. These names are a hand-maintained contract with the API's `utils/revalidateWeb.ts`.
+
+Two Next 16 details worth keeping:
+
+- `revalidateTag(tag, profile)` takes **two** arguments; the single-argument form is deprecated.
+- The route passes `{ expire: 0 }`, not `'max'`. `'max'` serves stale content while revalidating, which would defeat the point — the admin would still see the old page. `updateTag` is not an option here because the caller is a webhook, not a Server Action.
+
+The dashboard's edit page fetches with `{ fresh: true }` (`cache: 'no-store'`) and stays untagged: it must never show a stale form.
+
 ---
 
 ## Auth
@@ -131,6 +145,7 @@ See `.env.example`:
 
 - `API_BASE_URL` — server-to-server calls from Server Components and the sitemap
 - `NEXT_PUBLIC_BASE_URL` — browser calls (dashboard mutations, resume download)
+- `REVALIDATE_SECRET` — shared with the API, guards `POST /api/revalidate`. Without it the route answers 503 and project data stays cached indefinitely
 
 Both currently point at the Vercel-hosted API. **The API is moving to Koyeb**, so these values change together with that deploy. Neither includes the `/api/v1` prefix — the service files add it.
 
@@ -146,16 +161,21 @@ Projects carry **`id`**, not `_id`, and `image` is a plain Cloudinary URL string
 
 | Method | Path | Auth | `data` |
 | --- | --- | --- | --- |
-| GET | `/api/v1/project/getAllProjects` | – | project array, newest first |
-| GET | `/api/v1/project/getProjectById/:id` | – | one project; 404 when missing |
+| GET | `/api/v1/project/getAllProjects` | – | **published** projects only, `order` ascending then newest first |
+| GET | `/api/v1/project/getAllProjectsForDashboard` | Bearer | every project, drafts included. The dashboard list uses this one |
+| GET | `/api/v1/project/getProjectBySlug/:slug` | – | one project; what `/projects/[slug]` uses. 404 when missing, **422** when the param is not slug-shaped |
+| GET | `/api/v1/project/getProjectById/:id` | – | one project; kept for the dashboard's edit page. 404 when missing |
 | GET | `/api/v1/project/getProjectsForHomepage` | – | `showOnHomepage: true` only |
 | POST | `/api/v1/project/create` | Bearer | the created project. Multipart, file field `image`, `frontEndTech`/`backEndTech` as JSON strings, max 2 MB |
-| PATCH | `/api/v1/project/updateShowOnHomePage/:id` | Bearer | the project with the flag flipped |
+| PATCH | `/api/v1/project/updateStatus/:id` | Bearer | the project with `status` flipped between `draft` and `published`. This is the publish gate |
+| PATCH | `/api/v1/project/updateShowOnHomePage/:id` | Bearer | the project with the flag flipped. Only a display flag — a draft stays off the site either way |
 | PATCH | `/api/v1/project/updateProject/:id` | Bearer | the updated project; partial, only whitelisted fields |
 | DELETE | `/api/v1/project/deleteProject/:id` | Bearer | `null` |
 | POST | `/api/v1/auth/login` | – | `{ user: { id, email }, token }`; 401 on bad credentials |
 | POST | `/api/v1/auth/signUp` | – | same, 201; 409 duplicate email, 422 validation |
-| GET | `/api/v1/resume/download` | – | not an envelope: a 302 to the Cloudinary PDF, which axios follows into a blob |
+| POST | `/api/v1/contact` | – | `null`. `{ name, email, message }` plus a hidden `website` honeypot; 429 when rate limited |
+| GET | `/api/v1/resume/download` | – | not an envelope: a 302 to the Cloudinary PDF. **Link to it with a plain anchor** — never fetch it as a blob |
+| POST | `/api/v1/resume` | Bearer | `{ updatedAt }`. Multipart, file field `resume`, PDF only, max 5 MB |
 
 ---
 

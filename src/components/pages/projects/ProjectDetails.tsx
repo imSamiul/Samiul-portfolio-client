@@ -11,15 +11,36 @@ import {
 import Reveal from "../../shared/motion/Reveal";
 import { bottomRevealVariants } from "../../shared/motion/variants";
 
-function TechList({ technologies }: { technologies: string[] | string }) {
-  const items = Array.isArray(technologies) ? technologies : [technologies];
+// The heading lives here so a frontend-only project does not render a
+// "Back-End Technologies" heading with nothing under it.
+function TechSection({
+  heading,
+  technologies,
+}: {
+  heading: string;
+  technologies: string[] | string;
+}) {
+  const items = (
+    Array.isArray(technologies) ? technologies : [technologies]
+  ).filter(Boolean);
 
-  return items.map((tech) => (
-    <div className="flex items-center gap-2 px-2" key={tech}>
-      <LuBadgeCheck />
-      <span className="text-sm md:text-base lg:text-lg">{tech}</span>
-    </div>
-  ));
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <h2 className="text-base md:text-xl lg:text-2xl font-bold  my-2">
+        {heading}
+      </h2>
+      {items.map((tech) => (
+        <div className="flex items-center gap-2 px-2" key={tech}>
+          <LuBadgeCheck />
+          <span className="text-sm md:text-base lg:text-lg">{tech}</span>
+        </div>
+      ))}
+    </>
+  );
 }
 
 function ProjectDetails({ project }: { project: ProjectType }) {
@@ -51,39 +72,45 @@ function ProjectDetails({ project }: { project: ProjectType }) {
           <p className="text-sm md:text-base lg:text-lg   leading-6">
             {project.projectDetails}
           </p>
-          <h2 className="text-base md:text-xl lg:text-2xl font-bold  my-2">
-            Front-End Technologies
-          </h2>
-          <TechList technologies={project.frontEndTech} />
-          <h2 className="text-base md:text-xl lg:text-2xl font-bold  my-2">
-            Back-End Technologies
-          </h2>
-          <TechList technologies={project.backEndTech} />
+          <TechSection
+            heading="Front-End Technologies"
+            technologies={project.frontEndTech}
+          />
+          <TechSection
+            heading="Back-End Technologies"
+            technologies={project.backEndTech}
+          />
           <div className="my-4 flex gap-2 md:gap-5 flex-wrap">
-            <a
-              href={project.liveLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-sm md:btn-md  btn-outline "
-            >
-              Live Site
-            </a>
-            <a
-              href={project.frontEndRepo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-sm md:btn-md  btn-outline btn-primary"
-            >
-              Frontend Repo
-            </a>
-            <a
-              href={project.backEndRepo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-sm md:btn-md  btn-outline btn-secondary"
-            >
-              Backend Repo
-            </a>
+            {project.liveLink && (
+              <a
+                href={project.liveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-sm md:btn-md  btn-outline "
+              >
+                Live Site
+              </a>
+            )}
+            {project.frontEndRepo && (
+              <a
+                href={project.frontEndRepo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-sm md:btn-md  btn-outline btn-primary"
+              >
+                Frontend Repo
+              </a>
+            )}
+            {project.backEndRepo && (
+              <a
+                href={project.backEndRepo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-sm md:btn-md  btn-outline btn-secondary"
+              >
+                Backend Repo
+              </a>
+            )}
           </div>
         </div>
       </div>

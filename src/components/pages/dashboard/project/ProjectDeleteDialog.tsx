@@ -51,12 +51,14 @@ function ProjectDeleteDialog({ project }: { project: ProjectType }) {
                 Summary:
                 <span className="font-medium">{project.summary}</span>
               </p>
-              <p className="my-2 md:text-lg">
-                Live Link:
-                <a className="font-medium " href={project.liveLink}>
-                  {project.liveLink}
-                </a>
-              </p>
+              {project.liveLink && (
+                <p className="my-2 md:text-lg">
+                  Live Link:
+                  <a className="font-medium " href={project.liveLink}>
+                    {project.liveLink}
+                  </a>
+                </p>
+              )}
             </div>
           </div>
 

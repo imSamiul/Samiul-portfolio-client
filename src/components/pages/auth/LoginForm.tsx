@@ -6,7 +6,7 @@ import { siteConfig } from "../../../config/site";
 import { useLoginUser } from "../../../services/mutations/userMutation";
 import { LoginFormType } from "../../../types/userType";
 
-function LoginForm() {
+function LoginForm({ destination }: { destination: string }) {
   const {
     register,
     handleSubmit,
@@ -14,7 +14,7 @@ function LoginForm() {
   } = useForm<LoginFormType>({
     defaultValues: { email: "", password: "" },
   });
-  const { mutate, isPending, isError, error } = useLoginUser();
+  const { mutate, isPending, isError, error } = useLoginUser(destination);
 
   return (
     <div className="hero bg-base-200 min-h-screen">

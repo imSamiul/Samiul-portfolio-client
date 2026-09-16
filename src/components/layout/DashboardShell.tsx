@@ -9,6 +9,7 @@ import barIcon from "../../assets/bars-solid.svg";
 const SIDEBAR_LINKS = [
   { href: "/dashboard/add-project", label: "Add Project" },
   { href: "/dashboard/project-list", label: "Project List" },
+  { href: "/dashboard/resume", label: "Resume" },
 ];
 
 function DashboardShell({ children }: { children: ReactNode }) {

@@ -56,16 +56,18 @@ function ProjectGrid({ projects }: { projects: ProjectType[] }) {
                   ))}
                 </div>
                 <div className="card-actions justify-end mt-5">
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary btn-sm md:btn-am lg:btn-md  "
-                    href={project.liveLink}
-                  >
-                    Live Site
-                  </a>
+                  {project.liveLink && (
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary btn-sm md:btn-am lg:btn-md  "
+                      href={project.liveLink}
+                    >
+                      Live Site
+                    </a>
+                  )}
                   <Link
-                    href={`/projects/${project.id}`}
+                    href={`/projects/${project.slug}`}
                     className="btn btn-secondary btn-sm md:btn-am lg:btn-md text-accent-content "
                   >
                     Learn More

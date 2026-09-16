@@ -1,7 +1,12 @@
 import { ApiResponse } from "../types/apiType";
 import { ProjectType } from "../types/ProjectType";
 
-const REVALIDATE_SECONDS = 300;
+/**
+ * Every project fetch carries this tag, and the API calls `/api/revalidate`
+ * after each write — so the data is cached indefinitely rather than on an
+ * interval. Keep the tag names in step with the API's `revalidateWeb.ts`.
+ */
+const PROJECTS_TAG = "projects";
 
 function projectApiUrl(path: string): string {
   const baseUrl = process.env.API_BASE_URL;
@@ -16,7 +21,7 @@ function projectApiUrl(path: string): string {
 async function fetchProjectList(path: string): Promise<ProjectType[]> {
   try {
     const response = await fetch(projectApiUrl(path), {
-      next: { revalidate: REVALIDATE_SECONDS },
+      next: { revalidate: false, tags: [PROJECTS_TAG] },
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.status}`);
@@ -37,26 +42,47 @@ export function getHomepageProjectsOnServer(): Promise<ProjectType[]> {
   return fetchProjectList("getProjectsForHomepage");
 }
 
-export async function getProjectByIdOnServer(
-  projectId: string,
-  options?: { fresh?: boolean },
+async function fetchProject(
+  path: string,
+  options?: { fresh?: boolean; tags?: string[] },
 ): Promise<ProjectType | null> {
   const response = await fetch(
-    projectApiUrl(`getProjectById/${projectId}`),
+    projectApiUrl(path),
     options?.fresh
       ? { cache: "no-store" }
-      : { next: { revalidate: REVALIDATE_SECONDS } },
+      : {
+          next: { revalidate: false, tags: options?.tags ?? [PROJECTS_TAG] },
+        },
   );
 
-  if (response.status === 404) {
+  // 404 is "no such project"; 422 is a param that could never name one, which
+  // the slug route sees for anything that is not URL safe.
+  if (response.status === 404 || response.status === 422) {
     return null;
   }
   if (!response.ok) {
     throw new Error(
-      `Failed to load project ${projectId}: ${response.status} ${response.statusText}`,
+      `Failed to load ${path}: ${response.status} ${response.statusText}`,
     );
   }
 
   const body: ApiResponse<ProjectType> = await response.json();
   return body.data;
+}
+
+/** Ids are the dashboard's handle on a project; the public site uses slugs. */
+export function getProjectByIdOnServer(
+  projectId: string,
+  options?: { fresh?: boolean },
+): Promise<ProjectType | null> {
+  return fetchProject(`getProjectById/${projectId}`, options);
+}
+
+export function getProjectBySlugOnServer(
+  slug: string,
+): Promise<ProjectType | null> {
+  // Tagged twice, so a write can drop one project's page or every list.
+  return fetchProject(`getProjectBySlug/${slug}`, {
+    tags: [PROJECTS_TAG, `project:${slug}`],
+  });
 }

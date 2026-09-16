@@ -34,7 +34,7 @@ export function buildProjectSchema(project: ProjectType) {
     "@type": "CreativeWork",
     name: project.title,
     description: project.summary,
-    url: `${siteConfig.url}/projects/${project.id}`,
+    url: `${siteConfig.url}/projects/${project.slug}`,
     author: {
       "@type": "Person",
       name: siteConfig.name,

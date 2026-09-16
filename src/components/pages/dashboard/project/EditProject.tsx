@@ -14,13 +14,16 @@ function EditProject({ project }: { project: ProjectType }) {
 
   const defaultValues: ProjectFormValues = {
     title: project.title,
+    slug: project.slug,
+    status: project.status,
+    order: project.order,
     summary: project.summary,
     frontEndTech: joinTechList(project.frontEndTech),
     backEndTech: joinTechList(project.backEndTech),
-    liveLink: project.liveLink,
-    frontEndRepo: project.frontEndRepo,
-    backEndRepo: project.backEndRepo,
-    projectDetails: project.projectDetails,
+    liveLink: project.liveLink ?? "",
+    frontEndRepo: project.frontEndRepo ?? "",
+    backEndRepo: project.backEndRepo ?? "",
+    projectDetails: project.projectDetails ?? "",
     showOnHomepage: project.showOnHomepage ?? false,
   };
 
@@ -30,6 +33,9 @@ function EditProject({ project }: { project: ProjectType }) {
         projectId: project.id!,
         formData: {
           title: values.title,
+          slug: values.slug,
+          status: values.status,
+          order: values.order,
           summary: values.summary,
           liveLink: values.liveLink,
           frontEndRepo: values.frontEndRepo,

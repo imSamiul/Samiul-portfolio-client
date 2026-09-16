@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllProjects } from "../projectApis";
+import { getAllProjectsForDashboard } from "../projectApis";
 import { ProjectType } from "../../types/ProjectType";
 
-export function useGetAllProjects() {
+export function useGetAllProjectsForDashboard() {
   return useQuery<ProjectType[]>({
     queryKey: ["allProjects"],
-    queryFn: getAllProjects,
+    queryFn: getAllProjectsForDashboard,
   });
 }

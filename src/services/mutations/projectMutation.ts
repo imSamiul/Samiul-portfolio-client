@@ -5,6 +5,7 @@ import {
   deleteProject,
   updateProject,
   updateShowOnHomePage,
+  updateStatus,
 } from "../projectApis";
 import { ProjectType } from "../../types/ProjectType";
 
@@ -22,6 +23,16 @@ export function useUpdateShowOnHomePage() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (projectId: string) => updateShowOnHomePage(projectId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["allProjects"] });
+    },
+  });
+}
+
+export function useUpdateStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (projectId: string) => updateStatus(projectId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["allProjects"] });
     },

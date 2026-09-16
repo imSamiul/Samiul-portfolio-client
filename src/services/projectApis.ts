@@ -21,11 +21,13 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-// GET: get all projects
-export async function getAllProjects() {
+// GET: every project, drafts included. Authenticated, unlike `/getAllProjects`,
+// which the public site uses and which hides drafts.
+export async function getAllProjectsForDashboard() {
   try {
-    const response =
-      await instance.get<ApiResponse<ProjectType[]>>("/getAllProjects");
+    const response = await instance.get<ApiResponse<ProjectType[]>>(
+      "/getAllProjectsForDashboard",
+    );
     return response.data.data;
   } catch (error) {
     throw new Error(getErrorMessage(error));
@@ -54,6 +56,18 @@ export async function updateShowOnHomePage(projectId: string) {
   try {
     const response = await instance.patch<ApiResponse<ProjectType>>(
       `/updateShowOnHomePage/${projectId}`,
+    );
+    return response.data.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
+// PATCH: flip draft <-> published
+export async function updateStatus(projectId: string) {
+  try {
+    const response = await instance.patch<ApiResponse<ProjectType>>(
+      `/updateStatus/${projectId}`,
     );
     return response.data.data;
   } catch (error) {

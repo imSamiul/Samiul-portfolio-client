@@ -2,15 +2,25 @@
 
 import Link from "next/link";
 
-import { useUpdateShowOnHomePage } from "../../../../services/mutations/projectMutation";
-import { useGetAllProjects } from "../../../../services/queries/projectQueries";
+import {
+  useUpdateShowOnHomePage,
+  useUpdateStatus,
+} from "../../../../services/mutations/projectMutation";
+import { useGetAllProjectsForDashboard } from "../../../../services/queries/projectQueries";
 import Loader from "../../../ui/Loader";
 import ProjectDeleteDialog from "./ProjectDeleteDialog";
 
 function DashboardProjectList() {
-  const { data: projects, isLoading, isError, error } = useGetAllProjects();
+  const {
+    data: projects,
+    isLoading,
+    isError,
+    error,
+  } = useGetAllProjectsForDashboard();
   const { mutate: toggleShowOnHomepage, isPending: isTogglePending } =
     useUpdateShowOnHomePage();
+  const { mutate: togglePublished, isPending: isPublishPending } =
+    useUpdateStatus();
 
   if (isLoading) {
     return <Loader className="h-screen" />;
@@ -39,6 +49,8 @@ function DashboardProjectList() {
                 <th></th>
                 <th className="text-base">Title</th>
                 <th className="text-base">Live Link</th>
+                <th className="text-base text-center">Published</th>
+                <th className="text-base text-center">Order</th>
                 <th className="text-base text-center">Show on homepage</th>
                 <th className="text-base">Edit</th>
                 <th className="text-base">Delete</th>
@@ -49,11 +61,23 @@ function DashboardProjectList() {
                 <tr key={project.id} className="hover">
                   <th>{index + 1}</th>
                   <td>{project.title}</td>
-                  <td>{project.liveLink}</td>
+                  <td>{project.liveLink ?? "—"}</td>
+                  <td className="text-center">
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-sm toggle-success"
+                      aria-label={`Publish ${project.title}`}
+                      checked={project.status === "published"}
+                      disabled={isPublishPending}
+                      onChange={() => togglePublished(project.id!)}
+                    />
+                  </td>
+                  <td className="text-center">{project.order}</td>
                   <td className="text-center">
                     <input
                       type="checkbox"
                       className="toggle toggle-sm toggle-primary"
+                      aria-label={`Show ${project.title} on the homepage`}
                       checked={project.showOnHomepage ?? false}
                       disabled={isTogglePending}
                       onChange={() => toggleShowOnHomepage(project.id!)}
