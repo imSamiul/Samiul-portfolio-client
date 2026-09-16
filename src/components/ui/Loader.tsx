@@ -1,10 +1,19 @@
+import { Loader2Icon } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
+
 function Loader({ className }: { className?: string }) {
   return (
     <div
-      className={`  flex flex-col justify-center items-center bg-base-100 text-center ${className}`}
+      className={cn(
+        'flex flex-col items-center justify-center text-center',
+        className,
+      )}
     >
-      <div className="loading  loading-bars loading-sm md:loading-lg text-primary"></div>
-      <p className="text-lg text-gray-500 mt-4">Loading, please wait...</p>
+      <Loader2Icon className="size-8 animate-spin text-primary" />
+      <p className="mt-4 text-lg text-muted-foreground">
+        Loading, please wait...
+      </p>
     </div>
   );
 }

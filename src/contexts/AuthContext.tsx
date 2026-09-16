@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { createContext, useEffect, useState, type ReactNode } from "react";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { createContext, useEffect, useState, type ReactNode } from 'react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 export type AuthContextType = {
   isAuthenticated: boolean;
@@ -20,18 +20,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Cookies are unreadable while rendering on the server, so the real auth
   // state has to be picked up after mount to keep the markup hydration-safe.
+  // A lazy initializer would read the cookie during the client render and
+  // produce exactly the mismatch this avoids, so the mount sync is deliberate.
   useEffect(() => {
-    setIsAuthenticated(!!Cookies.get("token"));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsAuthenticated(!!Cookies.get('token'));
   }, []);
 
   const login = (token: string) => {
-    Cookies.set("token", token, { expires: 7 });
+    Cookies.set('token', token, { expires: 7 });
     setIsAuthenticated(true);
     router.refresh();
   };
 
   const logout = () => {
-    Cookies.remove("token");
+    Cookies.remove('token');
     setIsAuthenticated(false);
     router.refresh();
   };

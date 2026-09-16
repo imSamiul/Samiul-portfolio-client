@@ -1,255 +1,422 @@
-import Image from "next/image";
-import { FaFeatherPointed } from "react-icons/fa6";
-import { LuBadgeCheck } from "react-icons/lu";
-import { TbTransformPointTopLeft } from "react-icons/tb";
+import {
+  ArrowUpRightIcon,
+  BrainIcon,
+  CodeIcon,
+  DatabaseIcon,
+  GraduationCapIcon,
+  KeyRoundIcon,
+  LayersIcon,
+  MailIcon,
+  MapPinIcon,
+  SparklesIcon,
+  TargetIcon,
+  type LucideIcon,
+} from 'lucide-react';
+import Image from 'next/image';
 
-import firstProfileImage from "../../../assets/first-profile-image.jpg";
-import { siteConfig } from "../../../config/site";
-import Reveal from "../../shared/motion/Reveal";
-import { bottomRevealVariants } from "../../shared/motion/variants";
-import ContactForm from "./ContactForm";
+import profileImage from '@/assets/first-profile-image.jpg';
+import { siteConfig } from '@/lib/site';
+import Reveal from '@/components/shared/motion/Reveal';
+import SpotlightCard from '@/components/shared/motion/SpotlightCard';
+import SectionHeading from '@/components/shared/SectionHeading';
+import TechBadge from '@/components/shared/TechBadge';
+import Timeline, { type TimelineItem } from '@/components/shared/Timeline';
+import { Button } from '@/components/ui/button';
+import ContactForm from './ContactForm';
 
-const SERVICES = [
+const JOURNEY: TimelineItem[] = [
   {
-    heading: "Building dynamic, responsive front-end interfaces using",
-    items: [
-      "React",
-      "Tailwind, and Bootstrap.",
-      "DaisyUI",
-      "TypeScript",
-      "React Router",
-      "Tanstack Router",
-      "Tanstack Query",
-      "Redux Toolkit",
-      "Tanstack Table (React Table)",
-      "Motion",
-      "Next.JS",
+    period: '2020',
+    title: 'First semester, first web page',
+    description:
+      'Started Computer Science at Daffodil International University and discovered the browser was the most fun place to see code run. HTML, CSS, then Tailwind and Bootstrap.',
+  },
+  {
+    period: '2021 – 2022',
+    title: 'JavaScript, then React',
+    description:
+      'Moved from static pages to real applications: JavaScript, React, React Router, Redux Toolkit, and the first projects that talked to an API.',
+  },
+  {
+    period: '2023',
+    title: 'Full stack',
+    description:
+      'Final-year projects needed a backend, so I built one: Node.js, Express, MongoDB and Mongoose, with JWT, Passport.js and OAuth for auth. Picked up TypeScript and TanStack Query and never put them down.',
+  },
+  {
+    period: 'March 2024',
+    title: 'Graduated — B.Sc. in CSE',
+    description:
+      'Left university with a portfolio of deployed full-stack apps and a habit of reading docs before tutorials.',
+  },
+  {
+    period: 'Now',
+    title: 'Next.js App Router, in production',
+    description:
+      'This site: server components, tagged caching with on-demand revalidation, zod-checked API contracts and a real admin dashboard. Open to full-stack and frontend roles.',
+    current: true,
+  },
+];
+
+const SERVICES: {
+  Icon: LucideIcon;
+  title: string;
+  text: string;
+  tech: string[];
+}[] = [
+  {
+    Icon: LayersIcon,
+    title: 'Frontend interfaces',
+    text: 'Responsive, accessible UIs with sensible component boundaries and motion that stays out of the way.',
+    tech: [
+      'React',
+      'Next.js',
+      'TypeScript',
+      'Tailwind',
+      'TanStack Query',
+      'Motion',
     ],
   },
   {
-    heading: "Creating secure and scalable back-end systems using",
-    items: ["Node.JS", "Express.JS", "MongoDB", "Mongoose"],
+    Icon: DatabaseIcon,
+    title: 'Backend & data',
+    text: 'REST APIs with validated inputs, enveloped responses and a schema the frontend can trust.',
+    tech: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'zod'],
   },
   {
-    heading:
-      "Developing RESTful APIs and integrating authentication systems with",
-    items: ["JWT", "Passport.JS", "OAuth", "Axios/Fetch"],
+    Icon: KeyRoundIcon,
+    title: 'Auth & integration',
+    text: 'Login flows that are boring in the right way: JWT, Passport.js and OAuth, wired to protected routes.',
+    tech: ['JWT', 'Passport.js', 'OAuth', 'Axios'],
   },
   {
-    heading: "Managing state effectively with",
-    items: ["Redux Toolkit", "React Context API"],
+    Icon: CodeIcon,
+    title: 'State & tooling',
+    text: 'Server state, client state and forms each in their own lane, plus the tests that keep the contract honest.',
+    tech: ['Redux Toolkit', 'Context', 'react-hook-form', 'Vitest'],
   },
 ];
 
-const STRENGTHS = [
+const STRENGTHS: { Icon: LucideIcon; title: string; text: string }[] = [
   {
-    title: "Problem-Solving Mindset:",
-    text: "I excel at analyzing challenges, debugging issues, and finding efficient solutions.",
+    Icon: TargetIcon,
+    title: 'Problem-solving mindset',
+    text: 'I read the error before I search for it. Debugging is analysis, not guesswork.',
   },
   {
-    title: "Continuous Learner:",
-    text: "I stay updated with emerging tools and technologies to keep my skills sharp.",
+    Icon: BrainIcon,
+    title: 'Continuous learner',
+    text: 'Docs first, tutorials second. I pick up new tools by building something real with them.',
   },
   {
-    title: "Commitment to Excellence:",
-    text: "I approach every project with attention to detail, ensuring high-quality results. By choosing me, you're partnering with someone who's not just a coder but a collaborator focused on your success.",
+    Icon: SparklesIcon,
+    title: 'Care for the details',
+    text: 'Real 404 codes, proper alt text, no layout shift. The small things are the product.',
   },
+];
+
+const UNDER_THE_HOOD = [
+  'Next.js 16 App Router with React Server Components',
+  'Project data cached indefinitely and revalidated by a webhook from the API',
+  'Every API response parsed with zod before it reaches a component',
+  'Vitest on the contract layer; ESLint and TypeScript strict on everything',
+  'Admin dashboard behind JWT auth, Cloudinary for images and the PDF resume',
+];
+
+const HOBBIES = [
+  "Rubik's cubes",
+  'Story-driven PC games',
+  'Anime & series',
+  'Soldering & DIY repairs',
+  'PC hardware',
+  'Tea-stall conversations',
 ];
 
 const CONTACTS = [
-  { label: "Linkedin", href: siteConfig.socials.linkedin, name: "Samiul Karim Prodhan" },
-  { label: "Whatsapp", href: "https://wa.me/+8801517868247", name: "Samiul Karim Prodhan" },
-  { label: "Telegram", href: "https://t.me/samiul_karim_shrabon", name: "Samiul Karim" },
-  { label: "Facebook", href: siteConfig.socials.facebook, name: "Samiul Karim Shrabon" },
+  {
+    label: 'Email',
+    href: `mailto:${siteConfig.email}`,
+    value: siteConfig.email,
+  },
+  {
+    label: 'LinkedIn',
+    href: siteConfig.socials.linkedin,
+    value: 'imsamiul3041',
+  },
+  { label: 'GitHub', href: siteConfig.socials.github, value: 'imSamiul' },
+  {
+    label: 'WhatsApp',
+    href: siteConfig.socials.whatsapp,
+    value: '+880 1517-868247',
+  },
+  {
+    label: 'Telegram',
+    href: siteConfig.socials.telegram,
+    value: '@samiul_karim_shrabon',
+  },
 ];
 
 function AboutPage() {
   return (
-    <Reveal variants={bottomRevealVariants}>
-      <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
-        <div className="sticky top-0  py-2 md:py-5">
-          <h1 className="text-center text-3xl font-bold mb-5 text-primary">
-            About me
-          </h1>
-        </div>
+    <>
+      <section className="container-page pt-12 pb-16 md:pt-20 md:pb-24">
+        <div className="grid gap-12 lg:grid-cols-[20rem_1fr] lg:gap-20">
+          {/* Sticky rail: the face, the facts and the contact routes. */}
+          <Reveal
+            variant="left"
+            as="aside"
+            className="lg:sticky lg:top-24 lg:self-start"
+          >
+            <div className="relative mx-auto max-w-xs lg:mx-0">
+              <div
+                aria-hidden="true"
+                className="absolute -inset-2 rounded-[1.75rem] bg-linear-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl"
+              />
+              <Image
+                src={profileImage}
+                alt={siteConfig.name}
+                className="relative aspect-4/5 w-full rounded-3xl border object-cover object-top shadow-xl shadow-primary/10"
+                sizes="(max-width: 1024px) 20rem, 20rem"
+                placeholder="blur"
+                priority
+              />
+            </div>
+            <dl className="mt-8 space-y-3 text-sm">
+              <div className="flex items-center gap-3">
+                <MapPinIcon className="size-4 shrink-0 text-primary" />
+                <dt className="sr-only">Location</dt>
+                <dd>{siteConfig.location}</dd>
+              </div>
+              <div className="flex items-center gap-3">
+                <GraduationCapIcon className="size-4 shrink-0 text-primary" />
+                <dt className="sr-only">Education</dt>
+                <dd>B.Sc. CSE, Daffodil International University (2024)</dd>
+              </div>
+              <div className="flex items-center gap-3">
+                <MailIcon className="size-4 shrink-0 text-primary" />
+                <dt className="sr-only">Email</dt>
+                <dd>
+                  <a
+                    href={`mailto:${siteConfig.email}`}
+                    className="underline-offset-4 hover:underline"
+                  >
+                    {siteConfig.email}
+                  </a>
+                </dd>
+              </div>
+            </dl>
+            <Button asChild className="mt-6 w-full">
+              <a href="#contact">Send a message</a>
+            </Button>
+          </Reveal>
 
-        <div className=" flex flex-col-reverse  items-center gap-5 px-4 py-8 lg:flex-row lg:gap-10 lg:px-16">
-          <div className="text-center lg:text-left">
-            <h2 className="text-xl md:text-2xl  font-semibold lg:text-3xl font-Montserrat">
-              &quot;Turning Ideas into Seamless Web Solutions&quot;
-            </h2>
-            <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg lg:leading-8">
-              Hi, I&apos;m{" "}
-              <span className="text-lg font-medium text-primary">
-                Samiul Karim Prodhan
-              </span>
-              , a full-stack web developer specializing in the MERN stack
-              (MongoDB, Express.js, React.js, and Node.js). With a passion for
-              innovation and problem-solving, I design and build web
-              applications that are not only functional but also scalable,
-              user-friendly, and visually appealing.
-            </p>
-          </div>
+          <div className="min-w-0 space-y-20 md:space-y-24">
+            <SectionHeading
+              as="h1"
+              eyebrow="About me"
+              title={
+                <>
+                  Turning ideas into <span className="marker">seamless</span>{' '}
+                  web solutions
+                </>
+              }
+              description={
+                <>
+                  Hi, I&apos;m{' '}
+                  <span className="font-medium text-foreground">
+                    {siteConfig.shortName}
+                  </span>
+                  , a full-stack developer working in the MERN stack and
+                  Next.js. I build applications that are scalable and
+                  user-friendly, and I care as much about how the code reads as
+                  how the page looks.
+                </>
+              }
+            />
 
-          <Image
-            src={firstProfileImage}
-            alt="Samiul Karim Prodhan"
-            className="w-full max-w-xs rounded-lg shadow-md lg:max-w-md h-auto"
-          />
-        </div>
+            <div>
+              <SectionHeading
+                eyebrow="Journey"
+                title="How I got here"
+                description="From a first HTML page to production Next.js, in five steps."
+              />
+              <Timeline items={JOURNEY} className="mt-10" />
+            </div>
 
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            My Journey
-          </h2>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            My journey into web development began in 2020 during my first
-            semester at university. What started as curiosity quickly turned
-            into a passion. By 2023, during my final semester, I was actively
-            building full-stack projects, exploring new tools, and honing my
-            skills. I watch tutorials videos, read blogs, and work on side
-            projects to keep my skills sharp. I work on different tools of web
-            development. First I started with HTML then CSS. After that I learn
-            css framework Tailwind, Bootstrap. Then I learn JavaScript then
-            React.JS. I also learn Node.JS to build full-stack website. I also
-            learn Express.JS, MongoDB, Mongoose to build full-stack website. I
-            also learn Redux toolkit, React Context API to manage state
-            effectively. I also learn how to integrate authentication systems
-            with JWT, Passport.js, and OAuth. I also learn how to build RESTful
-            APIs. I also learn how to build secure and scalable back-end systems
-            with Node.js, Express.js, MongoDB, and Mongoose. I also learn how to
-            build dynamic, responsive front-end interfaces using React,
-            TypeScript, Tailwind, and Bootstrap. Recently I learn about
-            TypeScript. I am a big fan of TypeScript. I also a big fan of
-            TanStack Query previously known as React Query which is a data
-            fetching library for React. I also know React Router which is a
-            collection of navigational components that compose declaratively
-            with your application. Then I get to know Tanstack Router which is
-            alternative to React Router but the benefit of Tanstack Router is it
-            is type safe and encourage to use typescript. Recently, I also get
-            to know Zod which is used to data validation. I also know how to use
-            Axios to make HTTP requests. I am trying to learning technologies
-            daily.
-          </p>
-        </div>
-
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            What I Offer
-          </h2>
-          <div className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            <p>
-              I offer a complete suite of web development services, including:
-            </p>
-            {SERVICES.map((service) => (
-              <div key={service.heading}>
-                <div className="flex items-center gap-2 px-2">
-                  <FaFeatherPointed className="w-4 h-4  flex-shrink-0" />
-                  <p className="py-2 font-medium">{service.heading}</p>
-                </div>
-                <div className="px-4  md:px-6">
-                  {service.items.map((item) => (
-                    <div className="flex items-center gap-2 px-2" key={item}>
-                      <LuBadgeCheck className="w-4 h-4  flex-shrink-0" />
-                      <span className="text-sm md:text-base lg:text-lg">
-                        {item}
+            <div>
+              <SectionHeading eyebrow="What I offer" title="Where I can help" />
+              <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                {SERVICES.map((service, index) => (
+                  <Reveal
+                    key={service.title}
+                    index={index}
+                    variant="scale"
+                    className="h-full"
+                  >
+                    <SpotlightCard className="h-full p-6">
+                      <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                        <service.Icon className="size-5" />
                       </span>
-                    </div>
+                      <h3 className="mt-4 text-lg font-semibold">
+                        {service.title}
+                      </h3>
+                      <p className="mt-2 text-sm text-pretty text-muted-foreground">
+                        {service.text}
+                      </p>
+                      <ul className="mt-4 flex flex-wrap gap-1.5">
+                        {service.tech.map((tech) => (
+                          <li key={tech}>
+                            <TechBadge>{tech}</TechBadge>
+                          </li>
+                        ))}
+                      </ul>
+                    </SpotlightCard>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <SectionHeading eyebrow="Why me" title="More than the stack" />
+              <ul className="mt-10 grid gap-4 sm:grid-cols-3">
+                {STRENGTHS.map((strength, index) => (
+                  <Reveal key={strength.title} as="li" index={index}>
+                    <strength.Icon className="size-5 text-primary" />
+                    <h3 className="mt-3 font-semibold">{strength.title}</h3>
+                    <p className="mt-1.5 text-sm text-pretty text-muted-foreground">
+                      {strength.text}
+                    </p>
+                  </Reveal>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <SectionHeading
+                eyebrow="Under the hood"
+                title="How this site is built"
+                description={
+                  <>
+                    The portfolio is itself a full-stack project. Both halves
+                    are public:{' '}
+                    <a
+                      href={siteConfig.repos.client}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-0.5 font-medium text-primary underline-offset-4 hover:underline"
+                    >
+                      frontend
+                      <ArrowUpRightIcon className="size-3.5" />
+                    </a>{' '}
+                    and{' '}
+                    <a
+                      href={siteConfig.repos.server}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-0.5 font-medium text-primary underline-offset-4 hover:underline"
+                    >
+                      API
+                      <ArrowUpRightIcon className="size-3.5" />
+                    </a>
+                    .
+                  </>
+                }
+              />
+              <Reveal className="mt-8">
+                <ul className="divide-y rounded-2xl border bg-card">
+                  {UNDER_THE_HOOD.map((line, index) => (
+                    <li
+                      key={line}
+                      className="flex items-start gap-4 px-5 py-4 text-sm"
+                    >
+                      <span className="font-mono text-xs text-muted-foreground">
+                        0{index + 1}
+                      </span>
+                      <span>{line}</span>
+                    </li>
                   ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                </ul>
+              </Reveal>
+            </div>
 
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Why Me?
-          </h2>
-          <div className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            <p>I bring more than just technical expertise to the table:</p>
-            {STRENGTHS.map((strength) => (
-              <div className="flex items-center gap-2 p-2" key={strength.title}>
-                <TbTransformPointTopLeft className="w-4 h-4  flex-shrink-0" />
+            <div>
+              <SectionHeading
+                eyebrow="Beyond code"
+                title="When the laptop is closed"
+                description="I'm based in Bangladesh and an extrovert by nature — I can find a common topic with almost anyone, whether it's tech, films, sport or anime."
+              />
+              <Reveal className="mt-8 space-y-4 text-pretty text-muted-foreground">
                 <p>
-                  <span className="font-medium">{strength.title}</span>{" "}
-                  {strength.text}
+                  Off the clock you&apos;ll find me solving Rubik&apos;s cubes,
+                  playing story-driven PC games (Uncharted 4 is the favourite)
+                  or keeping up with PC hardware through YouTube and hardware
+                  groups. I own a soldering iron and use it — fixing broken
+                  things and building small DIY projects, not always
+                  successfully, always enjoyably.
                 </p>
+                <p>
+                  Evenings are for friends, short trips around the local area
+                  and long conversations over tea at a nearby stall. Before
+                  university I did my SSC (2016) at Collectorate Adarsha Shikkha
+                  Niketan, Panchagarh, and my HSC (2018) at Cantonment Public
+                  School and College.
+                </p>
+                <ul className="flex flex-wrap gap-2 pt-2">
+                  {HOBBIES.map((hobby) => (
+                    <li
+                      key={hobby}
+                      className="rounded-full border bg-background px-3 py-1 text-xs font-medium text-foreground"
+                    >
+                      {hobby}
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            </div>
+
+            <div id="contact" className="scroll-mt-24">
+              <SectionHeading
+                eyebrow="Contact"
+                title="Let's talk"
+                description="Hiring, freelance or just a question about something on this site — I reply within a day."
+              />
+              <div className="mt-10 grid gap-10 md:grid-cols-[16rem_1fr]">
+                <Reveal variant="left">
+                  <ul className="space-y-4">
+                    {CONTACTS.map((contact) => {
+                      const external = contact.href.startsWith('http');
+
+                      return (
+                        <li key={contact.label}>
+                          <p className="eyebrow text-[0.65rem]">
+                            {contact.label}
+                          </p>
+                          <a
+                            href={contact.href}
+                            target={external ? '_blank' : undefined}
+                            rel={
+                              external ? 'me noopener noreferrer' : undefined
+                            }
+                            className="mt-0.5 inline-block text-sm font-medium break-all underline-offset-4 hover:text-primary hover:underline"
+                          >
+                            {contact.value}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </Reveal>
+                <Reveal variant="right">
+                  <div className="rounded-2xl border bg-card p-6 md:p-8">
+                    <ContactForm />
+                  </div>
+                </Reveal>
               </div>
-            ))}
+            </div>
           </div>
         </div>
-
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Beyond Code
-          </h2>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            I am based in Bangladesh, where I&apos;ve spent years honing my
-            skills and exploring the ever-evolving world of technology. Beyond
-            coding, I enjoy a range of activities that fuel my creativity and
-            passion.
-            <br></br> When I&apos;m not writing code, you&apos;ll often find me
-            solving Rubik&apos;s Cubes, diving into tech blogs and videos, or
-            reading about the latest advancements in web development. I consider
-            myself an extrovert and enjoy engaging in conversations.
-            Interestingly, I always manage to find a common topic with anyone I
-            talk to—be it about technology, movies, series, sports, or anime.
-            <br></br> I am a PC enthusiast who enjoys staying up-to-date on the
-            latest computer components through YouTube and Facebook groups.
-            I&apos;m also a gamer, primarily playing story-driven PC games that
-            allow me to immerse myself in the role of a character. One of my
-            favorite games is Uncharted 4.<br></br> In my leisure time, I enjoy
-            watching anime, series, or movies. Additionally, I have a passion
-            for working with electrical tools. I own a soldering iron and often
-            try fixing broken items or building DIY projects. While my
-            experiments don&apos;t always succeed, I thoroughly enjoy the
-            process of tinkering and creating.
-            <br></br> I also enjoy reading books and spending time with friends.
-            My evenings are usually spent hanging out with friends, taking short
-            tours around our local area, and sharing lively conversations over
-            tea at a nearby stall. I find joy in connecting with people and
-            discussing various topics.<br></br> In terms of education, I have
-            had the privilege of experiencing different schools throughout my
-            academic journey. I completed my SSC in 2016 from Collectorate
-            Adarsha Shikkha Niketan in Panchagarh and my HSC in 2018 from
-            Cantonment Public School and College. In 2020, I enrolled at
-            Daffodil International University to study Computer Science and
-            Engineering and graduated in March 2024.
-          </p>
-        </div>
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Currently
-          </h2>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            Currently I am learning about Next.JS which is a React framework.
-          </p>
-        </div>
-        <div className="py-4 md:py-8">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Contact Me
-          </h2>
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            <a href={`mailto:${siteConfig.email}`}>
-              Email: {siteConfig.email}
-            </a>
-          </p>
-          {CONTACTS.map((contact) => (
-            <p
-              className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg "
-              key={contact.label}
-            >
-              {contact.label}:{" "}
-              <a href={contact.href} target="_blank" rel="noopener noreferrer">
-                {contact.name}
-              </a>
-            </p>
-          ))}
-          <ContactForm />
-        </div>
-      </div>
-    </Reveal>
+      </section>
+    </>
   );
 }
 

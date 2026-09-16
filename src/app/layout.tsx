@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from 'next';
 
-import "./globals.css";
-import Footer from "../components/layout/Footer";
-import Navbar from "../components/layout/Navbar";
-import Providers from "../components/layout/Providers";
-import { siteConfig } from "../config/site";
+import './globals.css';
+import Providers from '@/components/layout/Providers';
+import { fontVariables } from '@/lib/fonts';
+import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -13,8 +12,20 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  keywords: [
+    'full-stack developer',
+    'React developer',
+    'Next.js developer',
+    'MERN stack',
+    'TypeScript',
+    'Node.js',
+    'Bangladesh',
+    siteConfig.name,
+  ],
   openGraph: {
-    type: "website",
+    type: 'website',
     siteName: siteConfig.name,
     title: `${siteConfig.name} — ${siteConfig.jobTitle}`,
     description: siteConfig.description,
@@ -22,16 +33,23 @@ export const metadata: Metadata = {
     images: [{ url: siteConfig.ogImage }],
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     title: `${siteConfig.name} — ${siteConfig.jobTitle}`,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
 };
 
-// Applies the saved theme before first paint so the page never flashes the
-// default theme and the markup React hydrates against already matches.
-const applySavedTheme = `try{var t=localStorage.getItem("theme");if(t){document.documentElement.setAttribute("data-theme",t)}}catch(e){/* theme preference is optional */}`;
+// The browser chrome follows the theme: white in light, the dark surface
+// (`--background` in `.dark`) otherwise.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1d2b' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+};
 
 export default function RootLayout({
   children,
@@ -39,18 +57,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: applySavedTheme }} />
-      </head>
-      <body>
-        <Providers>
-          <div className="min-h-screen">
-            <Navbar />
-            {children}
-          </div>
-          <Footer />
-        </Providers>
+    // `suppressHydrationWarning` is required: next-themes writes the theme
+    // class onto <html> before React hydrates.
+    <html
+      lang="en"
+      className={fontVariables}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
+      <body className="font-sans">
+        {/* Page chrome lives in the route groups: see (site)/layout.tsx. */}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

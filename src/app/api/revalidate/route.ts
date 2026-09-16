@@ -1,4 +1,4 @@
-import { revalidateTag } from "next/cache";
+import { revalidateTag } from 'next/cache';
 
 /**
  * Called by the API after every project write. Project data is cached
@@ -10,14 +10,14 @@ export async function POST(request: Request) {
   // Refuse rather than accept: without a secret anyone could flush the cache.
   if (!secret) {
     return Response.json(
-      { revalidated: false, message: "Revalidation is not configured" },
+      { revalidated: false, message: 'Revalidation is not configured' },
       { status: 503 },
     );
   }
 
-  if (request.headers.get("x-revalidate-secret") !== secret) {
+  if (request.headers.get('x-revalidate-secret') !== secret) {
     return Response.json(
-      { revalidated: false, message: "Invalid secret" },
+      { revalidated: false, message: 'Invalid secret' },
       { status: 401 },
     );
   }
@@ -27,9 +27,9 @@ export async function POST(request: Request) {
   } | null;
   const { tags } = body ?? {};
 
-  if (!Array.isArray(tags) || !tags.every((tag) => typeof tag === "string")) {
+  if (!Array.isArray(tags) || !tags.every((tag) => typeof tag === 'string')) {
     return Response.json(
-      { revalidated: false, message: "Expected a tags array" },
+      { revalidated: false, message: 'Expected a tags array' },
       { status: 400 },
     );
   }

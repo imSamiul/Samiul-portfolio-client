@@ -1,97 +1,88 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useRef } from "react";
+import { Trash2Icon } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
 
-import { useDeleteProject } from "../../../../services/mutations/projectMutation";
-import { ProjectType } from "../../../../types/ProjectType";
+import { useProjectManager } from '@/services/queryHooks/useProjectManager';
+import type { ProjectSummary } from '@/shared';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   PROJECT_IMAGE_HEIGHT,
   PROJECT_IMAGE_WIDTH,
-} from "../../../../utils/projectImage";
+} from '@/utils/projectImage';
 
-function ProjectDeleteDialog({ project }: { project: ProjectType }) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const { mutate, isPending, isError, error } = useDeleteProject();
+function ProjectDeleteDialog({ project }: { project: ProjectSummary }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { deleteProject, isDeletingProject, deleteProjectError } =
+    useProjectManager({ shouldFetch: false });
 
   function handleDelete() {
-    mutate(project.id!, {
-      onSuccess: () => dialogRef.current?.close(),
-    });
+    deleteProject(project.id, { onSuccess: () => setIsOpen(false) });
   }
 
   return (
-    <div>
-      <button
-        className="btn btn-md btn-error text-white "
-        onClick={() => dialogRef.current?.showModal()}
-      >
-        Delete Project
-      </button>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={`Delete ${project.title}`}
+          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+        >
+          <Trash2Icon />
+        </Button>
+      </DialogTrigger>
 
-      <dialog ref={dialogRef} className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box  overflow-visible">
-          <div className="flex flex-col gap-3 py-3">
-            <div className="my-2">
-              <Image
-                src={project.image!}
-                alt={project.title}
-                width={PROJECT_IMAGE_WIDTH}
-                height={PROJECT_IMAGE_HEIGHT}
-                sizes="100vw"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <h3 className=" md:text-lg ">
-                Delete Project :{" "}
-                <span className="font-medium">{project.title}</span>
-              </h3>
-              <p className="my-2 md:text-lg">
-                Summary:
-                <span className="font-medium">{project.summary}</span>
-              </p>
-              {project.liveLink && (
-                <p className="my-2 md:text-lg">
-                  Live Link:
-                  <a className="font-medium " href={project.liveLink}>
-                    {project.liveLink}
-                  </a>
-                </p>
-              )}
-            </div>
-          </div>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete {project.title}?</DialogTitle>
+          <DialogDescription>
+            This removes the project and its image for good.
+          </DialogDescription>
+        </DialogHeader>
 
-          {isError && (
-            <p className="text-error" role="alert">
-              {error.message}
-            </p>
-          )}
+        <Image
+          src={project.image}
+          alt={project.title}
+          width={PROJECT_IMAGE_WIDTH}
+          height={PROJECT_IMAGE_HEIGHT}
+          sizes="(min-width: 640px) 32rem, 100vw"
+          className="w-full rounded-lg object-cover"
+        />
 
-          <div className="modal-action">
-            <button
-              type="button"
-              className="btn btn-secondary text-black"
-              onClick={() => dialogRef.current?.close()}
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              className="btn btn-error"
-              onClick={handleDelete}
-              disabled={isPending}
-            >
-              {isPending ? "Deleting..." : "Delete"}
-            </button>
-          </div>
-        </div>
+        <p className="text-sm text-muted-foreground">{project.summary}</p>
 
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
-    </div>
+        {deleteProjectError && (
+          <p className="text-sm text-destructive" role="alert">
+            {deleteProjectError.message}
+          </p>
+        )}
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isDeletingProject}
+          >
+            {isDeletingProject ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

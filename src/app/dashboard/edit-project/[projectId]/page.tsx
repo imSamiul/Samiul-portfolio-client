@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import EditProject from "../../../../components/pages/dashboard/project/EditProject";
-import { getProjectByIdOnServer } from "../../../../services/projectServerApis";
+import EditProject from '@/components/pages/dashboard/project/EditProject';
+import { getProjectByIdOnServer } from '@/services/apis/projectServerApis';
 
 export const metadata: Metadata = {
-  title: "Edit Project",
+  title: 'Edit Project',
   robots: { index: false, follow: false },
 };
 

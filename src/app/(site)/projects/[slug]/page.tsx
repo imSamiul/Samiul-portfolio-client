@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
-import { notFound, permanentRedirect } from "next/navigation";
+import type { Metadata } from 'next';
+import { notFound, permanentRedirect } from 'next/navigation';
 
-import ProjectDetails from "../../../components/pages/projects/ProjectDetails";
-import JsonLd from "../../../components/shared/JsonLd";
-import { siteConfig } from "../../../config/site";
-import { buildProjectSchema } from "../../../config/structuredData";
+import ProjectDetails from '@/components/pages/projects/ProjectDetails';
+import JsonLd from '@/components/shared/JsonLd';
+import {
+  buildBreadcrumbSchema,
+  buildMetadata,
+  buildProjectSchema,
+} from '@/lib/seo';
 import {
   getProjectByIdOnServer,
   getProjectBySlugOnServer,
-} from "../../../services/projectServerApis";
+} from '@/services/apis/projectServerApis';
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -48,22 +51,12 @@ export async function generateMetadata({
   // redirect are settled before the response shell is flushed.
   const project = await loadProject(slug);
 
-  const canonical = `/projects/${project.slug}`;
-
-  return {
+  return buildMetadata({
     title: project.title,
     description: project.summary,
-    alternates: { canonical },
-    openGraph: {
-      title: `${project.title} | ${siteConfig.name}`,
-      description: project.summary,
-      url: `${siteConfig.url}${canonical}`,
-    },
-    twitter: {
-      title: `${project.title} | ${siteConfig.name}`,
-      description: project.summary,
-    },
-  };
+    path: `/projects/${project.slug}`,
+    images: [project.image],
+  });
 }
 
 export default async function Page({ params }: ProjectPageProps) {
@@ -72,8 +65,18 @@ export default async function Page({ params }: ProjectPageProps) {
 
   return (
     <>
-      <JsonLd data={buildProjectSchema(project)} />
       <ProjectDetails project={project} />
+      {/* Structured data goes after the content: Next.js scrolls a new
+          route to its first DOM node, and a zero-size <script> first in line
+          made it keep the previous page's scroll position instead. */}
+      <JsonLd data={buildProjectSchema(project)} />
+      <JsonLd
+        data={buildBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Projects', path: '/projects' },
+          { name: project.title, path: `/projects/${project.slug}` },
+        ])}
+      />
     </>
   );
 }

@@ -1,29 +1,58 @@
-import { ProjectType } from "../../../types/ProjectType";
-import ProjectGrid from "../projects/ProjectGrid";
-import Reveal from "../../shared/motion/Reveal";
-import { headingVariants } from "../../shared/motion/variants";
-import FollowMe from "./FollowMe";
-import Hero from "./Hero";
-import Skills from "./Skills";
+import { ArrowRightIcon } from 'lucide-react';
+import Link from 'next/link';
 
-function HomePage({ projects }: { projects: ProjectType[] }) {
+import type { ProjectSummary } from '@/shared';
+import ContactCta from '@/components/shared/ContactCta';
+import ProjectGrid from '@/components/shared/ProjectGrid';
+import SectionHeading from '@/components/shared/SectionHeading';
+import { Button } from '@/components/ui/button';
+import Hero from './Hero';
+import HowIWork from './HowIWork';
+import Skills, { SkillMarquee } from './Skills';
+
+function HomePage({
+  projects,
+  hasResume,
+}: {
+  projects: ProjectSummary[];
+  hasResume: boolean;
+}) {
   return (
-    <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
-      <Hero />
+    <>
+      <Hero hasResume={hasResume} />
+      <SkillMarquee />
 
       <Skills />
-      <div className="py-4 md:py-8">
-        <Reveal variants={headingVariants} margin="-10% 0px -20% 0px">
-          <h2 className="text-2xl md:text-3xl  font-semibold  font-Montserrat mb-8">
-            Projects
-          </h2>
-        </Reveal>
-        <ProjectGrid projects={projects} />
-      </div>
 
-      <div className="divider md:my-20"></div>
-      <FollowMe />
-    </div>
+      <section
+        aria-labelledby="projects-heading"
+        className="border-y bg-muted/40"
+      >
+        <div className="container-page section-y">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeading
+              eyebrow="Selected work"
+              title={<span id="projects-heading">Projects</span>}
+              description="Full-stack apps with a live deployment and public source. The first one is the deepest."
+            />
+            <Button
+              asChild
+              variant="ghost"
+              className="group self-start sm:self-auto"
+            >
+              <Link href="/projects">
+                All projects
+                <ArrowRightIcon className="transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </Button>
+          </div>
+          <ProjectGrid projects={projects} featured className="mt-10" />
+        </div>
+      </section>
+
+      <HowIWork />
+      <ContactCta />
+    </>
   );
 }
 

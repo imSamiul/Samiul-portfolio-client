@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import ResumeUpload from "../../../components/pages/dashboard/resume/ResumeUpload";
+import ResumeUpload from '@/components/pages/dashboard/resume/ResumeUpload';
 
 export const metadata: Metadata = {
-  title: "Resume",
+  title: 'Resume',
   robots: { index: false, follow: false },
 };
 

@@ -1,19 +1,23 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { sendContactMessage } from "../../../services/contactApis";
-import { ContactFormValues } from "../../../types/contactType";
+import { contactApis } from '@/services/apis/contactApis';
+import { ApiRequestError } from '@/services/utils/apiHelper';
+import { contactMessageSchema, type ContactFormValues } from '@/shared';
+import { Button } from '@/components/ui/button';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 const EMPTY_MESSAGE: ContactFormValues = {
-  name: "",
-  email: "",
-  message: "",
-  website: "",
+  name: '',
+  email: '',
+  message: '',
+  website: '',
 };
-
-const MIN_MESSAGE_LENGTH = 20;
 
 function ContactForm() {
   const [isSent, setIsSent] = useState(false);
@@ -22,87 +26,88 @@ function ContactForm() {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, isSubmitting },
-  } = useForm<ContactFormValues>({ defaultValues: EMPTY_MESSAGE });
+  } = useForm<ContactFormValues>({
+    defaultValues: EMPTY_MESSAGE,
+    // Same limits the API enforces, so a valid form never comes back as a 422.
+    resolver: zodResolver(contactMessageSchema),
+  });
 
   async function handleSend(values: ContactFormValues) {
     setIsSent(false);
     setSendError(null);
 
     try {
-      await sendContactMessage(values);
+      await contactApis.sendMessage(values);
       reset(EMPTY_MESSAGE);
       setIsSent(true);
     } catch (error) {
+      if (error instanceof ApiRequestError) {
+        // A 422 names the fields it rejected; anything else is a whole-form
+        // problem the visitor cannot fix by editing one input.
+        const issues = error.fieldIssues.filter(
+          (
+            issue,
+          ): issue is { field: keyof ContactFormValues; message: string } =>
+            issue.field in EMPTY_MESSAGE,
+        );
+
+        issues.forEach((issue) =>
+          setError(issue.field, { message: issue.message }),
+        );
+
+        if (issues.length > 0) return;
+      }
+
       setSendError(
         error instanceof Error
           ? error.message
-          : "Could not send your message right now.",
+          : 'Could not send your message right now.',
       );
     }
   }
 
   return (
-    <form className="mt-5 grid gap-3 max-w-xl" onSubmit={handleSubmit(handleSend)}>
-      <div className="form-control">
-        <label className="label" htmlFor="contactName">
-          <span className="label-text">Your name</span>
-        </label>
-        <input
+    <form
+      className="mt-5 grid max-w-xl gap-5"
+      onSubmit={handleSubmit(handleSend)}
+      noValidate
+    >
+      <Field>
+        <FieldLabel htmlFor="contactName">Your name</FieldLabel>
+        <Input
           id="contactName"
-          type="text"
-          className="input input-bordered"
           placeholder="Who is writing?"
-          {...register("name", {
-            required: "Please tell me your name",
-            minLength: { value: 2, message: "That name looks too short" },
-          })}
+          aria-invalid={Boolean(errors.name)}
+          {...register('name')}
         />
-        {errors.name && <p className="text-error mt-1">{errors.name.message}</p>}
-      </div>
+        <FieldError errors={[errors.name]} />
+      </Field>
 
-      <div className="form-control">
-        <label className="label" htmlFor="contactEmail">
-          <span className="label-text">Your email</span>
-        </label>
-        <input
+      <Field>
+        <FieldLabel htmlFor="contactEmail">Your email</FieldLabel>
+        <Input
           id="contactEmail"
           type="email"
-          className="input input-bordered"
           placeholder="So I can reply"
-          {...register("email", {
-            required: "Please leave an email so I can reply",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Enter a valid email address",
-            },
-          })}
+          aria-invalid={Boolean(errors.email)}
+          {...register('email')}
         />
-        {errors.email && (
-          <p className="text-error mt-1">{errors.email.message}</p>
-        )}
-      </div>
+        <FieldError errors={[errors.email]} />
+      </Field>
 
-      <div className="form-control">
-        <label className="label" htmlFor="contactMessage">
-          <span className="label-text">Message</span>
-        </label>
-        <textarea
+      <Field>
+        <FieldLabel htmlFor="contactMessage">Message</FieldLabel>
+        <Textarea
           id="contactMessage"
-          className="textarea textarea-bordered h-32"
+          rows={7}
           placeholder="What would you like to talk about?"
-          {...register("message", {
-            required: "Please write a message",
-            minLength: {
-              value: MIN_MESSAGE_LENGTH,
-              message: `Please write at least ${MIN_MESSAGE_LENGTH} characters`,
-            },
-          })}
+          aria-invalid={Boolean(errors.message)}
+          {...register('message')}
         />
-        {errors.message && (
-          <p className="text-error mt-1">{errors.message.message}</p>
-        )}
-      </div>
+        <FieldError errors={[errors.message]} />
+      </Field>
 
       {/* Honeypot: hidden from people, irresistible to bots. */}
       <input
@@ -111,24 +116,20 @@ function ContactForm() {
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
-        {...register("website")}
+        {...register('website')}
       />
 
-      <button
-        type="submit"
-        className="btn btn-primary mt-2"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Sending..." : "Send message"}
-      </button>
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Sending...' : 'Send message'}
+      </Button>
 
       {isSent && (
-        <p className="text-success" role="status">
+        <p className="text-sm text-primary" role="status">
           Thanks — your message is on its way. I will reply by email.
         </p>
       )}
       {sendError && (
-        <p className="text-error" role="alert">
+        <p className="text-sm text-destructive" role="alert">
           {sendError}
         </p>
       )}

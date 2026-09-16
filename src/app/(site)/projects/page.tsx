@@ -1,22 +1,37 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import ProjectsPage from "../../components/pages/projects/ProjectsPage";
-import { siteConfig } from "../../config/site";
-import { getAllProjectsOnServer } from "../../services/projectServerApis";
+import ProjectsPage from '@/components/pages/projects/ProjectsPage';
+import JsonLd from '@/components/shared/JsonLd';
+import {
+  buildBreadcrumbSchema,
+  buildMetadata,
+  buildProjectListSchema,
+} from '@/lib/seo';
+import { siteConfig } from '@/lib/site';
+import { getAllProjectsOnServer } from '@/services/apis/projectServerApis';
 
-export const metadata: Metadata = {
-  title: "Projects",
+export const metadata: Metadata = buildMetadata({
+  title: 'Projects',
   description: `Full-stack web projects built by ${siteConfig.name} with React, Next.js, Node.js, Express and MongoDB.`,
-  alternates: { canonical: "/projects" },
-  openGraph: {
-    title: `Projects | ${siteConfig.name}`,
-    description: `Full-stack web projects built by ${siteConfig.name}.`,
-    url: `${siteConfig.url}/projects`,
-  },
-};
+  path: '/projects',
+});
 
 export default async function Page() {
   const projects = await getAllProjectsOnServer();
 
-  return <ProjectsPage projects={projects} />;
+  return (
+    <>
+      <ProjectsPage projects={projects} />
+      {/* Structured data goes after the content: Next.js scrolls a new
+          route to its first DOM node, and a zero-size <script> first in line
+          made it keep the previous page's scroll position instead. */}
+      <JsonLd data={buildProjectListSchema(projects)} />
+      <JsonLd
+        data={buildBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Projects', path: '/projects' },
+        ])}
+      />
+    </>
+  );
 }

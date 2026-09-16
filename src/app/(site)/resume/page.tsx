@@ -1,19 +1,32 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import ResumePage from "../../components/pages/resume/ResumePage";
-import { siteConfig } from "../../config/site";
+import ResumePage from '@/components/pages/resume/ResumePage';
+import JsonLd from '@/components/shared/JsonLd';
+import { buildBreadcrumbSchema, buildMetadata } from '@/lib/seo';
+import { siteConfig } from '@/lib/site';
+import { getResumeMetaOnServer } from '@/services/apis/resumeServerApis';
 
-export const metadata: Metadata = {
-  title: "Resume",
+export const metadata: Metadata = buildMetadata({
+  title: 'Resume',
   description: `Resume of ${siteConfig.name} — education, skills and coursework of a MERN stack developer specializing in React, Next.js, Node.js and MongoDB.`,
-  alternates: { canonical: "/resume" },
-  openGraph: {
-    title: `Resume | ${siteConfig.name}`,
-    description: `Resume of ${siteConfig.name}, full-stack MERN developer.`,
-    url: `${siteConfig.url}/resume`,
-  },
-};
+  path: '/resume',
+});
 
-export default function Page() {
-  return <ResumePage />;
+export default async function Page() {
+  const resume = await getResumeMetaOnServer();
+
+  return (
+    <>
+      <ResumePage resumeUpdatedAt={resume?.updatedAt ?? null} />
+      {/* Structured data goes after the content: Next.js scrolls a new
+          route to its first DOM node, and a zero-size <script> first in line
+          made it keep the previous page's scroll position instead. */}
+      <JsonLd
+        data={buildBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Resume', path: '/resume' },
+        ])}
+      />
+    </>
+  );
 }

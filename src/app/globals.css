@@ -1,10 +1,206 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-html,
-body {
-  overflow-x: hidden;
-  scroll-behavior: smooth;
+/* `dark` is a class so next-themes can drive it. */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* All three resolve to the `next/font` variables set on <html>. */
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 2);
+
+  /* Logo strip under the hero. Duplicated content + translate -50% loops. */
+  --animate-marquee: marquee 45s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+/**
+ * `primary`, `secondary` and `accent` are the brand palette this site has
+ * always used; the neutrals are tinted towards the primary hue so surfaces
+ * read as part of it rather than as flat grey. Some shadcn components
+ * (`ui/sonner.tsx`) read these properties directly rather than through a
+ * utility class, which is why they exist here and not only in `@theme`.
+ *
+ * Each colour has one job. Blue is structure: buttons, links, icon tint.
+ * Yellow is the highlighter — one marked word or one active state per screen.
+ * Pink is warmth, used only in gradients and glows, never as body or heading
+ * text. Keeping the roles apart is what stops the three from shouting over
+ * each other.
+ */
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.24 0.03 268);
+  --card: oklch(0.99 0.003 268);
+  --card-foreground: oklch(0.24 0.03 268);
+  --popover: oklch(0.99 0.003 268);
+  --popover-foreground: oklch(0.24 0.03 268);
+  --muted: oklch(0.96 0.008 268);
+  --muted-foreground: oklch(0.5 0.025 268);
+  --primary: oklch(0.517 0.117 268); /* True Blue #4670B7 */
+  --primary-foreground: oklch(0.99 0.005 268);
+  --secondary: oklch(0.834 0.145 94.6); /* Arylide Yellow #E2C849 */
+  --secondary-foreground: oklch(0.28 0.06 80);
+  --accent: oklch(0.756 0.121 9.9); /* Salmon Pink #F08EA0 */
+  --accent-foreground: oklch(0.3 0.08 10);
+  --destructive: oklch(0.436 0.185 28.4); /* Turkey Red #AD0102 */
+  --border: oklch(0.91 0.012 268);
+  --input: oklch(0.91 0.012 268);
+  --ring: oklch(0.517 0.117 268);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: oklch(0.19 0.025 268);
+  --foreground: oklch(0.97 0.008 268);
+  --card: oklch(0.23 0.025 268);
+  --card-foreground: oklch(0.97 0.008 268);
+  --popover: oklch(0.23 0.025 268);
+  --popover-foreground: oklch(0.97 0.008 268);
+  --muted: oklch(0.27 0.025 268);
+  --muted-foreground: oklch(0.74 0.02 268);
+  --primary: oklch(0.72 0.11 268);
+  --primary-foreground: oklch(0.2 0.04 268);
+  --secondary: oklch(0.83 0.13 94.6);
+  --secondary-foreground: oklch(0.24 0.05 80);
+  --accent: oklch(0.72 0.11 9.9);
+  --accent-foreground: oklch(0.22 0.05 10);
+  --destructive: oklch(0.65 0.19 28);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.72 0.11 268);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    /*
+     * Horizontal overflow is clipped on <html> only. Setting it on <body>
+     * too turned the body into its own scroll container, and every
+     * `position: sticky` on the site (navbar, dashboard sidebar, resume
+     * tabs) silently stopped sticking. `clip` rather than `hidden` so the
+     * root never becomes a scroll container either.
+     */
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    /* Anchor jumps land below the sticky navbar. */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight text-balance;
+  }
+
+  ::selection {
+    @apply bg-secondary text-secondary-foreground;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Page-level primitives every public page shares. */
+@utility container-page {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility section-y {
+  @apply py-16 md:py-24 lg:py-28;
+}
+
+/* Small uppercase mono label that sits above every section heading. */
+@utility eyebrow {
+  @apply font-mono text-xs font-medium tracking-[0.2em] text-muted-foreground uppercase;
+}
+
+/* Faint dot grid, faded out at the edges so it never reads as a hard box. */
+@utility bg-dots {
+  background-image: radial-gradient(
+    color-mix(in oklch, var(--foreground) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+}
+
+@layer components {
+  /* Highlighter stroke behind one word: the yellow's only job in a heading. */
+  .marker {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .marker::before {
+    content: '';
+    position: absolute;
+    inset: 60% -0.15em 0.05em;
+    z-index: -1;
+    border-radius: 0.25em;
+    background: color-mix(in oklch, var(--secondary) 55%, transparent);
+    transform: skew(-8deg);
+  }
+
+  .dark .marker::before {
+    background: color-mix(in oklch, var(--secondary) 35%, transparent);
+  }
+
+  /* Soft blurred blob for hero / CTA backgrounds. */
+  .glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    pointer-events: none;
+  }
 }

@@ -1,80 +1,30 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { MoonIcon, SunIcon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
-const THEMES = [
-  "light",
-  "dark",
-  "cupcake",
-  "bumblebee",
-  "emerald",
-  "corporate",
-  "synthwave",
-  "retro",
-  "cyberpunk",
-  "valentine",
-  "halloween",
-  "forest",
-  "fantasy",
-  "wireframe",
-  "dracula",
-  "business",
-  "acid",
-  "lemonade",
-  "night",
-  "coffee",
-  "sunset",
-];
+import { Button } from '@/components/ui/button';
 
+/**
+ * Both icons are always in the DOM and the `.dark` class on <html> decides
+ * which one shows. Branching on `resolvedTheme` instead used to produce a
+ * hydration mismatch: the server has no theme and rendered the moon, while
+ * the client's first render already knew it was dark and rendered the sun.
+ * The class is written before paint, so this never flickers either.
+ */
 function ThemeController() {
-  const [theme, setTheme] = useState("light");
-
-  // The saved theme is applied to <html> by the inline script in the root
-  // layout before paint, so reading it back after mount keeps both in sync
-  // without touching localStorage during server rendering.
-  useEffect(() => {
-    setTheme(document.documentElement.getAttribute("data-theme") ?? "light");
-  }, []);
-
-  const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn  btn-sm md:btn-md  m-1">
-        Theme
-        <svg
-          width="12px"
-          height="12px"
-          className="inline-block h-2 w-2 fill-current opacity-60"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 2048 2048"
-        >
-          <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
-        </svg>
-      </div>
-      <ul
-        tabIndex={0}
-        className="dropdown-content bg-base-300 rounded-box z-[1] w-52 p-2 shadow-2xl"
-      >
-        {THEMES.map((t) => (
-          <li key={t}>
-            <input
-              type="radio"
-              name="theme-dropdown"
-              className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-              aria-label={t.charAt(0).toUpperCase() + t.slice(1)}
-              value={t}
-              checked={theme === t}
-              onChange={() => handleThemeChange(t)}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label="Toggle colour theme"
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+    >
+      <SunIcon className="hidden size-5 dark:block" />
+      <MoonIcon className="size-5 dark:hidden" />
+    </Button>
   );
 }
 

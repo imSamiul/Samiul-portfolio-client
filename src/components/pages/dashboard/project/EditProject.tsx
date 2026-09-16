@@ -1,16 +1,20 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
-import { useUpdateProject } from "../../../../services/mutations/projectMutation";
-import { ProjectFormValues, ProjectType } from "../../../../types/ProjectType";
-import { joinTechList, splitTechList } from "../../../../utils/techList";
-import Toast from "../../../ui/Toast";
-import ProjectForm from "./ProjectForm";
+import { useProjectManager } from '@/services/queryHooks/useProjectManager';
+import { ApiRequestError } from '@/services/utils/apiHelper';
+import type { ProjectDetail, ProjectFormValues } from '@/shared';
+import { joinTechList, splitTechList } from '@/utils/techList';
+import DashboardHeader from '../DashboardHeader';
+import { toastUnlessFieldIssues } from './toastUnlessFieldIssues';
+import ProjectForm from './ProjectForm';
 
-function EditProject({ project }: { project: ProjectType }) {
+function EditProject({ project }: { project: ProjectDetail }) {
   const router = useRouter();
-  const { mutate, isPending, isError, error } = useUpdateProject();
+  const { updateProject, isUpdatingProject, updateProjectError } =
+    useProjectManager({ shouldFetch: false });
 
   const defaultValues: ProjectFormValues = {
     title: project.title,
@@ -20,18 +24,18 @@ function EditProject({ project }: { project: ProjectType }) {
     summary: project.summary,
     frontEndTech: joinTechList(project.frontEndTech),
     backEndTech: joinTechList(project.backEndTech),
-    liveLink: project.liveLink ?? "",
-    frontEndRepo: project.frontEndRepo ?? "",
-    backEndRepo: project.backEndRepo ?? "",
-    projectDetails: project.projectDetails ?? "",
-    showOnHomepage: project.showOnHomepage ?? false,
+    liveLink: project.liveLink ?? '',
+    frontEndRepo: project.frontEndRepo ?? '',
+    backEndRepo: project.backEndRepo ?? '',
+    projectDetails: project.projectDetails,
+    showOnHomepage: project.showOnHomepage,
   };
 
   function handleUpdate(values: ProjectFormValues) {
-    mutate(
+    updateProject(
       {
-        projectId: project.id!,
-        formData: {
+        projectId: project.id,
+        payload: {
           title: values.title,
           slug: values.slug,
           status: values.status,
@@ -46,21 +50,36 @@ function EditProject({ project }: { project: ProjectType }) {
           backEndTech: splitTechList(values.backEndTech),
         },
       },
-      { onSuccess: () => router.push("/dashboard/project-list") },
+      {
+        onSuccess: () => {
+          toast.success('Project updated');
+          router.push('/dashboard/project-list');
+        },
+        onError: toastUnlessFieldIssues,
+      },
     );
   }
 
   return (
-    <div className="container mx-auto p-5">
-      {isError && <Toast message={error.message} variant="error" />}
-      <h1 className="text-2xl font-bold text-center mb-5">Edit Project</h1>
+    <>
+      <DashboardHeader
+        title={project.title}
+        description="Changes go live as soon as you save."
+        backHref="/dashboard/project-list"
+        backLabel="Projects"
+      />
       <ProjectForm
         mode="edit"
         defaultValues={defaultValues}
-        isPending={isPending}
+        isPending={isUpdatingProject}
         onSubmit={handleUpdate}
+        fieldIssues={
+          updateProjectError instanceof ApiRequestError
+            ? updateProjectError.fieldIssues
+            : undefined
+        }
       />
-    </div>
+    </>
   );
 }
 

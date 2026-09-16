@@ -1,120 +1,189 @@
-"use client";
+import {
+  ArrowLeftIcon,
+  ArrowUpRightIcon,
+  CalendarIcon,
+  GlobeIcon,
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaGithub } from 'react-icons/fa6';
+import type { IconType } from 'react-icons';
 
-import Image from "next/image";
-import { LuBadgeCheck } from "react-icons/lu";
-
-import { ProjectType } from "../../../types/ProjectType";
+import type { ProjectDetail } from '@/shared';
 import {
   PROJECT_IMAGE_HEIGHT,
   PROJECT_IMAGE_WIDTH,
-} from "../../../utils/projectImage";
-import Reveal from "../../shared/motion/Reveal";
-import { bottomRevealVariants } from "../../shared/motion/variants";
+} from '@/utils/projectImage';
+import ContactCta from '@/components/shared/ContactCta';
+import Reveal from '@/components/shared/motion/Reveal';
+import TechBadge from '@/components/shared/TechBadge';
+import { Button } from '@/components/ui/button';
+
+const EXTERNAL_LINKS: {
+  field: 'liveLink' | 'frontEndRepo' | 'backEndRepo';
+  label: string;
+  Icon: IconType;
+}[] = [
+  { field: 'liveLink', label: 'Live site', Icon: GlobeIcon },
+  { field: 'frontEndRepo', label: 'Frontend repo', Icon: FaGithub },
+  { field: 'backEndRepo', label: 'Backend repo', Icon: FaGithub },
+];
+
+const dateFormatter = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  year: 'numeric',
+});
 
 // The heading lives here so a frontend-only project does not render a
-// "Back-End Technologies" heading with nothing under it.
+// "Backend" heading with nothing under it.
 function TechSection({
   heading,
   technologies,
 }: {
   heading: string;
-  technologies: string[] | string;
+  technologies: string[];
 }) {
-  const items = (
-    Array.isArray(technologies) ? technologies : [technologies]
-  ).filter(Boolean);
-
-  if (items.length === 0) {
+  if (technologies.length === 0) {
     return null;
   }
 
   return (
-    <>
-      <h2 className="text-base md:text-xl lg:text-2xl font-bold  my-2">
-        {heading}
-      </h2>
-      {items.map((tech) => (
-        <div className="flex items-center gap-2 px-2" key={tech}>
-          <LuBadgeCheck />
-          <span className="text-sm md:text-base lg:text-lg">{tech}</span>
-        </div>
-      ))}
-    </>
+    <div>
+      <p className="eyebrow">{heading}</p>
+      <ul className="mt-3 flex flex-wrap gap-1.5">
+        {technologies.map((tech) => (
+          <li key={tech}>
+            <TechBadge>{tech}</TechBadge>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
-function ProjectDetails({ project }: { project: ProjectType }) {
-  return (
-    <Reveal variants={bottomRevealVariants}>
-      <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
-        <div>
-          <Image
-            src={project.image!}
-            alt={project.title}
-            width={PROJECT_IMAGE_WIDTH}
-            height={PROJECT_IMAGE_HEIGHT}
-            sizes="100vw"
-            priority
-            className="w-full h-52 md:h-80 lg:h-96 object-cover rounded-xl"
-          />
-        </div>
+function ProjectDetails({ project }: { project: ProjectDetail }) {
+  const links = EXTERNAL_LINKS.filter(({ field }) => project[field]);
+  // The long copy is plain text typed into a textarea, so every line break
+  // is a deliberate paragraph break (the stored text uses \r\n).
+  const paragraphs = project.projectDetails
+    .split(/\r?\n+/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 
-        <div className="my-5">
-          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold font-Montserrat mb-2 ">
+  return (
+    <>
+      <article className="container-page pt-8 pb-16 md:pt-12 md:pb-24">
+        <Reveal variant="fade">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeftIcon className="size-4" />
+            All projects
+          </Link>
+        </Reveal>
+
+        <Reveal className="mt-6 max-w-3xl">
+          <h1 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
             {project.title}
           </h1>
-          <p className="mb-4 text-sm md:text-base lg:text-lg text-accent">
+          <p className="mt-4 text-lg text-pretty text-muted-foreground sm:text-xl">
             {project.summary}
           </p>
-          <h2 className="text-base md:text-xl lg:text-2xl font-bold ">
-            Details
-          </h2>
-          <p className="text-sm md:text-base lg:text-lg   leading-6">
-            {project.projectDetails}
-          </p>
-          <TechSection
-            heading="Front-End Technologies"
-            technologies={project.frontEndTech}
-          />
-          <TechSection
-            heading="Back-End Technologies"
-            technologies={project.backEndTech}
-          />
-          <div className="my-4 flex gap-2 md:gap-5 flex-wrap">
-            {project.liveLink && (
-              <a
-                href={project.liveLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-sm md:btn-md  btn-outline "
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            {links.map(({ field, label, Icon }) => (
+              <Button
+                asChild
+                key={field}
+                variant={field === 'liveLink' ? 'default' : 'outline'}
               >
-                Live Site
-              </a>
-            )}
-            {project.frontEndRepo && (
-              <a
-                href={project.frontEndRepo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-sm md:btn-md  btn-outline btn-primary"
-              >
-                Frontend Repo
-              </a>
-            )}
-            {project.backEndRepo && (
-              <a
-                href={project.backEndRepo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-sm md:btn-md  btn-outline btn-secondary"
-              >
-                Backend Repo
-              </a>
-            )}
+                <a
+                  href={project[field]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon />
+                  {label}
+                  <ArrowUpRightIcon className="size-3.5 opacity-70" />
+                </a>
+              </Button>
+            ))}
           </div>
+        </Reveal>
+
+        <Reveal variant="scale" className="mt-10">
+          <div className="overflow-hidden rounded-2xl border bg-card shadow-xl shadow-primary/10">
+            <Image
+              src={project.image}
+              alt={project.title}
+              width={PROJECT_IMAGE_WIDTH}
+              height={PROJECT_IMAGE_HEIGHT}
+              sizes="(max-width: 1152px) 100vw, 1152px"
+              priority
+              className="aspect-video w-full object-cover object-top"
+            />
+          </div>
+        </Reveal>
+
+        <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_18rem] lg:gap-16">
+          <Reveal className="min-w-0">
+            <h2 className="text-2xl font-semibold">About the project</h2>
+            <div className="mt-4 space-y-4 text-base leading-relaxed text-pretty text-foreground/90 sm:text-lg">
+              {paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal
+            variant="right"
+            as="aside"
+            className="lg:sticky lg:top-24 lg:self-start"
+          >
+            <div className="space-y-6 rounded-2xl border bg-card p-6">
+              <TechSection
+                heading="Frontend"
+                technologies={project.frontEndTech}
+              />
+              <TechSection
+                heading="Backend"
+                technologies={project.backEndTech}
+              />
+              <div>
+                <p className="eyebrow">Last updated</p>
+                <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium">
+                  <CalendarIcon className="size-4 text-primary" />
+                  <time dateTime={project.updatedAt}>
+                    {dateFormatter.format(new Date(project.updatedAt))}
+                  </time>
+                </p>
+              </div>
+              {links.length > 0 && (
+                <div>
+                  <p className="eyebrow">Links</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {links.map(({ field, label, Icon }) => (
+                      <li key={field}>
+                        <a
+                          href={project[field]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          <Icon className="size-4" />
+                          {label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </Reveal>
         </div>
-      </div>
-    </Reveal>
+      </article>
+      <ContactCta />
+    </>
   );
 }
 

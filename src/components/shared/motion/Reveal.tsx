@@ -1,56 +1,57 @@
-"use client";
+'use client';
 
-import {
-  motion,
-  useAnimation,
-  useInView,
-  type Transition,
-  type Variants,
-} from "motion/react";
-import { useEffect, useRef, type ReactNode } from "react";
+import { motion } from 'motion/react';
+import type { ReactNode } from 'react';
 
-// Mirrors the (unexported) margin type framer-motion accepts for useInView.
-type MarginValue = `${number}${"px" | "%"}`;
+import { revealVariants, type RevealVariant } from './variants';
+
+// Mirrors the (unexported) margin type motion accepts for `viewport`.
+type MarginValue = `${number}${'px' | '%'}`;
 type ViewportMargin =
-  `${MarginValue} ${MarginValue} ${MarginValue} ${MarginValue}`;
+  | MarginValue
+  | `${MarginValue} ${MarginValue}`
+  | `${MarginValue} ${MarginValue} ${MarginValue} ${MarginValue}`;
 
 type RevealProps = {
   children: ReactNode;
-  variants: Variants;
+  variant?: RevealVariant;
   className?: string;
+  /** Position in a list; each step adds a small delay so grids cascade. */
   index?: number;
+  /** How far past the viewport edge the element has to be before it plays. */
   margin?: ViewportMargin;
-  transition?: Transition;
+  /** Rendered element. Lets a list item be a real `<li>`. */
+  as?: 'div' | 'li' | 'section' | 'article' | 'aside';
+  id?: string;
 };
 
+/**
+ * Plays once. Replaying on every scroll-back was the single most tiring thing
+ * about the old site, and the browser only ever has to paint one transition.
+ */
 function Reveal({
   children,
-  variants,
+  variant = 'up',
   className,
-  index,
-  margin = "-5% 0px -5% 0px",
-  transition = { duration: 0.5, delay: 0.2 },
+  index = 0,
+  margin = '0px 0px -10% 0px',
+  as = 'div',
+  ...rest
 }: RevealProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, margin });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    controls.start(isInView ? "visible" : "hidden");
-  }, [isInView, controls]);
+  const Component = motion[as];
 
   return (
-    <motion.div
-      ref={ref}
-      variants={variants}
+    <Component
+      variants={revealVariants[variant]}
       initial="hidden"
-      animate={controls}
+      whileInView="visible"
+      viewport={{ once: true, margin }}
       custom={index}
-      transition={transition}
       className={className}
+      {...rest}
     >
       {children}
-    </motion.div>
+    </Component>
   );
 }
 

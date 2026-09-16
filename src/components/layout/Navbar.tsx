@@ -1,103 +1,148 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion } from "motion/react";
+import { MenuIcon } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { motion, useMotionValueEvent, useScroll } from 'motion/react';
+import { useState } from 'react';
 
-import { useAuth } from "../../hooks/useAuth";
-import ThemeController from "./ThemeController";
+import { useAuth } from '@/hooks/useAuth';
+import { siteConfig } from '@/lib/site';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import ThemeController from './ThemeController';
 
 const NAV_LINKS = [
-  { href: "/about", label: "About" },
-  { href: "/resume", label: "Resume" },
-  { href: "/projects", label: "Projects" },
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/resume', label: 'Resume' },
 ];
-
-const ACTIVE_LINK_CLASS =
-  "rounded-none border-b-2 border-secondary font-semibold";
 
 function Navbar() {
   const { isAuthenticated } = useAuth();
   const pathname = usePathname();
+  // App Router keeps the layout mounted across navigations, so the sheet has
+  // to be told to close when a link inside it is followed.
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // The bar is transparent over the hero and gains a blurred surface once the
+  // page has moved, so the first fold has no line across it.
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setIsScrolled(latest > 12);
+  });
 
   const links = isAuthenticated
-    ? [...NAV_LINKS, { href: "/dashboard", label: "Dashboard" }]
+    ? [...NAV_LINKS, { href: '/dashboard', label: 'Dashboard' }]
     : NAV_LINKS;
 
   const isActive = (href: string) => pathname.startsWith(href);
 
   return (
-    <motion.div
-      className="navbar bg-base-100 z-10"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+    <motion.header
+      className={cn(
+        'sticky top-0 z-40 transition-[background-color,border-color,box-shadow] duration-300',
+        isScrolled
+          ? 'border-b border-border/60 bg-background/75 shadow-sm shadow-primary/5 backdrop-blur-md supports-backdrop-filter:bg-background/60'
+          : 'border-b border-transparent bg-transparent',
+      )}
+      initial={{ y: -16, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
     >
-      {/* Navbar Start */}
-      <div className="navbar-start flex-1">
-        {/* Dropdown for Mobile View */}
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+      <div className="container-page flex h-16 items-center gap-2">
+        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              aria-label="Open navigation menu"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-          >
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href}>{link.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* Brand Name */}
+              <MenuIcon className="size-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72 p-6">
+            <SheetHeader className="p-0">
+              <SheetTitle className="font-display text-xl font-bold">
+                <span className="text-primary">SK</span>
+                <span className="text-secondary">.</span>
+              </SheetTitle>
+            </SheetHeader>
+            <nav className="mt-4 flex flex-col gap-1">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={cn(
+                    'rounded-md px-3 py-2.5 text-base font-medium transition-colors hover:bg-muted',
+                    isActive(link.href) && 'bg-muted text-primary',
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Button asChild className="mt-4">
+                <a href={`mailto:${siteConfig.email}`}>Hire me</a>
+              </Button>
+            </nav>
+          </SheetContent>
+        </Sheet>
+
         <Link
           href="/"
-          className="md:text-xl font-medium whitespace-nowrap md:px-5"
+          aria-label={`${siteConfig.name} — home`}
+          className="font-display text-xl font-bold tracking-tight md:flex-1"
         >
-          Samiul Karim Prodhan
+          <span className="text-primary">SK</span>
+          <span className="text-secondary">.</span>
         </Link>
-      </div>
 
-      {/* Navbar Center (Hidden in Mobile View, Visible in Large Screens) */}
-      <div className="navbar-center flex-[2] justify-center hidden lg:flex px-5">
-        <ul className="menu menu-horizontal px-1 gap-4">
-          {links.map((link) => (
-            <li key={link.href}>
+        <nav className="relative hidden items-center gap-1 md:flex">
+          {links.map((link) => {
+            const active = isActive(link.href);
+
+            return (
               <Link
+                key={link.href}
                 href={link.href}
-                className={`hover:rounded-md focus:bg-transparent ${
-                  isActive(link.href) ? ACTIVE_LINK_CLASS : ""
-                }`}
+                className={cn(
+                  'relative rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-foreground',
+                  active ? 'text-foreground' : 'text-muted-foreground',
+                )}
               >
                 {link.label}
+                {active && (
+                  // One shared `layoutId` makes the underline slide between
+                  // links instead of blinking off and on.
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-secondary"
+                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                  />
+                )}
               </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+            );
+          })}
+        </nav>
 
-      {/* Navbar End */}
-      <div className="navbar-end flex-1 ">
-        <div className="flex items-center mx-1 md:px-5 ">
+        <div className="flex flex-1 items-center justify-end gap-1 md:gap-2">
           <ThemeController />
+          <Button asChild size="sm" className="hidden md:inline-flex">
+            <a href={`mailto:${siteConfig.email}`}>Hire me</a>
+          </Button>
         </div>
       </div>
-    </motion.div>
+    </motion.header>
   );
 }
 

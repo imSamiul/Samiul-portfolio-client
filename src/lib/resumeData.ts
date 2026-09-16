@@ -1,413 +1,193 @@
-export const buttonTools = [
-  "allSkills",
-  "frontEnd",
-  "webDevelopment",
-  "language",
-  "framework",
-  "library",
-  "database",
-  "backEnd",
-  "tools",
-  "python",
-  "javascript",
-  "authentication",
-];
-export const colors = [
-  "#03071eff",
-  "#6a040fff",
-  "#9d0208ff",
-  "#d00000ff",
-  "#dc2f02ff",
-  "#e85d04ff",
-  "#f48c06ff",
-  "#faa307ff",
-  "#ffba08ff",
-];
+/**
+ * Static resume content. The percentages the old page rendered as progress
+ * bars are kept as the source of truth but shown as three honest tiers —
+ * nobody can tell "JavaScript 75%" from "80%", but "working" versus
+ * "familiar" is a claim a reviewer can hold me to.
+ */
+export type SkillLevel = 'proficient' | 'working' | 'familiar';
 
-const skills = [
+export const SKILL_LEVELS: {
+  id: SkillLevel;
+  label: string;
+  description: string;
+}[] = [
   {
-    tools: "HTML",
-    value: 95,
-    category: ["allSkills", "frontEnd", "webDevelopment", "language"],
+    id: 'proficient',
+    label: 'Proficient',
+    description: 'Daily driver — I can architect and debug with it unaided.',
   },
   {
-    tools: "CSS",
-    value: 90,
-    category: ["allSkills", "frontEnd", "webDevelopment", "language"],
+    id: 'working',
+    label: 'Working',
+    description: 'Shipped with it; comfortable, still learning the corners.',
   },
   {
-    tools: "TailwindCSS",
-    value: 95,
-    category: ["allSkills", "frontEnd", "webDevelopment", "framework"],
-  },
-  {
-    tools: "Bootstrap",
-    value: 40,
-    category: ["allSkills", "frontEnd", "webDevelopment", "framework"],
-  },
-  {
-    tools: "JavaScript",
-    value: 75,
-    category: [
-      "allSkills",
-      "frontEnd",
-      "webDevelopment",
-      "language",
-      "javascript",
-    ],
-  },
-  {
-    tools: "TypeScript",
-    value: 65,
-    category: [
-      "allSkills",
-      "frontEnd",
-      "webDevelopment",
-      "language",
-      "javascript",
-    ],
-  },
-  {
-    tools: "React.JS",
-    value: 90,
-    category: [
-      "allSkills",
-      "frontEnd",
-      "webDevelopment",
-      "library",
-      "javascript",
-    ],
-  },
-
-  {
-    tools: "React-Router",
-    value: 95,
-    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
-  },
-  {
-    tools: "Axios",
-    value: 75,
-    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
-  },
-  {
-    tools: "TanStack Query",
-    value: 70,
-    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
-  },
-  {
-    tools: "TanStack Router",
-    value: 65,
-    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
-  },
-  {
-    tools: "TanStack Table",
-    value: 65,
-    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
-  },
-  {
-    tools: "Motion",
-    value: 70,
-    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
-  },
-  {
-    tools: "Next.JS",
-    value: 50,
-    category: [
-      "allSkills",
-      "frontEnd",
-      "webDevelopment",
-      "framework",
-      "javascript",
-      "backEnd",
-    ],
-  },
-  {
-    tools: "RESTful APIs",
-    value: 90,
-    category: ["allSkills", "frontEnd", "webDevelopment"],
-  },
-  {
-    tools: "Firebase",
-    value: 40,
-    category: ["allSkills", "webDevelopment", "database"],
-  },
-  {
-    tools: "Node.JS",
-    value: 55,
-    category: ["allSkills", "backEnd", "webDevelopment", "javascript"],
-  },
-  {
-    tools: "Express.JS",
-    value: 65,
-    category: [
-      "allSkills",
-      "backEnd",
-      "webDevelopment",
-      "framework",
-      "javascript",
-    ],
-  },
-  {
-    tools: "MongoDB",
-    value: 70,
-    category: ["allSkills", "backEnd", "webDevelopment", "database"],
-  },
-  {
-    tools: "Mongoose",
-    value: 65,
-    category: ["allSkills", "backEnd", "webDevelopment", "database", "library"],
-  },
-  {
-    tools: "Git & GitHub",
-    value: 55,
-    category: ["allSkills", "tools"],
-  },
-  {
-    tools: "Bash",
-    value: 35,
-    category: ["allSkills", "tools", "language"],
-  },
-  {
-    tools: "Python",
-    value: 30,
-    category: ["allSkills", "language", "python"],
-  },
-  {
-    tools: "C",
-    value: 87,
-    category: ["allSkills", "language"],
-  },
-
-  {
-    tools: "Java",
-    value: 33,
-    category: ["allSkills", "language"],
-  },
-  {
-    tools: "Redux Toolkit",
-    value: 65,
-    category: ["allSkills", "frontEnd", "webDevelopment", "library"],
-  },
-  {
-    tools: "Figma",
-    value: 70,
-    category: ["allSkills", "tools"],
-  },
-  {
-    tools: "Postman",
-    value: 75,
-    category: ["allSkills", "tools"],
-  },
-  {
-    tools: "JWT",
-    value: 80,
-    category: ["allSkills", "authentication"],
-  },
-  {
-    tools: "OAuth",
-    value: 70,
-    category: ["allSkills", "authentication"],
-  },
-  {
-    tools: "Passport.JS",
-    value: 80,
-    category: ["allSkills", "authentication"],
+    id: 'familiar',
+    label: 'Familiar',
+    description: 'Used it in coursework or a side project.',
   },
 ];
 
-// Colours are derived from the position so server and client renders agree.
-export const skillsData = skills.map((skill, index) => ({
-  ...skill,
-  color: colors[index % colors.length],
+export const SKILL_CATEGORIES = [
+  { id: 'all', label: 'All' },
+  { id: 'frontend', label: 'Frontend' },
+  { id: 'backend', label: 'Backend' },
+  { id: 'language', label: 'Languages' },
+  { id: 'database', label: 'Databases' },
+  { id: 'auth', label: 'Auth' },
+  { id: 'tools', label: 'Tools' },
+] as const;
+
+export type SkillCategory = (typeof SKILL_CATEGORIES)[number]['id'];
+
+type Skill = {
+  name: string;
+  /** 0–100 self-assessment; only ever surfaced through `levelOf`. */
+  score: number;
+  categories: Exclude<SkillCategory, 'all'>[];
+};
+
+const SKILLS: Skill[] = [
+  { name: 'HTML', score: 95, categories: ['frontend', 'language'] },
+  { name: 'CSS', score: 90, categories: ['frontend', 'language'] },
+  { name: 'Tailwind CSS', score: 95, categories: ['frontend'] },
+  { name: 'Bootstrap', score: 40, categories: ['frontend'] },
+  { name: 'JavaScript', score: 75, categories: ['frontend', 'language'] },
+  { name: 'TypeScript', score: 65, categories: ['frontend', 'language'] },
+  { name: 'React', score: 90, categories: ['frontend'] },
+  { name: 'Next.js', score: 80, categories: ['frontend', 'backend'] },
+  { name: 'Redux Toolkit', score: 65, categories: ['frontend'] },
+  { name: 'TanStack Query', score: 70, categories: ['frontend'] },
+  { name: 'TanStack Table', score: 65, categories: ['frontend'] },
+  { name: 'Motion', score: 70, categories: ['frontend'] },
+  { name: 'Axios', score: 75, categories: ['frontend'] },
+  { name: 'RESTful APIs', score: 90, categories: ['backend'] },
+  { name: 'Node.js', score: 55, categories: ['backend'] },
+  { name: 'Express', score: 65, categories: ['backend'] },
+  { name: 'MongoDB', score: 70, categories: ['backend', 'database'] },
+  { name: 'Mongoose', score: 65, categories: ['backend', 'database'] },
+  { name: 'Firebase', score: 40, categories: ['database'] },
+  { name: 'JWT', score: 80, categories: ['auth', 'backend'] },
+  { name: 'OAuth', score: 70, categories: ['auth'] },
+  { name: 'Passport.js', score: 80, categories: ['auth', 'backend'] },
+  { name: 'Git & GitHub', score: 55, categories: ['tools'] },
+  { name: 'Postman', score: 75, categories: ['tools'] },
+  { name: 'Figma', score: 70, categories: ['tools'] },
+  { name: 'Bash', score: 35, categories: ['tools', 'language'] },
+  { name: 'C', score: 87, categories: ['language'] },
+  { name: 'Java', score: 33, categories: ['language'] },
+  { name: 'Python', score: 30, categories: ['language'] },
+];
+
+function levelOf(score: number): SkillLevel {
+  if (score >= 75) return 'proficient';
+  if (score >= 55) return 'working';
+  return 'familiar';
+}
+
+export const skillsData = SKILLS.map(({ name, score, categories }) => ({
+  name,
+  categories,
+  level: levelOf(score),
 }));
 
-export const courses = [
+export type ResumeSkill = (typeof skillsData)[number];
+
+export const EDUCATION = [
   {
-    courseCode: "CSE123",
-    courseName: "Problem Solving Lab",
+    period: '2020 – 2024',
+    institution: 'Daffodil International University',
+    detail: 'B.Sc. in Computer Science and Engineering',
   },
   {
-    courseCode: "CSE122",
-    courseName: "Programming and Problem Solving",
+    period: '2016 – 2018',
+    institution: 'Cantonment Public School and College',
+    detail: 'Higher Secondary Certificate',
   },
   {
-    courseCode: "CSE136",
-    courseName: "Software Project I",
+    period: '2016',
+    institution: 'Collectorate Adarsha Shiksha Niketon, Panchagarh',
+    detail: 'Secondary School Certificate',
+  },
+];
+
+type Course = { courseCode: string; courseName: string };
+
+/**
+ * The handful a hiring engineer actually scans for. Everything else is still
+ * listed, behind a disclosure, so the page stays honest and stays short.
+ */
+export const RELEVANT_COURSES: Course[] = [
+  { courseCode: 'CSE414', courseName: 'Web Engineering' },
+  { courseCode: 'CSE333', courseName: 'Software Engineering' },
+  { courseCode: 'CSE311', courseName: 'Database Management System' },
+  { courseCode: 'CSE134', courseName: 'Data Structure' },
+  { courseCode: 'CSE214', courseName: 'Algorithm' },
+  { courseCode: 'CSE221', courseName: 'Object Oriented Programming' },
+  { courseCode: 'CSE323', courseName: 'Operating Systems' },
+  { courseCode: 'CSE313', courseName: 'Computer Networks' },
+  { courseCode: 'CSE423', courseName: 'Information Security' },
+  { courseCode: 'CSE325', courseName: 'System Analysis and Design' },
+];
+
+export const courses: Course[] = [
+  { courseCode: 'CSE123', courseName: 'Problem Solving Lab' },
+  { courseCode: 'CSE122', courseName: 'Programming and Problem Solving' },
+  { courseCode: 'CSE136', courseName: 'Software Project I' },
+  { courseCode: 'CSE135', courseName: 'Data Structure Lab' },
+  { courseCode: 'CSE134', courseName: 'Data Structure' },
+  { courseCode: 'CSE216', courseName: 'Software Project II' },
+  { courseCode: 'CSE222', courseName: 'Object Oriented Programming Lab' },
+  { courseCode: 'CSE221', courseName: 'Object Oriented Programming' },
+  { courseCode: 'ACT211', courseName: 'Financial and Managerial Accounting' },
+  { courseCode: 'CSE226', courseName: 'Software Project III' },
+  { courseCode: 'CSE225', courseName: 'Data Communication' },
+  { courseCode: 'CSE215', courseName: 'Algorithm Lab' },
+  { courseCode: 'CSE214', courseName: 'Algorithm' },
+  { courseCode: 'STA221', courseName: 'Statistics and Probability' },
+  {
+    courseCode: 'CSE232',
+    courseName: 'Microprocessor, Embedded Systems, and IoT Lab',
   },
   {
-    courseCode: "CSE135",
-    courseName: "Data Structure Lab",
+    courseCode: 'CSE231',
+    courseName: 'Microprocessor, Embedded Systems, and IoT',
   },
+  { courseCode: 'CSE234', courseName: 'Object Oriented Programming II Lab' },
+  { courseCode: 'CSE233', courseName: 'Object Oriented Programming II' },
+  { courseCode: 'CSE237', courseName: 'Software Project IV' },
+  { courseCode: 'CSE317', courseName: 'Software Project V' },
+  { courseCode: 'CSE316', courseName: 'Artificial Intelligence Lab' },
+  { courseCode: 'CSE315', courseName: 'Artificial Intelligence' },
+  { courseCode: 'CSE314', courseName: 'Computer Networks Lab' },
+  { courseCode: 'CSE313', courseName: 'Computer Networks' },
+  { courseCode: 'CSE312', courseName: 'Database Management System Lab' },
+  { courseCode: 'CSE311', courseName: 'Database Management System' },
+  { courseCode: 'CSE322', courseName: 'Data Mining and Machine Learning Lab' },
+  { courseCode: 'CSE321', courseName: 'Data Mining and Machine Learning' },
+  { courseCode: 'CSE325', courseName: 'System Analysis and Design' },
+  { courseCode: 'CSE336', courseName: 'Software Project VI' },
   {
-    courseCode: "CSE134",
-    courseName: "Data Structure",
+    courseCode: 'CSE335',
+    courseName: 'Pervasive Computing and Mobile App Development Lab',
   },
+  { courseCode: 'CSE334', courseName: 'Pervasive Computing' },
+  { courseCode: 'CSE332', courseName: 'Compiler Design Lab' },
+  { courseCode: 'CSE331', courseName: 'Compiler Design' },
+  { courseCode: 'CSE324', courseName: 'Operating Systems Lab' },
+  { courseCode: 'CSE323', courseName: 'Operating Systems' },
+  { courseCode: 'CSE333', courseName: 'Software Engineering' },
+  { courseCode: 'CSE414', courseName: 'Web Engineering' },
+  { courseCode: 'CSE415', courseName: 'Web Engineering Lab' },
+  { courseCode: 'CSE427', courseName: 'Digital Image Processing' },
+  { courseCode: 'CSE423', courseName: 'Information Security' },
+  { courseCode: 'CSE422', courseName: 'Computer Graphics Lab' },
+  { courseCode: 'CSE421', courseName: 'Computer Graphics' },
+  { courseCode: 'CSE413', courseName: 'Big Data and IoT Lab' },
+  { courseCode: 'CSE412', courseName: 'Big Data and IoT' },
   {
-    courseCode: "CSE216",
-    courseName: "Software Project II",
+    courseCode: 'CSE411',
+    courseName: 'Computer Architecture and Organization',
   },
-  {
-    courseCode: "CSE222",
-    courseName: "Object Oriented Programming Lab",
-  },
-  {
-    courseCode: "CSE221",
-    courseName: "Object Oriented Programming",
-  },
-  {
-    courseCode: "ACT211",
-    courseName: "Financial and Managerial Accounting",
-  },
-  {
-    courseCode: "CSE226",
-    courseName: "Software Project III",
-  },
-  {
-    courseCode: "CSE225",
-    courseName: "Data Communication",
-  },
-  {
-    courseCode: "CSE215",
-    courseName: "Algorithm Lab",
-  },
-  {
-    courseCode: "CSE214",
-    courseName: "Algorithm",
-  },
-  {
-    courseCode: "STA221",
-    courseName: "Statistics and Probability",
-  },
-  {
-    courseCode: "CSE232",
-    courseName: "Microprocessor, Embedded Systems, and IoT Lab",
-  },
-  {
-    courseCode: "CSE231",
-    courseName: "Microprocessor, Embedded Systems, and IoT",
-  },
-  {
-    courseCode: "CSE234",
-    courseName: "Object Oriented Programming II Lab",
-  },
-  {
-    courseCode: "CSE233",
-    courseName: "Object Oriented Programming II",
-  },
-  {
-    courseCode: "CSE237",
-    courseName: "Software Project IV",
-  },
-  {
-    courseCode: "CSE317",
-    courseName: "Software Project V",
-  },
-  {
-    courseCode: "CSE316",
-    courseName: "Artificial Intelligence Lab",
-  },
-  {
-    courseCode: "CSE315",
-    courseName: "Artificial Intelligence",
-  },
-  {
-    courseCode: "CSE314",
-    courseName: "Computer Networks Lab",
-  },
-  {
-    courseCode: "CSE313",
-    courseName: "Computer Networks",
-  },
-  {
-    courseCode: "CSE312",
-    courseName: "Database Management System Lab",
-  },
-  {
-    courseCode: "CSE311",
-    courseName: "Database Management System",
-  },
-  {
-    courseCode: "CSE322",
-    courseName: "Data Mining and Machine Learning Lab",
-  },
-  {
-    courseCode: "CSE321",
-    courseName: "Data Mining and Machine Learning",
-  },
-  {
-    courseCode: "CSE325",
-    courseName: "System Analysis and Design",
-  },
-  {
-    courseCode: "CSE336",
-    courseName: "Software Project VI",
-  },
-  {
-    courseCode: "CSE335",
-    courseName: "Pervasive Computing and Mobile App Development Lab",
-  },
-  {
-    courseCode: "CSE334",
-    courseName: "Pervasive Computing",
-  },
-  {
-    courseCode: "CSE332",
-    courseName: "Compiler Design Lab",
-  },
-  {
-    courseCode: "CSE331",
-    courseName: "Compiler Design",
-  },
-  {
-    courseCode: "CSE324",
-    courseName: "Operating Systems Lab",
-  },
-  {
-    courseCode: "CSE323",
-    courseName: "Operating Systems",
-  },
-  {
-    courseCode: "CSE333",
-    courseName: "Software Engineering",
-  },
-  {
-    courseCode: "CSE414",
-    courseName: "Web Engineering",
-  },
-  {
-    courseCode: "CSE415",
-    courseName: "Web Engineering Lab",
-  },
-  {
-    courseCode: "CSE427",
-    courseName: "Digital Image Processing",
-  },
-  {
-    courseCode: "CSE423",
-    courseName: "Information Security",
-  },
-  {
-    courseCode: "CSE422",
-    courseName: "Computer Graphics Lab",
-  },
-  {
-    courseCode: "CSE421",
-    courseName: "Computer Graphics",
-  },
-  {
-    courseCode: "CSE413",
-    courseName: "Big Data and IoT Lab",
-  },
-  {
-    courseCode: "CSE412",
-    courseName: "Big Data and IoT",
-  },
-  {
-    courseCode: "CSE411",
-    courseName: "Computer Architecture and Organization",
-  },
-  {
-    courseCode: "CSE499",
-    courseName: "Project / Internship (Phase I)",
-  },
+  { courseCode: 'CSE499', courseName: 'Project / Internship (Phase I)' },
 ];

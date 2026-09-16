@@ -1,196 +1,203 @@
-"use client";
+import { DownloadIcon, MailIcon, MapPinIcon } from 'lucide-react';
 
-import { Line } from "rc-progress";
-import { Fragment, useState, type MouseEvent } from "react";
-import { FaUniversity } from "react-icons/fa";
-import { RxDividerVertical } from "react-icons/rx";
-
-import { buttonTools, courses, skillsData } from "../../../db/resumeData";
-import { siteConfig } from "../../../config/site";
-import Reveal from "../../shared/motion/Reveal";
-import {
-  bottomRevealVariants,
-  upRevealVariants,
-} from "../../shared/motion/variants";
+import { courses, EDUCATION, RELEVANT_COURSES } from '@/lib/resumeData';
+import { siteConfig } from '@/lib/site';
+import { RESUME_DOWNLOAD_URL } from '@/services/apis/resumeApis';
+import ContactCta from '@/components/shared/ContactCta';
+import Reveal from '@/components/shared/motion/Reveal';
+import SectionHeading from '@/components/shared/SectionHeading';
+import Timeline from '@/components/shared/Timeline';
+import { buttonVariants } from '@/components/ui/button';
+import ResumeSkills from './ResumeSkills';
 
 const SECTIONS = [
-  { id: "profileSummary", label: "Profile Summary" },
-  { id: "education", label: "Education" },
-  { id: "skills", label: "Skills" },
-  { id: "courses", label: "Courses" },
-  { id: "reference", label: "Reference" },
+  { id: 'summary', label: 'Summary' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'education', label: 'Education' },
+  { id: 'courses', label: 'Coursework' },
+  { id: 'reference', label: 'Reference' },
 ];
 
-const EDUCATION = [
-  {
-    institution: "Daffodil International University",
-    detail: "Bachelor of Science in Computer Science and Engineering (2020-2024)",
-  },
-  {
-    institution: "Cantonment Public School and College",
-    detail: "Higher Secondary School Certificate (2016-2018)",
-  },
-  {
-    institution: "Collectorate Adarsha Shiksha Niketon",
-    detail: "Secondary School Certificate (2016)",
-  },
-];
+const dateFormatter = new Intl.DateTimeFormat('en', {
+  month: 'long',
+  year: 'numeric',
+});
 
-function ResumePage() {
-  const [activeCategory, setActiveCategory] = useState("allSkills");
-
-  const visibleSkills = skillsData.filter((skill) =>
-    skill.category.includes(activeCategory),
-  );
-
-  function handleSectionJump(
-    event: MouseEvent<HTMLAnchorElement>,
-    sectionId: string,
-  ) {
-    event.preventDefault();
-    const target = document.getElementById(sectionId);
-    if (!target) {
-      return;
-    }
-    const stickyHeaderHeight =
-      document.querySelector(".sticky")?.clientHeight || 0;
-    window.scrollTo({
-      top: target.getBoundingClientRect().top + window.scrollY - stickyHeaderHeight,
-      behavior: "smooth",
-    });
-  }
-
+function ResumeSection({
+  id,
+  eyebrow,
+  title,
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="container mx-auto my-3 md:my-10 px-5 md:px-10">
-      <Reveal variants={bottomRevealVariants}>
-        <div className="sticky top-0   py-2">
-          <h1 className="text-center text-3xl font-bold mb-5 text-primary">
-            Resume
-          </h1>
-          <div className="flex gap-2 md:gap-4 justify-center items-center flex-wrap ">
-            {SECTIONS.map((section, index) => (
-              <Fragment key={section.id}>
+    <section id={id} aria-labelledby={`${id}-heading`} className="scroll-mt-28">
+      <SectionHeading
+        eyebrow={eyebrow}
+        title={<span id={`${id}-heading`}>{title}</span>}
+      />
+      <div className="mt-8">{children}</div>
+    </section>
+  );
+}
+
+/**
+ * `resumeUpdatedAt` is the API's timestamp for the PDF, or `null` when none
+ * is stored — in which case the download button is not rendered at all.
+ */
+function ResumePage({ resumeUpdatedAt }: { resumeUpdatedAt: string | null }) {
+  return (
+    <>
+      <div className="container-page pt-12 md:pt-20">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHeading
+            as="h1"
+            eyebrow="Resume"
+            title={siteConfig.name}
+            description={
+              <span className="flex flex-wrap gap-x-5 gap-y-1 text-base">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPinIcon className="size-4 text-primary" />
+                  {siteConfig.location}
+                </span>
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+                >
+                  <MailIcon className="size-4 text-primary" />
+                  {siteConfig.email}
+                </a>
+              </span>
+            }
+          />
+          {resumeUpdatedAt && (
+            <Reveal variant="right" className="shrink-0">
+              {/* A plain anchor: the API answers with a redirect to the PDF. */}
+              <a
+                href={RESUME_DOWNLOAD_URL}
+                className={buttonVariants({
+                  size: 'lg',
+                  className: 'h-11 px-6',
+                })}
+              >
+                <DownloadIcon />
+                Download PDF
+              </a>
+              <p className="mt-2 font-mono text-xs text-muted-foreground lg:text-right">
+                Updated {dateFormatter.format(new Date(resumeUpdatedAt))}
+              </p>
+            </Reveal>
+          )}
+        </div>
+
+        {/* Section jump list. Anchor links only — `scroll-padding-top` in the
+            global CSS lands them below the sticky navbar without any JS. */}
+        <nav
+          aria-label="Resume sections"
+          className="sticky top-16 z-30 -mx-4 mt-10 border-y bg-background/80 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        >
+          <ul className="flex gap-1 overflow-x-auto">
+            {SECTIONS.map((section) => (
+              <li key={section.id}>
                 <a
                   href={`#${section.id}`}
-                  onClick={(event) => handleSectionJump(event, section.id)}
+                  className="inline-block rounded-full px-3.5 py-1.5 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
                   {section.label}
                 </a>
-                {index !== SECTIONS.length - 1 && <RxDividerVertical />}
-              </Fragment>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </nav>
 
-        <div className="py-4 md:py-8" id="profileSummary">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Profile Summary
-          </h2>
-          <div className="my-2 md:my-4 ">
-            <h3 className="text-base md:text-lg  font-semibold lg:text-lg">
-              Samiul Karim Prodhan
-            </h3>
-            <p className=" text-base leading-6 lg:text-lg ">
-              <a href={`mailto:${siteConfig.email}`}>
-                Email: {siteConfig.email}
-              </a>
-            </p>
-          </div>
+        <div className="max-w-3xl space-y-20 py-16 md:space-y-24 md:py-20">
+          <ResumeSection id="summary" eyebrow="Profile" title="Summary">
+            <Reveal>
+              <p className="text-lg leading-relaxed text-pretty text-muted-foreground">
+                Full-stack web developer specializing in the MERN stack and
+                Next.js. I build scalable, user-friendly applications with a
+                frontend-first mindset and a solid grounding in debugging and
+                analytical problem-solving. Graduated in Computer Science and
+                Engineering in 2024; currently{' '}
+                {siteConfig.openToWork
+                  ? 'open to full-stack and frontend roles.'
+                  : 'building things.'}
+              </p>
+            </Reveal>
+          </ResumeSection>
 
-          <p className="mt-3 text-base leading-6 lg:mt-5 lg:text-lg ">
-            I am a dedicated and passionate full-stack web developer
-            specializing in the MERN stack (MongoDB, Express.js, React.js, and
-            Node.js). With a solid foundation in problem-solving, debugging, and
-            analytical thinking, I excel at creating scalable, user-friendly,
-            and visually appealing web applications.
-          </p>
-        </div>
-        <div className="py-4 md:py-8" id="education">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Education
-          </h2>
-          <div className="mt-2 md:mt-4 px-2 md:px-4">
-            {EDUCATION.map((education) => (
-              <div className="my-2" key={education.institution}>
-                <div className="flex items-center gap-2">
-                  <FaUniversity className="w-4 h-4  flex-shrink-0" />
-                  <h3 className="text-base md:text-lg  font-semibold ">
-                    {education.institution}
-                  </h3>
-                </div>
-                <p className=" text-base leading-6 lg:text-lg ">
-                  {education.detail}
+          <ResumeSection id="skills" eyebrow="Skills" title="What I work with">
+            <ResumeSkills />
+          </ResumeSection>
+
+          <ResumeSection
+            id="education"
+            eyebrow="Education"
+            title="Where I studied"
+          >
+            <Timeline
+              items={EDUCATION.map((entry) => ({
+                period: entry.period,
+                title: entry.institution,
+                description: entry.detail,
+              }))}
+            />
+          </ResumeSection>
+
+          <ResumeSection
+            id="courses"
+            eyebrow="Coursework"
+            title="Relevant courses"
+          >
+            <Reveal>
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {RELEVANT_COURSES.map((course) => (
+                  <li
+                    key={course.courseCode}
+                    className="flex items-baseline gap-3 rounded-lg border bg-card px-4 py-2.5 text-sm"
+                  >
+                    <span className="font-mono text-xs text-muted-foreground">
+                      {course.courseCode}
+                    </span>
+                    {course.courseName}
+                  </li>
+                ))}
+              </ul>
+              <details className="group mt-4">
+                <summary className="cursor-pointer text-sm font-medium text-primary underline-offset-4 hover:underline">
+                  <span className="group-open:hidden">
+                    Show all {courses.length} courses
+                  </span>
+                  <span className="hidden group-open:inline">Show fewer</span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {courses.map((course, index) => (
+                    <span key={course.courseCode}>
+                      <span className="font-mono text-xs">
+                        {course.courseCode}
+                      </span>{' '}
+                      {course.courseName}
+                      {index !== courses.length - 1 && ' · '}
+                    </span>
+                  ))}
                 </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Reveal>
-      <Reveal variants={bottomRevealVariants}>
-        <div className="py-4 md:py-8" id="skills">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Skills
-          </h2>
+              </details>
+            </Reveal>
+          </ResumeSection>
 
-          <div className="my-2 md:my-4 flex gap-2 flex-wrap">
-            {buttonTools.map((tool) => (
-              <button
-                key={tool}
-                className={`btn btn-sm md:btn-am lg:btn-md  ${tool === activeCategory ? "btn-primary " : ""}`}
-                onClick={() => setActiveCategory(tool)}
-              >
-                {tool}
-              </button>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {visibleSkills.map((skill) => (
-              <Reveal key={skill.tools} variants={upRevealVariants}>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <h3>{skill.tools}</h3>
-                    <h4>{skill.value}%</h4>
-                  </div>
-                  <Line
-                    percent={skill.value}
-                    strokeWidth={2}
-                    strokeColor={skill.color}
-                  />
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <ResumeSection id="reference" eyebrow="Reference" title="References">
+            <Reveal>
+              <p className="text-muted-foreground">Available upon request.</p>
+            </Reveal>
+          </ResumeSection>
         </div>
-      </Reveal>
-      <Reveal variants={bottomRevealVariants}>
-        <div className="py-4 md:py-8" id="courses">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Course
-          </h2>
-          <div className="mt-2 md:mt-4">
-            <p className=" text-base leading-6 lg:text-lg ">
-              {courses.map((course, index) => (
-                <Fragment key={course.courseCode}>
-                  <span className="font-semibold">{course.courseCode} - </span>
-                  {course.courseName}
-                  {index !== courses.length - 1 && ", "}
-                </Fragment>
-              ))}
-            </p>
-          </div>
-        </div>
-        <div className="py-4 md:py-8" id="reference">
-          <h2 className="text-lg md:text-2xl  font-semibold lg:text-2xl font-Montserrat text-accent">
-            Reference
-          </h2>
-          <div className="mt-2 md:mt-4">
-            <p className=" text-base leading-6 lg:text-lg ">
-              Available upon request
-            </p>
-          </div>
-        </div>
-      </Reveal>
-    </div>
+      </div>
+      <ContactCta />
+    </>
   );
 }
 

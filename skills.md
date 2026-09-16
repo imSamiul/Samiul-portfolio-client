@@ -34,9 +34,11 @@ samiuls-portfolio-client   Next.js 16 App Router + shadcn + TanStack Query → V
 
 ```
 src/app/                    # routes only (thin pages) + metadata/SEO
+  (site)/                   # public pages; its layout owns Navbar, Footer, ScrollProgress
+  dashboard/, login/        # outside (site): they bring their own full-screen chrome
 src/components/
   pages/<domain>/           # feature UI (home, projects, about, resume, auth, dashboard)
-  shared/                   # cross-domain pieces (JsonLd, motion, loaders)
+  shared/                   # cross-domain pieces (JsonLd, SectionHeading, Timeline, TechBadge, ContactCta, motion/)
   layout/                   # Navbar, Footer, Providers, DashboardShell, ThemeController
   ui/                       # shadcn primitives only
 src/shared/                 # zod schemas + constants (this repo's own copy)
@@ -45,7 +47,7 @@ src/services/
   queryHooks/               # use*Manager hooks
 src/lib/                    # env, seo, site config, static content
 src/types/                  # shared TS types
-src/middleware.ts           # dashboard auth gate
+src/proxy.ts                # dashboard auth gate (Next 16 renamed middleware.ts)
 ```
 
 ### Must follow
@@ -68,29 +70,77 @@ This repo just moved from Vite + TanStack Router to Next.js App Router (commit `
 
 - `src/app/**` (routes, layouts, metadata)
 - `src/components/layout/`, `src/components/pages/`, `src/components/shared/`
-- `src/middleware.ts`
+- `src/proxy.ts`
 - `src/services/projectServerApis.ts` (RSC fetching, tagged and cached indefinitely)
 - `src/app/api/revalidate/route.ts` (the API's cache-invalidation webhook)
 
 **Pre-migration — do NOT copy these shapes:**
 
-| Current | Target |
-| --- | --- |
-| `components/UI/Toast.tsx` | `sonner` toasts |
-| `components/UI/Loader.tsx`, `CardLoader.tsx` | `components/shared/` |
-| flat `services/*.ts` + `services/mutations/` + `services/queries/` | `services/apis/` + `services/queryHooks/` |
-| `src/config/site.ts`, `src/config/structuredData.ts` | `src/lib/` |
-| `src/db/resumeData.ts` | `src/lib/` |
-| Tailwind 3 + DaisyUI classes | Tailwind 4 + shadcn |
-| no zod anywhere | `src/shared/schemas/` |
-| no eslint config | `eslint` + `eslint-config-next` |
+| Current                    | Target               |
+| -------------------------- | -------------------- |
+| `components/ui/Loader.tsx` | `components/shared/` |
+
+### Theming
+
+Tailwind 4 is CSS-first: there is no `tailwind.config.js`, and `src/app/globals.css` is the whole configuration.
+
+- `:root` and `.dark` hold the token values as `oklch()`. `@theme inline` maps them to utility names (`--color-primary: var(--primary)`), which is what makes `bg-primary` work. Both halves are needed: some shadcn components (`ui/sonner.tsx`) read `var(--popover)` directly rather than through a class.
+- `primary`, `secondary` and `accent` are the brand palette this site has always used (True Blue, Arylide Yellow, Salmon Pink); the neutrals are tinted towards the primary hue rather than flat grey.
+- Dark mode is `next-themes` with `attribute="class"`, so `.dark` is toggled on `<html>`. `layout.tsx` needs `suppressHydrationWarning` for that, and there is no hand-written pre-paint script — the provider brings its own.
+
+DaisyUI is gone. Do not reintroduce `bg-base-100`, `btn`, `card-body`, `form-control` or `data-theme`; the shadcn equivalents are `bg-background`, `Button`, `CardContent` and `Field`.
+
+Three `next/font` families come from `src/lib/fonts.ts`, each with one role: **Plus Jakarta Sans** for headings (`font-display`, applied to `h1–h4` globally), **Inter** for body (`font-sans`) and **JetBrains Mono** for the small uppercase labels (`font-mono`, the `eyebrow` utility). `fontVariables` is applied to `<html>` in `layout.tsx` **and** `global-error.tsx` — that boundary renders its own `<html>`, so it needs the classes separately. Do not put a Google Fonts `@import` back in the CSS; it is a render-blocking third-party request with no `font-display` control.
+
+Colour roles, in one line: blue is structure (buttons, links, icon tint), yellow is the highlighter (the `.marker` stroke under one word, an active tab, the "open to work" dot — one per screen), pink is warmth (gradients and glows only, never text). The comment above `:root` in `globals.css` says the same.
+
+Page primitives live in `globals.css` as `@utility`: `container-page` (max-w-6xl + gutters — every public section uses it, which is what keeps the pages aligned), `section-y`, `eyebrow`, `bg-dots`. Sections open with `<SectionHeading eyebrow title description>`.
+
+`html` has `overflow-x: clip` and **body has no overflow rule**. An overflow value on `<body>` makes it a scroll container of its own, and every `position: sticky` on the site (navbar, dashboard sidebar, resume tabs, About rail) silently stops sticking. Smooth scrolling is declared with `data-scroll-behavior="smooth"` on `<html>` as well as in CSS, which is what lets Next 16 disable it during route transitions.
+
+### Animation
+
+The library is `motion` (`motion/react`) — not GSAP. It is what the React/Next ecosystem standardises on, it is declarative, and `whileInView`, `layoutId` and `useScroll` cover everything this site does; a second animation library would be ~70 KB for nothing.
+
+`Reveal` takes a **variant name**, not a variant object: `<Reveal variant="up" index={i}>` (variants: `up`, `down`, `left`, `right`, `fade`, `scale`; `index` staggers a list). Every `visible` is a function of the index, and a function cannot be serialised across the server/client boundary — passing the object is what once forced four otherwise-static components to declare `'use client'`. `revealVariants` in `motion/variants.ts` is the only export; the objects themselves are module-private. Reveals play **once** (`viewport.once`) and move 16–24px; do not bring back replay-on-scroll or 100px slides.
+
+Other motion pieces in `components/shared/motion/`: `ScrollProgress` (top line), `SpotlightCard` (cursor-follow glow; client), `Marquee` (pure CSS, `--animate-marquee` in the theme).
+
+`JsonLd` is rendered **after** the page component in every route. Next.js scrolls a new route to its first DOM node; a zero-size `<script>` first in line made it keep the previous page's scroll position.
+
+`Reveal` declares `'use client'` itself, so a server component can render it and the boundary forms one level down.
+
+### Data layer
+
+`services/apis/` holds the transport, `services/queryHooks/` holds the React side. Nothing else talks to the API.
+
+- `axiosInstance.ts` — one instance at `/api/v1` with the Bearer interceptor. There is no second client; per-domain base URLs were what made the token interceptor exist in three copies.
+- `projectApis`, `contactApis`, `resumeApis`, `userApis` — plain objects of named calls, each wrapped in `request(schema, call)`.
+- `projectServerApis.ts`, `resumeServerApis.ts` — the RSC `fetch` path. Separate because it is tagged and cached, uses `serverApiUrl` (server-only `API_BASE_URL`), and degrades a failure to `[]`/`null` so public pages still render.
+- `queryHooks/use*Manager.ts` — one hook per domain, returning `// Data`, `// Loading states`, `// Errors`, `// Actions`, `// Invalidation`. Pass `{ shouldFetch: false }` where a component only needs the mutations.
+- `apis/queryKeys.ts` — every cache key. Never write a key literal at a call site.
+
+`src/lib/env.ts` is the only place that reads `process.env`; `apiUrl()` is for the browser and `serverApiUrl()` for RSC.
+
+Signing in calls `queryClient.clear()`: whatever the previous session cached must not leak into the new one.
+
+### Contract safety
+
+Nothing from the API is trusted on shape. `src/services/utils/apiHelper.ts` owns both halves:
+
+- `request(schema, call)` unwraps the `{ success, message, data }` envelope and **parses `data`** against a zod schema. A backend change surfaces here as `RESPONSE_SHAPE_MISMATCH` naming the field, not as `undefined.map` inside a component. `projectServerApis.ts` does the same for the RSC `fetch` path.
+- `ApiRequestError` carries `code`, `status` and `details`, so a 401 `ACCESS_TOKEN_INVALID` can be told apart from a 500. Branch on `code`, never on `message` — the wording is not part of the contract.
+- `error.fieldIssues` returns the `{ field, message }[]` behind a 422. `ContactForm` maps them with `setError`; `ProjectForm` takes them as a `fieldIssues` prop and renders them against the field they name.
+
+The API's DTOs are two shapes, and so are the client's: **`ProjectSummary`** (list payloads, no `projectDetails`) and **`ProjectDetail`** (single-project endpoints). Using one loose type for both is what let list code read a field the list never sends.
+
+Form schemas are _not_ copies of the server's. The server parses multipart text (JSON-encoded tech lists, `"true"` booleans); `projectFormSchema` describes what the inputs actually produce. Only the **limits** are mirrored, so a form that validates never comes back as a 422.
 
 **Known gaps:**
 
-- `src/components/UI/` is the tracked folder name but several files import `../ui/Loader` and `../ui/Toast`. Windows resolves that; **Linux does not, so the Vercel build breaks.** Fix the casing as part of moving those files to `components/shared/`.
-- `pnpm build` currently fails while prerendering `/_global-error` with `Cannot read properties of null (reading 'useContext')`. It predates the API contract change and is unrelated to it — a Next 16 / React 19 problem in this repo's setup.
+- `pnpm build` fails while prerendering `/_global-error` with `Cannot read properties of null (reading 'useContext')`. **This is an upstream Next 16.3.5 bug, not this repo's code** — the Bari-vara frontend reproduces it identically on the same version. Ruled out: the local `global-error.tsx` (it predates that file), the React version (19.3.0 and 19.2.8 both fail), and the bundler (Turbopack and webpack both fail). It does _not_ happen with minification off, so `next build --debug-prerender` completes all 15 pages. The webpack frame lands in Next's own `OuterLayoutRouter`, which calls `useContext` on a null React namespace — `react/react.react-server.js` exports no `useContext`, so Next's client router is reaching the server graph. Nothing to fix here; re-test on the next Next release. `dev` and `typecheck` are unaffected.
 - `src/utils/projectImage.ts` now holds only the two image dimensions that `next/image` needs. The base64 workarounds it used to carry, along with `src/app/api/project-image/`, have been deleted.
-- DaisyUI classes are spread across 14 component files (heaviest: `Navbar`, `DashboardShell`, `ProjectGrid`, `LoginForm`, `ProjectForm`, `ThemeController`). Restyle domain by domain, not in one sweep.
+- `next-themes` logs `Encountered a script tag while rendering React component` in dev. It is the provider's own pre-paint script, which React 19 warns about on the client render path; it still runs from the SSR HTML, and Bari-vara shows the same line. Not fixable from here — next-themes 0.4 offers no way to place that script itself.
 
 ---
 
@@ -121,7 +171,7 @@ services/projectServerApis.ts   # RSC-only fetch helpers
 
 Project fetches are **cached indefinitely** (`next: { revalidate: false, tags: [...] }`), not on an interval. Invalidation is on demand: the API POSTs to `src/app/api/revalidate/route.ts` after every write, and that route calls `revalidateTag`. Do not reintroduce a `revalidate: <seconds>` — it only adds a window where the dashboard looks broken.
 
-Tags: every project fetch carries `projects`; the by-slug fetch also carries `project:<slug>`. These names are a hand-maintained contract with the API's `utils/revalidateWeb.ts`.
+Tags: every project fetch carries `projects`; the by-slug fetch also carries `project:<slug>`; the resume metadata fetch carries `resume`. These names are a hand-maintained contract with the API's `utils/revalidateWeb.ts`.
 
 Two Next 16 details worth keeping:
 
@@ -134,7 +184,7 @@ The dashboard's edit page fetches with `{ fresh: true }` (`cache: 'no-store'`) a
 
 ## Auth
 
-- **Current:** JWT in a readable `token` cookie (`js-cookie`), sent as `Authorization: Bearer <token>`; `src/middleware.ts` redirects `/dashboard*` when the cookie is missing
+- **Current:** JWT in a readable `token` cookie (`js-cookie`), sent as `Authorization: Bearer <token>`; `src/proxy.ts` redirects `/dashboard*` to `/login?next=<path>` when the cookie is missing. The login route only honours same-site `next` paths, so the callback cannot be turned into an open redirect
 - **Planned (last migration step):** httpOnly cookies set by the API, browser talking to a same-origin `/api` rewrite. Do not start this unless the task explicitly asks — it changes both repos and production cookie settings at once.
 
 ---
@@ -159,23 +209,24 @@ Base: `<API_BASE_URL>/api/v1`.
 
 Projects carry **`id`**, not `_id`, and `image` is a plain Cloudinary URL string.
 
-| Method | Path | Auth | `data` |
-| --- | --- | --- | --- |
-| GET | `/api/v1/project/getAllProjects` | – | **published** projects only, `order` ascending then newest first |
-| GET | `/api/v1/project/getAllProjectsForDashboard` | Bearer | every project, drafts included. The dashboard list uses this one |
-| GET | `/api/v1/project/getProjectBySlug/:slug` | – | one project; what `/projects/[slug]` uses. 404 when missing, **422** when the param is not slug-shaped |
-| GET | `/api/v1/project/getProjectById/:id` | – | one project; kept for the dashboard's edit page. 404 when missing |
-| GET | `/api/v1/project/getProjectsForHomepage` | – | `showOnHomepage: true` only |
-| POST | `/api/v1/project/create` | Bearer | the created project. Multipart, file field `image`, `frontEndTech`/`backEndTech` as JSON strings, max 2 MB |
-| PATCH | `/api/v1/project/updateStatus/:id` | Bearer | the project with `status` flipped between `draft` and `published`. This is the publish gate |
-| PATCH | `/api/v1/project/updateShowOnHomePage/:id` | Bearer | the project with the flag flipped. Only a display flag — a draft stays off the site either way |
-| PATCH | `/api/v1/project/updateProject/:id` | Bearer | the updated project; partial, only whitelisted fields |
-| DELETE | `/api/v1/project/deleteProject/:id` | Bearer | `null` |
-| POST | `/api/v1/auth/login` | – | `{ user: { id, email }, token }`; 401 on bad credentials |
-| POST | `/api/v1/auth/signUp` | – | same, 201; 409 duplicate email, 422 validation |
-| POST | `/api/v1/contact` | – | `null`. `{ name, email, message }` plus a hidden `website` honeypot; 429 when rate limited |
-| GET | `/api/v1/resume/download` | – | not an envelope: a 302 to the Cloudinary PDF. **Link to it with a plain anchor** — never fetch it as a blob |
-| POST | `/api/v1/resume` | Bearer | `{ updatedAt }`. Multipart, file field `resume`, PDF only, max 5 MB |
+| Method | Path                                         | Auth   | `data`                                                                                                          |
+| ------ | -------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
+| GET    | `/api/v1/project/getAllProjects`             | –      | **published** projects only, `order` ascending then newest first                                                |
+| GET    | `/api/v1/project/getAllProjectsForDashboard` | Bearer | every project, drafts included. The dashboard list uses this one                                                |
+| GET    | `/api/v1/project/getProjectBySlug/:slug`     | –      | one project; what `/projects/[slug]` uses. 404 when missing, **422** when the param is not slug-shaped          |
+| GET    | `/api/v1/project/getProjectById/:id`         | –      | one project; kept for the dashboard's edit page. 404 when missing                                               |
+| GET    | `/api/v1/project/getProjectsForHomepage`     | –      | `showOnHomepage: true` only                                                                                     |
+| POST   | `/api/v1/project/create`                     | Bearer | the created project. Multipart, file field `image`, `frontEndTech`/`backEndTech` as JSON strings, max 2 MB      |
+| PATCH  | `/api/v1/project/updateStatus/:id`           | Bearer | the project with `status` flipped between `draft` and `published`. This is the publish gate                     |
+| PATCH  | `/api/v1/project/updateShowOnHomePage/:id`   | Bearer | the project with the flag flipped. Only a display flag — a draft stays off the site either way                  |
+| PATCH  | `/api/v1/project/updateProject/:id`          | Bearer | the updated project; partial, only whitelisted fields                                                           |
+| DELETE | `/api/v1/project/deleteProject/:id`          | Bearer | `null`                                                                                                          |
+| POST   | `/api/v1/auth/login`                         | –      | `{ user: { id, email }, token }`; 401 on bad credentials                                                        |
+| POST   | `/api/v1/auth/signUp`                        | –      | same, 201; 409 duplicate email, 422 validation                                                                  |
+| POST   | `/api/v1/contact`                            | –      | `null`. `{ name, email, message }` plus a hidden `website` honeypot; 429 when rate limited                      |
+| GET    | `/api/v1/resume`                             | –      | `{ updatedAt }`, or 404 `RESUME_NOT_CONFIGURED` when none is stored. Checked before rendering any download link |
+| GET    | `/api/v1/resume/download`                    | –      | not an envelope: a 302 to the Cloudinary PDF. **Link to it with a plain anchor** — never fetch it as a blob     |
+| POST   | `/api/v1/resume`                             | Bearer | `{ updatedAt }`. Multipart, file field `resume`, PDF only, max 5 MB                                             |
 
 ---
 
@@ -187,7 +238,18 @@ cp .env.example .env.development
 pnpm dev          # http://localhost:3002
 ```
 
-- `pnpm typecheck` before calling anything done
+Quality gate — all three must pass before calling anything done:
+
+```bash
+pnpm lint         # eslint flat config + eslint-config-next
+pnpm typecheck    # next typegen && tsc --noEmit
+pnpm test         # vitest, jsdom + Testing Library
+```
+
+`pnpm format` runs Prettier (single quotes, 80 cols, `prettier-plugin-tailwindcss`).
+
+`typecheck` reads both `.next/types/` and `.next/dev/types/`, but `next typegen` only writes the first. If a dev server was mid-compile, the dev copy can be left half-written and `tsc` reports a syntax error inside `.next/dev/types/validator.ts`. Delete `.next/dev/types` and re-run; it is never your source that is broken.
+
 - Vercel hosts this repo at the project root
 
 ---

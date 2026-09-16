@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import AddProject from "../../../components/pages/dashboard/project/AddProject";
+import AddProject from '@/components/pages/dashboard/project/AddProject';
 
 export const metadata: Metadata = {
-  title: "Add Project",
+  title: 'Add Project',
   robots: { index: false, follow: false },
 };
 
