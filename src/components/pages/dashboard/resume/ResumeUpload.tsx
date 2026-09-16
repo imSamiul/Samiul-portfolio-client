@@ -96,7 +96,7 @@ function ResumeUpload() {
                 <span className="text-xs text-muted-foreground">
                   {selectedFile
                     ? `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`
-                    : 'Up to 5 MB'}
+                    : 'Up to 4 MB'}
                 </span>
               </label>
               <Input
