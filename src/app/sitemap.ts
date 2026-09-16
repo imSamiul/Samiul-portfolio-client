@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 
+import type { ProjectSummary } from '@/shared';
 import { absoluteUrl } from '@/lib/seo';
 import { siteConfig } from '@/lib/site';
 import { getAllProjectsOnServer } from '@/services/apis/projectServerApis';
@@ -11,8 +12,29 @@ import { getAllProjectsOnServer } from '@/services/apis/projectServerApis';
  */
 export const revalidate = 86400;
 
+/**
+ * The list endpoint is paginated, and a sitemap that stops at page one would
+ * quietly drop projects as the collection grows — so this walks every page.
+ */
+async function getEveryProject() {
+  const projects: ProjectSummary[] = [];
+  let page = 1;
+
+  for (;;) {
+    const { items, meta } = await getAllProjectsOnServer({ page, limit: 50 });
+
+    projects.push(...items);
+
+    if (!meta.hasMore) {
+      return projects;
+    }
+
+    page += 1;
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const projects = await getAllProjectsOnServer();
+  const projects = await getEveryProject();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: siteConfig.url, changeFrequency: 'monthly', priority: 1 },

@@ -52,8 +52,8 @@ function Hero({ hasResume }: { hasResume: boolean }) {
       {/* Backdrop: dot grid plus two brand glows, all behind the content. */}
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-dots" />
-        <div className="glow -top-32 left-1/2 size-[28rem] -translate-x-[70%] bg-primary/25 dark:bg-primary/15" />
-        <div className="glow top-1/3 right-0 size-[24rem] translate-x-1/3 bg-accent/30 dark:bg-accent/15" />
+        <div className="blob -top-32 left-1/2 size-[28rem] -translate-x-[70%] bg-primary/25 dark:bg-primary/15" />
+        <div className="blob top-1/3 right-0 size-[24rem] translate-x-1/3 bg-glow/30 dark:bg-glow/15" />
       </div>
 
       <div className="container-page grid min-h-[calc(100svh-4rem)] items-center gap-12 py-16 md:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
@@ -180,7 +180,7 @@ function Hero({ hasResume }: { hasResume: boolean }) {
           <div className="relative">
             <div
               aria-hidden="true"
-              className="absolute -inset-3 rounded-[2rem] bg-linear-to-br from-primary/40 via-accent/30 to-secondary/40 blur-2xl dark:from-primary/30 dark:via-accent/20 dark:to-secondary/20"
+              className="absolute -inset-3 rounded-[2rem] bg-linear-to-br from-primary/40 via-glow/30 to-secondary/40 blur-2xl dark:from-primary/30 dark:via-glow/20 dark:to-secondary/20"
             />
             <div className="relative overflow-hidden rounded-[1.75rem] border bg-card shadow-2xl shadow-primary/15">
               <Image

@@ -24,6 +24,7 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-glow: var(--glow);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);
@@ -49,59 +50,70 @@
 }
 
 /**
- * `primary`, `secondary` and `accent` are the brand palette this site has
- * always used; the neutrals are tinted towards the primary hue so surfaces
- * read as part of it rather than as flat grey. Some shadcn components
- * (`ui/sonner.tsx`) read these properties directly rather than through a
- * utility class, which is why they exist here and not only in `@theme`.
+ * Palette: "Indigo / Amber". Chosen for a developer portfolio that has to
+ * read as professional in light mode and still glow in dark mode.
  *
- * Each colour has one job. Blue is structure: buttons, links, icon tint.
- * Yellow is the highlighter — one marked word or one active state per screen.
- * Pink is warmth, used only in gradients and glows, never as body or heading
- * text. Keeping the roles apart is what stops the three from shouting over
- * each other.
+ *   primary    electric indigo  #555DE3 (dark: #90A1FF) — structure: buttons,
+ *              links, icon tint, focus ring
+ *   secondary  amber            #FFC622 — the highlighter: the `.marker`
+ *              stroke under one word, an active tab, the "open to work" dot;
+ *              one per screen
+ *   glow       magenta-violet   #E369CC — gradients and blurred blobs only,
+ *              never text. Indigo → magenta is the site's "aurora" gradient
+ *   accent     a neutral hover surface, as shadcn intends. It used to carry a
+ *              brand pink, which turned every ghost/outline button pink on
+ *              hover
+ *
+ * The neutrals are tinted towards the indigo hue so surfaces read as part of
+ * the palette rather than as flat grey. Light mode is off-white with pure
+ * white cards; dark mode is a deep slate, not pure black. Some shadcn
+ * components (`ui/sonner.tsx`) read these properties directly rather than
+ * through a utility class, which is why they exist here and not only in
+ * `@theme`.
  */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.24 0.03 268);
-  --card: oklch(0.99 0.003 268);
-  --card-foreground: oklch(0.24 0.03 268);
-  --popover: oklch(0.99 0.003 268);
-  --popover-foreground: oklch(0.24 0.03 268);
-  --muted: oklch(0.96 0.008 268);
-  --muted-foreground: oklch(0.5 0.025 268);
-  --primary: oklch(0.517 0.117 268); /* True Blue #4670B7 */
-  --primary-foreground: oklch(0.99 0.005 268);
-  --secondary: oklch(0.834 0.145 94.6); /* Arylide Yellow #E2C849 */
-  --secondary-foreground: oklch(0.28 0.06 80);
-  --accent: oklch(0.756 0.121 9.9); /* Salmon Pink #F08EA0 */
-  --accent-foreground: oklch(0.3 0.08 10);
-  --destructive: oklch(0.436 0.185 28.4); /* Turkey Red #AD0102 */
-  --border: oklch(0.91 0.012 268);
-  --input: oklch(0.91 0.012 268);
-  --ring: oklch(0.517 0.117 268);
+  --background: oklch(0.985 0.004 275);
+  --foreground: oklch(0.2 0.03 275);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.03 275);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.03 275);
+  --muted: oklch(0.955 0.008 275);
+  --muted-foreground: oklch(0.5 0.03 275);
+  --primary: oklch(0.55 0.2 275);
+  --primary-foreground: oklch(0.99 0.005 275);
+  --secondary: oklch(0.86 0.17 85);
+  --secondary-foreground: oklch(0.3 0.07 70);
+  --accent: oklch(0.955 0.008 275);
+  --accent-foreground: oklch(0.2 0.03 275);
+  --glow: oklch(0.7 0.19 335);
+  --destructive: oklch(0.577 0.245 27);
+  --border: oklch(0.9 0.012 275);
+  --input: oklch(0.9 0.012 275);
+  --ring: oklch(0.55 0.2 275);
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: oklch(0.19 0.025 268);
-  --foreground: oklch(0.97 0.008 268);
-  --card: oklch(0.23 0.025 268);
-  --card-foreground: oklch(0.97 0.008 268);
-  --popover: oklch(0.23 0.025 268);
-  --popover-foreground: oklch(0.97 0.008 268);
-  --muted: oklch(0.27 0.025 268);
-  --muted-foreground: oklch(0.74 0.02 268);
-  --primary: oklch(0.72 0.11 268);
-  --primary-foreground: oklch(0.2 0.04 268);
-  --secondary: oklch(0.83 0.13 94.6);
-  --secondary-foreground: oklch(0.24 0.05 80);
-  --accent: oklch(0.72 0.11 9.9);
-  --accent-foreground: oklch(0.22 0.05 10);
-  --destructive: oklch(0.65 0.19 28);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.72 0.11 268);
+  --background: oklch(0.17 0.022 275);
+  --foreground: oklch(0.96 0.008 275);
+  --card: oklch(0.21 0.024 275);
+  --card-foreground: oklch(0.96 0.008 275);
+  --popover: oklch(0.21 0.024 275);
+  --popover-foreground: oklch(0.96 0.008 275);
+  --muted: oklch(0.26 0.024 275);
+  --muted-foreground: oklch(0.72 0.02 275);
+  --primary: oklch(0.74 0.15 275);
+  --primary-foreground: oklch(0.17 0.04 275);
+  --secondary: oklch(0.85 0.16 85);
+  --secondary-foreground: oklch(0.25 0.06 70);
+  --accent: oklch(0.26 0.024 275);
+  --accent-foreground: oklch(0.96 0.008 275);
+  --glow: oklch(0.68 0.19 335);
+  --destructive: oklch(0.7 0.19 22);
+  --border: oklch(1 0 0 / 11%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.74 0.15 275);
 }
 
 @layer base {
@@ -188,7 +200,7 @@
     inset: 60% -0.15em 0.05em;
     z-index: -1;
     border-radius: 0.25em;
-    background: color-mix(in oklch, var(--secondary) 55%, transparent);
+    background: color-mix(in oklch, var(--secondary) 50%, transparent);
     transform: skew(-8deg);
   }
 
@@ -196,8 +208,8 @@
     background: color-mix(in oklch, var(--secondary) 35%, transparent);
   }
 
-  /* Soft blurred blob for hero / CTA backgrounds. */
-  .glow {
+  /* Soft blurred blob for hero / CTA backgrounds (colour comes from `bg-*`). */
+  .blob {
     position: absolute;
     border-radius: 9999px;
     filter: blur(80px);

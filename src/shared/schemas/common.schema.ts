@@ -22,6 +22,23 @@ export const slugSchema = z.string().regex(SLUG_PATTERN, 'Invalid slug');
  */
 export const isoDateTimeSchema = z.iso.datetime();
 
+/**
+ * Mirrors the API's default `limit`, so the first client-side page continues
+ * exactly where the server-rendered one stopped.
+ */
+export const PROJECTS_PAGE_SIZE = 9;
+
+/** What every paginated list sends alongside its items. */
+export const paginationMetaSchema = z.object({
+  page: z.number().int(),
+  limit: z.number().int(),
+  total: z.number().int(),
+  totalPages: z.number().int(),
+  hasMore: z.boolean(),
+});
+
+export type PaginationMeta = z.infer<typeof paginationMetaSchema>;
+
 /** `{ field, message }` pairs the API sends with a 422 so a form can place them. */
 export const fieldIssueSchema = z.object({
   field: z.string(),

@@ -15,6 +15,8 @@ export const queryKeys = {
      * drafts, which made the old key name actively misleading.
      */
     dashboard: () => ['projects', 'dashboard'] as const,
+    /** The public, paginated list behind the projects page's infinite scroll. */
+    publicList: (limit: number) => ['projects', 'public', limit] as const,
   },
   resume: {
     all: ['resume'] as const,

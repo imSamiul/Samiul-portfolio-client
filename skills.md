@@ -85,14 +85,14 @@ This repo just moved from Vite + TanStack Router to Next.js App Router (commit `
 Tailwind 4 is CSS-first: there is no `tailwind.config.js`, and `src/app/globals.css` is the whole configuration.
 
 - `:root` and `.dark` hold the token values as `oklch()`. `@theme inline` maps them to utility names (`--color-primary: var(--primary)`), which is what makes `bg-primary` work. Both halves are needed: some shadcn components (`ui/sonner.tsx`) read `var(--popover)` directly rather than through a class.
-- `primary`, `secondary` and `accent` are the brand palette this site has always used (True Blue, Arylide Yellow, Salmon Pink); the neutrals are tinted towards the primary hue rather than flat grey.
+- The palette is "Indigo / Amber" (September 2026): `primary` electric indigo, `secondary` amber, `glow` magenta-violet for gradients only, and `accent` is a **neutral hover surface** as shadcn intends — do not put a brand colour back on it, every ghost/outline button hovers with it. The neutrals are tinted towards the indigo hue rather than flat grey.
 - Dark mode is `next-themes` with `attribute="class"`, so `.dark` is toggled on `<html>`. `layout.tsx` needs `suppressHydrationWarning` for that, and there is no hand-written pre-paint script — the provider brings its own.
 
 DaisyUI is gone. Do not reintroduce `bg-base-100`, `btn`, `card-body`, `form-control` or `data-theme`; the shadcn equivalents are `bg-background`, `Button`, `CardContent` and `Field`.
 
 Three `next/font` families come from `src/lib/fonts.ts`, each with one role: **Plus Jakarta Sans** for headings (`font-display`, applied to `h1–h4` globally), **Inter** for body (`font-sans`) and **JetBrains Mono** for the small uppercase labels (`font-mono`, the `eyebrow` utility). `fontVariables` is applied to `<html>` in `layout.tsx` **and** `global-error.tsx` — that boundary renders its own `<html>`, so it needs the classes separately. Do not put a Google Fonts `@import` back in the CSS; it is a render-blocking third-party request with no `font-display` control.
 
-Colour roles, in one line: blue is structure (buttons, links, icon tint), yellow is the highlighter (the `.marker` stroke under one word, an active tab, the "open to work" dot — one per screen), pink is warmth (gradients and glows only, never text). The comment above `:root` in `globals.css` says the same.
+Colour roles, in one line: indigo is structure (buttons, links, icon tint), amber is the highlighter (the `.marker` stroke under one word, an active tab, the "open to work" dot — one per screen), magenta (`glow`) is warmth (gradients and `.blob` backgrounds only, never text). The comment above `:root` in `globals.css` says the same.
 
 Page primitives live in `globals.css` as `@utility`: `container-page` (max-w-6xl + gutters — every public section uses it, which is what keeps the pages aligned), `section-y`, `eyebrow`, `bg-dots`. Sections open with `<SectionHeading eyebrow title description>`.
 
@@ -167,6 +167,8 @@ services/projectServerApis.ts   # RSC-only fetch helpers
 - Browser mutations go through `services/apis` with the axios instance that attaches auth
 - A failed public list request degrades to an empty list so the page still renders (SEO)
 
+`/projects` is the one page that keeps fetching after hydration: `page.tsx` renders page one on the server, hands it to `useInfiniteProjects` as `initialData`, and the client fetches page two onwards as the visitor scrolls. Seeding that first page is the point — refetching it on mount would make the server render a wasted round trip. Its JSON-LD only describes page one; the sitemap walks every page so crawlers still reach the rest.
+
 ### Caching
 
 Project fetches are **cached indefinitely** (`next: { revalidate: false, tags: [...] }`), not on an interval. Invalidation is on demand: the API POSTs to `src/app/api/revalidate/route.ts` after every write, and that route calls `revalidateTag`. Do not reintroduce a `revalidate: <seconds>` — it only adds a window where the dashboard looks broken.
@@ -197,7 +199,7 @@ See `.env.example`:
 - `NEXT_PUBLIC_BASE_URL` — browser calls (dashboard mutations, resume download)
 - `REVALIDATE_SECRET` — shared with the API, guards `POST /api/revalidate`. Without it the route answers 503 and project data stays cached indefinitely
 
-Both currently point at the Vercel-hosted API. **The API is moving to Koyeb**, so these values change together with that deploy. Neither includes the `/api/v1` prefix — the service files add it.
+Both point at the API, which is its own Vercel project (separate deployment from this site). Neither includes the `/api/v1` prefix — the service files add it.
 
 ---
 
@@ -211,7 +213,7 @@ Projects carry **`id`**, not `_id`, and `image` is a plain Cloudinary URL string
 
 | Method | Path                                         | Auth   | `data`                                                                                                          |
 | ------ | -------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
-| GET    | `/api/v1/project/getAllProjects`             | –      | **published** projects only, `order` ascending then newest first                                                |
+| GET    | `/api/v1/project/getAllProjects`             | –      | **paginated**: `?page=&limit=` (defaults 1 / 9, max 50) → `{ items, meta }`, published only, `order` ascending then newest first |
 | GET    | `/api/v1/project/getAllProjectsForDashboard` | Bearer | every project, drafts included. The dashboard list uses this one                                                |
 | GET    | `/api/v1/project/getProjectBySlug/:slug`     | –      | one project; what `/projects/[slug]` uses. 404 when missing, **422** when the param is not slug-shaped          |
 | GET    | `/api/v1/project/getProjectById/:id`         | –      | one project; kept for the dashboard's edit page. 404 when missing                                               |

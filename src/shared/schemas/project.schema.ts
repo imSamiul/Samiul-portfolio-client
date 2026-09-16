@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   isoDateTimeSchema,
   objectIdSchema,
+  paginationMetaSchema,
   SLUG_PATTERN,
   slugSchema,
 } from './common.schema';
@@ -44,6 +45,14 @@ export const projectDetailSchema = projectSummarySchema.extend({
 export type ProjectDetail = z.infer<typeof projectDetailSchema>;
 
 export const projectSummaryListSchema = z.array(projectSummarySchema);
+
+/** `GET /project/getAllProjects` — the only list the API paginates. */
+export const paginatedProjectsSchema = z.object({
+  items: projectSummaryListSchema,
+  meta: paginationMetaSchema,
+});
+
+export type PaginatedProjects = z.infer<typeof paginatedProjectsSchema>;
 
 /**
  * Dashboard form. This is not the server's create/update schema: those parse

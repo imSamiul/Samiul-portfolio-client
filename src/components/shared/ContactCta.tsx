@@ -17,11 +17,11 @@ function ContactCta() {
         <div className="relative overflow-hidden rounded-3xl border bg-card px-6 py-14 text-center sm:px-12 md:py-20">
           <div
             aria-hidden="true"
-            className="glow -top-24 -left-16 size-72 bg-accent/40 dark:bg-accent/25"
+            className="blob -top-24 -left-16 size-72 bg-glow/40 dark:bg-glow/25"
           />
           <div
             aria-hidden="true"
-            className="glow -right-16 -bottom-24 size-72 bg-primary/40 dark:bg-primary/25"
+            className="blob -right-16 -bottom-24 size-72 bg-primary/40 dark:bg-primary/25"
           />
           <div className="relative">
             <p className="eyebrow">Let&apos;s work together</p>

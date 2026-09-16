@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+  paginatedProjectsSchema,
   projectDetailSchema,
   projectSummaryListSchema,
   type UpdateProjectPayload,
@@ -10,6 +11,13 @@ import { axiosInstance } from './axiosInstance';
 import { request } from '../utils/apiHelper';
 
 export const projectApis = {
+  // GET: one page of the public list, drafts hidden. The projects route renders
+  // page one on the server, so this only ever fetches page two onwards.
+  listPage: ({ page, limit }: { page: number; limit: number }) =>
+    request(paginatedProjectsSchema, () =>
+      axiosInstance.get('/project/getAllProjects', { params: { page, limit } }),
+    ),
+
   // GET: every project, drafts included. Authenticated, unlike `/getAllProjects`,
   // which the public site uses and which hides drafts.
   getAllForDashboard: () =>

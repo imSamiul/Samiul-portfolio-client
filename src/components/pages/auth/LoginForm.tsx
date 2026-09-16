@@ -25,8 +25,8 @@ function LoginForm({ destination }: { destination: string }) {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
       <div aria-hidden="true" className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-dots" />
-        <div className="glow -top-24 left-1/4 size-80 bg-primary/25 dark:bg-primary/15" />
-        <div className="glow -right-16 -bottom-24 size-80 bg-accent/25 dark:bg-accent/15" />
+        <div className="blob -top-24 left-1/4 size-80 bg-primary/25 dark:bg-primary/15" />
+        <div className="blob -right-16 -bottom-24 size-80 bg-glow/25 dark:bg-glow/15" />
       </div>
 
       <div className="w-full max-w-sm rounded-2xl border bg-card p-6 shadow-xl shadow-primary/10 sm:p-8">

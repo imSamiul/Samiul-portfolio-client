@@ -170,7 +170,7 @@ function AboutPage() {
             <div className="relative mx-auto max-w-xs lg:mx-0">
               <div
                 aria-hidden="true"
-                className="absolute -inset-2 rounded-[1.75rem] bg-linear-to-br from-primary/30 via-accent/20 to-secondary/30 blur-xl"
+                className="absolute -inset-2 rounded-[1.75rem] bg-linear-to-br from-primary/30 via-glow/20 to-secondary/30 blur-xl"
               />
               <Image
                 src={profileImage}
