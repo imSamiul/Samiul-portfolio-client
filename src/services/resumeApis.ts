@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getErrorMessage } from "../utils/errorHandler";
 
-const baseURL = import.meta.env.VITE_BASE_URL;
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function getResume() {
   try {

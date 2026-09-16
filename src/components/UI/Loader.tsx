@@ -1,10 +1,4 @@
-import { HTMLProps } from "react";
-
-function Loader({
-  className,
-}: {
-  className?: HTMLProps<HTMLElement>["className"];
-}) {
+function Loader({ className }: { className?: string }) {
   return (
     <div
       className={`  flex flex-col justify-center items-center bg-base-100 text-center ${className}`}

@@ -1,7 +1,13 @@
-function Toast({ message }: { message: string }) {
+function Toast({
+  message,
+  variant = "success",
+}: {
+  message: string;
+  variant?: "success" | "error";
+}) {
   return (
     <div className="toast toast-top toast-center">
-      <div className="alert alert-success">
+      <div className={variant === "error" ? "alert alert-error" : "alert alert-success"}>
         <span>{message}</span>
       </div>
     </div>

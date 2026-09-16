@@ -1,7 +1,8 @@
-import React, { createContext, useState, useEffect } from "react";
-import Cookies from "js-cookie";
+"use client";
 
-import { router } from "../main";
+import { createContext, useEffect, useState, type ReactNode } from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export type AuthContextType = {
   isAuthenticated: boolean;
@@ -10,36 +11,34 @@ export type AuthContextType = {
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!Cookies.get("token")
-  );
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+
+  // Cookies are unreadable while rendering on the server, so the real auth
+  // state has to be picked up after mount to keep the markup hydration-safe.
+  useEffect(() => {
+    setIsAuthenticated(!!Cookies.get("token"));
+  }, []);
 
   const login = (token: string) => {
     Cookies.set("token", token, { expires: 7 });
-
     setIsAuthenticated(true);
-    router.invalidate();
+    router.refresh();
   };
 
   const logout = () => {
     Cookies.remove("token");
     setIsAuthenticated(false);
-    router.invalidate();
+    router.refresh();
   };
-
-  useEffect(() => {
-    setIsAuthenticated(!!Cookies.get("token"));
-  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}

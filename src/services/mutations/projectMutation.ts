@@ -10,8 +10,12 @@ import { ProjectType } from "../../types/ProjectType";
 
 // Create a new project
 export function useCreateNewProject() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (formData: FormData) => createNewProject(formData),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["allProjects"] });
+    },
   });
 }
 export function useUpdateShowOnHomePage() {

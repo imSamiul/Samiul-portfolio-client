@@ -24,35 +24,30 @@ export const colors = [
   "#ffba08ff",
 ];
 
-export const skillsData = [
+const skills = [
   {
     tools: "HTML",
     value: 95,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "language"],
   },
   {
     tools: "CSS",
     value: 90,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "language"],
   },
   {
     tools: "TailwindCSS",
     value: 95,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "framework"],
   },
   {
     tools: "Bootstrap",
     value: 40,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "framework"],
   },
   {
     tools: "JavaScript",
     value: 75,
-    color: colors[Math.floor(Math.random() * 9)],
     category: [
       "allSkills",
       "frontEnd",
@@ -64,7 +59,6 @@ export const skillsData = [
   {
     tools: "TypeScript",
     value: 65,
-    color: colors[Math.floor(Math.random() * 9)],
     category: [
       "allSkills",
       "frontEnd",
@@ -76,7 +70,6 @@ export const skillsData = [
   {
     tools: "React.JS",
     value: 90,
-    color: colors[Math.floor(Math.random() * 9)],
     category: [
       "allSkills",
       "frontEnd",
@@ -89,43 +82,36 @@ export const skillsData = [
   {
     tools: "React-Router",
     value: 95,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
     tools: "Axios",
     value: 75,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
     tools: "TanStack Query",
     value: 70,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
     tools: "TanStack Router",
     value: 65,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
     tools: "TanStack Table",
     value: 65,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
     tools: "Motion",
     value: 70,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
     tools: "Next.JS",
     value: 50,
-    color: colors[Math.floor(Math.random() * 9)],
     category: [
       "allSkills",
       "frontEnd",
@@ -138,25 +124,21 @@ export const skillsData = [
   {
     tools: "RESTful APIs",
     value: 90,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment"],
   },
   {
     tools: "Firebase",
     value: 40,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "webDevelopment", "database"],
   },
   {
     tools: "Node.JS",
     value: 55,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "backEnd", "webDevelopment", "javascript"],
   },
   {
     tools: "Express.JS",
     value: 65,
-    color: colors[Math.floor(Math.random() * 9)],
     category: [
       "allSkills",
       "backEnd",
@@ -168,83 +150,76 @@ export const skillsData = [
   {
     tools: "MongoDB",
     value: 70,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "backEnd", "webDevelopment", "database"],
   },
   {
     tools: "Mongoose",
     value: 65,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "backEnd", "webDevelopment", "database", "library"],
   },
   {
     tools: "Git & GitHub",
     value: 55,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "tools"],
   },
   {
     tools: "Bash",
     value: 35,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "tools", "language"],
   },
   {
     tools: "Python",
     value: 30,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "language", "python"],
   },
   {
     tools: "C",
     value: 87,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "language"],
   },
 
   {
     tools: "Java",
     value: 33,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "language"],
   },
   {
     tools: "Redux Toolkit",
     value: 65,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "frontEnd", "webDevelopment", "library"],
   },
   {
     tools: "Figma",
     value: 70,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "tools"],
   },
   {
     tools: "Postman",
     value: 75,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "tools"],
   },
   {
     tools: "JWT",
     value: 80,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "authentication"],
   },
   {
     tools: "OAuth",
     value: 70,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "authentication"],
   },
   {
     tools: "Passport.JS",
     value: 80,
-    color: colors[Math.floor(Math.random() * 9)],
     category: ["allSkills", "authentication"],
   },
 ];
+
+// Colours are derived from the position so server and client renders agree.
+export const skillsData = skills.map((skill, index) => ({
+  ...skill,
+  color: colors[index % colors.length],
+}));
 
 export const courses = [
   {
