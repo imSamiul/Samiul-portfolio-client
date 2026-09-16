@@ -17,11 +17,10 @@ export async function generateMetadata({
   const { projectId } = await params;
   const project = await getProjectByIdOnServer(projectId);
 
+  // Raised here rather than only in the page so the 404 status is set before
+  // the response shell is flushed.
   if (!project) {
-    return {
-      title: "Project not found",
-      robots: { index: false, follow: false },
-    };
+    notFound();
   }
 
   const canonical = `/projects/${projectId}`;

@@ -1,4 +1,4 @@
-import { getProjectByIdOnServer } from "../../../../services/projectServerApis";
+import { getProjectImageOnServer } from "../../../../services/projectServerApis";
 import { getProjectImageSrc } from "../../../../utils/projectImage";
 
 const DATA_URI_PATTERN = /^data:([^;]+);base64,(.+)$/;
@@ -11,15 +11,11 @@ export async function GET(
   { params }: { params: Promise<{ projectId: string }> },
 ) {
   const { projectId } = await params;
-  const project = await getProjectByIdOnServer(projectId);
+  const image = await getProjectImageOnServer(projectId);
+  const match = DATA_URI_PATTERN.exec(getProjectImageSrc(image));
 
-  if (!project) {
-    return new Response("Project not found", { status: 404 });
-  }
-
-  const match = DATA_URI_PATTERN.exec(getProjectImageSrc(project.image));
   if (!match) {
-    return new Response("Project has no image", { status: 404 });
+    return new Response("Project image not found", { status: 404 });
   }
 
   const [, contentType, base64Data] = match;
