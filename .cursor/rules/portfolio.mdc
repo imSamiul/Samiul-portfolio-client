@@ -1,0 +1,14 @@
+---
+description: Samiul portfolio frontend conventions — read skills.md before editing
+alwaysApply: true
+---
+
+# Samiul portfolio frontend context
+
+Before scaffolding or editing code in this repository:
+
+1. Read and follow [`skills.md`](../../skills.md) at the repo root.
+2. For agent skill entry, use `.cursor/skills/portfolio/`.
+3. Mirror existing files under `src/app/` and `src/components/{layout,pages,shared}/` — do not invent new layouts.
+4. Check the **Migration status** section of `skills.md` first. `components/UI/`, the flat `services/*.ts` files and `src/config/` are pre-migration and must not be used as a template.
+5. Stack is Next.js App Router + Tailwind 4 + shadcn + TanStack Query + zod in `src/shared` (`@/shared`). No DaisyUI, no Vite leftovers.
