@@ -167,7 +167,7 @@ services/projectServerApis.ts   # RSC-only fetch helpers
 - Browser mutations go through `services/apis` with the axios instance that attaches auth
 - A failed public list request degrades to an empty list so the page still renders (SEO)
 
-`/projects` is the one page that keeps fetching after hydration: `page.tsx` renders page one on the server, hands it to `useInfiniteProjects` as `initialData`, and the client fetches page two onwards as the visitor scrolls. Seeding that first page is the point — refetching it on mount would make the server render a wasted round trip. Its JSON-LD only describes page one; the sitemap walks every page so crawlers still reach the rest.
+`/projects` is paginated by URL: `page.tsx` reads `?page=`, fetches that page on the server and renders it, so every page is a shareable, crawlable document and nothing is fetched after hydration. A page past the last one is a `notFound()` rather than an empty grid, and each page canonicalises to itself so Google does not read the later ones as duplicates of the first. Its JSON-LD describes the page being viewed; the sitemap walks every page so crawlers reach every project either way. The dashboard list paginates the same way, but client-side — `getAllProjectsForDashboard` is not paginated, so the page is a slice of what is already in the cache.
 
 ### Caching
 
@@ -211,24 +211,24 @@ Base: `<API_BASE_URL>/api/v1`.
 
 Projects carry **`id`**, not `_id`, and `image` is a plain Cloudinary URL string.
 
-| Method | Path                                         | Auth   | `data`                                                                                                          |
-| ------ | -------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
+| Method | Path                                         | Auth   | `data`                                                                                                                           |
+| ------ | -------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------- |
 | GET    | `/api/v1/project/getAllProjects`             | –      | **paginated**: `?page=&limit=` (defaults 1 / 9, max 50) → `{ items, meta }`, published only, `order` ascending then newest first |
-| GET    | `/api/v1/project/getAllProjectsForDashboard` | Bearer | every project, drafts included. The dashboard list uses this one                                                |
-| GET    | `/api/v1/project/getProjectBySlug/:slug`     | –      | one project; what `/projects/[slug]` uses. 404 when missing, **422** when the param is not slug-shaped          |
-| GET    | `/api/v1/project/getProjectById/:id`         | –      | one project; kept for the dashboard's edit page. 404 when missing                                               |
-| GET    | `/api/v1/project/getProjectsForHomepage`     | –      | `showOnHomepage: true` only                                                                                     |
-| POST   | `/api/v1/project/create`                     | Bearer | the created project. Multipart, file field `image`, `frontEndTech`/`backEndTech` as JSON strings, max 2 MB      |
-| PATCH  | `/api/v1/project/updateStatus/:id`           | Bearer | the project with `status` flipped between `draft` and `published`. This is the publish gate                     |
-| PATCH  | `/api/v1/project/updateShowOnHomePage/:id`   | Bearer | the project with the flag flipped. Only a display flag — a draft stays off the site either way                  |
-| PATCH  | `/api/v1/project/updateProject/:id`          | Bearer | the updated project; partial, only whitelisted fields                                                           |
-| DELETE | `/api/v1/project/deleteProject/:id`          | Bearer | `null`                                                                                                          |
-| POST   | `/api/v1/auth/login`                         | –      | `{ user: { id, email }, token }`; 401 on bad credentials                                                        |
-| POST   | `/api/v1/auth/signUp`                        | –      | same, 201; 409 duplicate email, 422 validation                                                                  |
-| POST   | `/api/v1/contact`                            | –      | `null`. `{ name, email, message }` plus a hidden `website` honeypot; 429 when rate limited                      |
-| GET    | `/api/v1/resume`                             | –      | `{ updatedAt }`, or 404 `RESUME_NOT_CONFIGURED` when none is stored. Checked before rendering any download link |
-| GET    | `/api/v1/resume/download`                    | –      | not an envelope: a 302 to the Cloudinary PDF. **Link to it with a plain anchor** — never fetch it as a blob     |
-| POST   | `/api/v1/resume`                             | Bearer | `{ updatedAt }`. Multipart, file field `resume`, PDF only, max 5 MB                                             |
+| GET    | `/api/v1/project/getAllProjectsForDashboard` | Bearer | every project, drafts included. The dashboard list uses this one                                                                 |
+| GET    | `/api/v1/project/getProjectBySlug/:slug`     | –      | one project; what `/projects/[slug]` uses. 404 when missing, **422** when the param is not slug-shaped                           |
+| GET    | `/api/v1/project/getProjectById/:id`         | –      | one project; kept for the dashboard's edit page. 404 when missing                                                                |
+| GET    | `/api/v1/project/getProjectsForHomepage`     | –      | `showOnHomepage: true` only                                                                                                      |
+| POST   | `/api/v1/project/create`                     | Bearer | the created project. Multipart, file field `image`, `frontEndTech`/`backEndTech` as JSON strings, max 2 MB                       |
+| PATCH  | `/api/v1/project/updateStatus/:id`           | Bearer | the project with `status` flipped between `draft` and `published`. This is the publish gate                                      |
+| PATCH  | `/api/v1/project/updateShowOnHomePage/:id`   | Bearer | the project with the flag flipped. Only a display flag — a draft stays off the site either way                                   |
+| PATCH  | `/api/v1/project/updateProject/:id`          | Bearer | the updated project; partial, only whitelisted fields                                                                            |
+| DELETE | `/api/v1/project/deleteProject/:id`          | Bearer | `null`                                                                                                                           |
+| POST   | `/api/v1/auth/login`                         | –      | `{ user: { id, email }, token }`; 401 on bad credentials                                                                         |
+| POST   | `/api/v1/auth/signUp`                        | –      | same, 201; 409 duplicate email, 422 validation                                                                                   |
+| POST   | `/api/v1/contact`                            | –      | `null`. `{ name, email, message }` plus a hidden `website` honeypot; 429 when rate limited                                       |
+| GET    | `/api/v1/resume`                             | –      | `{ updatedAt }`, or 404 `RESUME_NOT_CONFIGURED` when none is stored. Checked before rendering any download link                  |
+| GET    | `/api/v1/resume/download`                    | –      | not an envelope: a 302 to the Cloudinary PDF. **Link to it with a plain anchor** — never fetch it as a blob                      |
+| POST   | `/api/v1/resume`                             | Bearer | `{ updatedAt }`. Multipart, file field `resume`, PDF only, max 5 MB                                                              |
 
 ---
 

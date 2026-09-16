@@ -30,8 +30,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import Pagination from '@/components/shared/Pagination';
 import DashboardHeader from '../DashboardHeader';
 import ProjectDeleteDialog from './ProjectDeleteDialog';
+
+/** A table row is short, so more of them fit than on the public card grid. */
+const DASHBOARD_PAGE_SIZE = 10;
 
 function StatCard({
   Icon,
@@ -72,7 +76,7 @@ function ListSkeleton() {
   );
 }
 
-function DashboardProjectList() {
+function DashboardProjectList({ page }: { page: number }) {
   const {
     projects,
     isLoadingProjects,
@@ -85,6 +89,20 @@ function DashboardProjectList() {
 
   const published = projects.filter((p) => p.status === 'published').length;
   const onHomepage = projects.filter((p) => p.showOnHomepage).length;
+
+  // The dashboard endpoint returns every project at once, so the page is a
+  // slice rather than a request. Clamping matters after a delete empties the
+  // last page, and for a ?page= that was never valid.
+  const totalPages = Math.max(
+    1,
+    Math.ceil(projects.length / DASHBOARD_PAGE_SIZE),
+  );
+  const currentPage = Math.min(Math.max(1, Math.trunc(page)), totalPages);
+  const firstIndex = (currentPage - 1) * DASHBOARD_PAGE_SIZE;
+  const visibleProjects = projects.slice(
+    firstIndex,
+    firstIndex + DASHBOARD_PAGE_SIZE,
+  );
 
   return (
     <>
@@ -149,10 +167,10 @@ function DashboardProjectList() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {projects.map((project, index) => (
+                  {visibleProjects.map((project, index) => (
                     <TableRow key={project.id}>
                       <TableCell className="text-center font-mono text-xs text-muted-foreground">
-                        {index + 1}
+                        {firstIndex + index + 1}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-3">
@@ -244,6 +262,14 @@ function DashboardProjectList() {
               </Table>
             </div>
           </div>
+
+          <Pagination
+            page={currentPage}
+            totalPages={totalPages}
+            basePath="/dashboard/project-list"
+            total={projects.length}
+            pageSize={DASHBOARD_PAGE_SIZE}
+          />
         </div>
       )}
     </>
