@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin '@tailwindcss/typography';
 
 /* `dark` is a class so next-themes can drive it. */
 @custom-variant dark (&:is(.dark *));

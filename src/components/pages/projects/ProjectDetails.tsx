@@ -6,8 +6,10 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
 import { FaGithub } from 'react-icons/fa6';
 import type { IconType } from 'react-icons';
+import remarkGfm from 'remark-gfm';
 
 import type { ProjectDetail } from '@/shared';
 import {
@@ -63,12 +65,6 @@ function TechSection({
 
 function ProjectDetails({ project }: { project: ProjectDetail }) {
   const links = EXTERNAL_LINKS.filter(({ field }) => project[field]);
-  // The long copy is plain text typed into a textarea, so every line break
-  // is a deliberate paragraph break (the stored text uses \r\n).
-  const paragraphs = project.projectDetails
-    .split(/\r?\n+/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean);
 
   return (
     <>
@@ -128,10 +124,10 @@ function ProjectDetails({ project }: { project: ProjectDetail }) {
         <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_18rem] lg:gap-16">
           <Reveal className="min-w-0">
             <h2 className="text-2xl font-semibold">About the project</h2>
-            <div className="mt-4 space-y-4 text-base leading-relaxed text-pretty text-foreground/90 sm:text-lg">
-              {paragraphs.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
+            <div className="prose prose-neutral dark:prose-invert mt-4 max-w-none prose-headings:scroll-mt-24 prose-a:text-primary">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {project.projectDetails}
+              </ReactMarkdown>
             </div>
           </Reveal>
 

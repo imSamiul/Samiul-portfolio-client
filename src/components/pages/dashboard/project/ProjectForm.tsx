@@ -199,14 +199,14 @@ function ProjectForm({
 
           <FormSection
             title="Details"
-            description="The long description on the project page. Blank lines become paragraphs."
+            description="Markdown on the project page: ## headings, - lists, **bold**. Blank lines become paragraphs."
           >
             <Field>
               <FieldLabel htmlFor="projectDetails">Project details</FieldLabel>
               <Textarea
                 id="projectDetails"
                 rows={12}
-                placeholder="What the project does, what you built, what was hard…"
+                placeholder={`## Overview\nWhat the project does.\n\n## What I built\n- Feature one\n- Feature two\n\nThe hard part was **…**`}
                 aria-invalid={Boolean(messageFor('projectDetails'))}
                 {...register('projectDetails')}
               />
