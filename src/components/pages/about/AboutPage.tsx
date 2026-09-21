@@ -50,10 +50,10 @@ const JOURNEY: TimelineItem[] = [
       'Left university with a portfolio of deployed full-stack apps and a habit of reading docs before tutorials.',
   },
   {
-    period: 'Now',
-    title: 'Next.js App Router, in production',
+    period: 'May 2025 – Present',
+    title: 'Jr. Software Engineer — Mojaru Education',
     description:
-      'This site: server components, tagged caching with on-demand revalidation, zod-checked API contracts and a real admin dashboard. Open to full-stack and frontend roles.',
+      'Full-stack on a production Education ERP and Next.js LMS: admissions, pre-assessment, campaigns, payments, reporting and hierarchy RBAC used in daily school operations. This portfolio ships alongside that work — App Router, tagged caching, and a real admin dashboard.',
     current: true,
   },
 ];
@@ -238,7 +238,7 @@ function AboutPage() {
               <SectionHeading
                 eyebrow="Journey"
                 title="How I got here"
-                description="From a first HTML page to production Next.js, in five steps."
+                description="From a first HTML page to shipping production ERP and LMS features at Mojaru."
               />
               <Timeline items={JOURNEY} className="mt-10" />
             </div>

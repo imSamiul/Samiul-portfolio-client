@@ -1,6 +1,11 @@
 import { DownloadIcon, MailIcon, MapPinIcon } from 'lucide-react';
 
-import { courses, EDUCATION, RELEVANT_COURSES } from '@/lib/resumeData';
+import {
+  courses,
+  EDUCATION,
+  EXPERIENCE,
+  RELEVANT_COURSES,
+} from '@/lib/resumeData';
 import { siteConfig } from '@/lib/site';
 import { RESUME_DOWNLOAD_URL } from '@/services/apis/resumeApis';
 import ContactCta from '@/components/shared/ContactCta';
@@ -12,6 +17,7 @@ import ResumeSkills from './ResumeSkills';
 
 const SECTIONS = [
   { id: 'summary', label: 'Summary' },
+  { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'education', label: 'Education' },
   { id: 'courses', label: 'Coursework' },
@@ -118,16 +124,40 @@ function ResumePage({ resumeUpdatedAt }: { resumeUpdatedAt: string | null }) {
           <ResumeSection id="summary" eyebrow="Profile" title="Summary">
             <Reveal>
               <p className="text-lg leading-relaxed text-pretty text-muted-foreground">
-                Full-stack web developer specializing in the MERN stack and
-                Next.js. I build scalable, user-friendly applications with a
-                frontend-first mindset and a solid grounding in debugging and
-                analytical problem-solving. Graduated in Computer Science and
-                Engineering in 2024; currently{' '}
+                Jr. Software Engineer specializing in the MERN stack and Next.js.
+                Currently shipping production features at Mojaru Education — an
+                Education ERP and student LMS used in daily school operations.
+                Graduated in Computer Science and Engineering in 2024
                 {siteConfig.openToWork
-                  ? 'open to full-stack and frontend roles.'
-                  : 'building things.'}
+                  ? '; open to full-stack and frontend roles.'
+                  : '.'}
               </p>
             </Reveal>
+          </ResumeSection>
+
+          <ResumeSection
+            id="experience"
+            eyebrow="Experience"
+            title="Where I work"
+          >
+            <Timeline
+              items={EXPERIENCE.map((job) => ({
+                period: job.period,
+                title: job.role,
+                current: job.current,
+                description: (
+                  <>
+                    <p className="font-medium text-foreground">{job.company}</p>
+                    <p className="mt-1 text-sm">{job.stack}</p>
+                    <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed">
+                      {job.bullets.map((bullet) => (
+                        <li key={bullet}>{bullet}</li>
+                      ))}
+                    </ul>
+                  </>
+                ),
+              }))}
+            />
           </ResumeSection>
 
           <ResumeSection id="skills" eyebrow="Skills" title="What I work with">

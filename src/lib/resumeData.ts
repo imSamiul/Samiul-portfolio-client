@@ -93,6 +93,37 @@ export const skillsData = SKILLS.map(({ name, score, categories }) => ({
 
 export type ResumeSkill = (typeof skillsData)[number];
 
+/**
+ * Work history for the resume Experience section. Bullets stay honest to
+ * production work (shipped / contributed) rather than sole ownership.
+ */
+export type ExperienceEntry = {
+  period: string;
+  company: string;
+  role: string;
+  /** Short stack line under the role. */
+  stack: string;
+  current?: boolean;
+  bullets: string[];
+};
+
+export const EXPERIENCE: ExperienceEntry[] = [
+  {
+    period: 'May 2025 – Present',
+    company: 'Mojaru Education Technologies',
+    role: 'Jr. Software Engineer (Full-Stack)',
+    stack: 'Next.js · React · Node.js · Express · MongoDB',
+    current: true,
+    bullets: [
+      'Primary contributor on the internal Education ERP (React + Node): shipped production modules for pre-assessment, complain register, reporting, and EFT v2.',
+      'Built admission cancel, payment gateway configuration, dialer campaigns, and campaign management across frontend and backend.',
+      'Improved ops tooling with hierarchy RBAC, leaderboard/search filters, CCR collection metrics, and lead / active-member analytics.',
+      'Shipped student-facing Next.js LMS features still live in production: Speed Master competition, enrollment/payment UX, and the Homework module.',
+      'Hardened day-to-day workflows: user deactivation hierarchy rules, admission ACL for support/academic, and assessment release/status correctness.',
+    ],
+  },
+];
+
 export const EDUCATION = [
   {
     period: '2020 – 2024',
