@@ -110,7 +110,7 @@ export type ExperienceEntry = {
 export const EXPERIENCE: ExperienceEntry[] = [
   {
     period: 'May 2025 – Present',
-    company: 'Mojaru Education Technologies',
+    company: 'Mojaru Education Technologies Limited',
     role: 'Jr. Software Engineer (Full-Stack)',
     stack: 'Next.js · React · Node.js · Express · MongoDB',
     current: true,

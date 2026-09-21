@@ -8,7 +8,7 @@ import { getResumeMetaOnServer } from '@/services/apis/resumeServerApis';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Resume',
-  description: `Resume of ${siteConfig.name} — Jr. Software Engineer at Mojaru Education. Experience, skills and education of a MERN stack developer specializing in React, Next.js, Node.js and MongoDB.`,
+  description: `Resume of ${siteConfig.name} — Jr. Software Engineer at Mojaru Education Technologies Limited. Experience, skills and education of a MERN stack developer specializing in React, Next.js, Node.js and MongoDB.`,
   path: '/resume',
 });
 

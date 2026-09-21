@@ -51,7 +51,7 @@ const JOURNEY: TimelineItem[] = [
   },
   {
     period: 'May 2025 – Present',
-    title: 'Jr. Software Engineer — Mojaru Education',
+    title: 'Jr. Software Engineer — Mojaru Education Technologies Limited',
     description:
       'Full-stack on a production Education ERP and Next.js LMS: admissions, pre-assessment, campaigns, payments, reporting and hierarchy RBAC used in daily school operations. This portfolio ships alongside that work — App Router, tagged caching, and a real admin dashboard.',
     current: true,

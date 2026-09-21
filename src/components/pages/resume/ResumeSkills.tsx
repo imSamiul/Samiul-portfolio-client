@@ -36,7 +36,7 @@ function ResumeSkills() {
         <div
           role="tablist"
           aria-label="Skill category"
-          className="flex flex-wrap gap-1 rounded-full border bg-muted/60 p-1"
+          className="flex flex-wrap gap-1 overflow-hidden rounded-2xl border bg-muted/60 p-1"
         >
           {SKILL_CATEGORIES.map((tab) => {
             const active = tab.id === category;

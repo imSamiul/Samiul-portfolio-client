@@ -125,9 +125,10 @@ function ResumePage({ resumeUpdatedAt }: { resumeUpdatedAt: string | null }) {
             <Reveal>
               <p className="text-lg leading-relaxed text-pretty text-muted-foreground">
                 Jr. Software Engineer specializing in the MERN stack and Next.js.
-                Currently shipping production features at Mojaru Education — an
-                Education ERP and student LMS used in daily school operations.
-                Graduated in Computer Science and Engineering in 2024
+                Currently shipping production features at Mojaru Education
+                Technologies Limited — an Education ERP and student LMS used in
+                daily school operations. Graduated in Computer Science and
+                Engineering in 2024
                 {siteConfig.openToWork
                   ? '; open to full-stack and frontend roles.'
                   : '.'}
